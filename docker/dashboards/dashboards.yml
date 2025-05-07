@@ -1,0 +1,10 @@
+apiVersion: 1
+providers:
+  - name: 'default'
+    orgId: 1
+    folder: 'RabbitMQ' # Optional: Create a folder for your RabbitMQ dashboards
+    type: 'file'
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards

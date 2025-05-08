@@ -11,6 +11,7 @@ docker run -d --hostname my-rabbit --name rabbitmq --network rmq-network -p 5672
 ```
 docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stream
 docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stream_management
+
 docker exec rabbitmq rabbitmq-plugins enable rabbitmq_prometheus
 
 docker exec rabbitmq rabbitmq-plugins enable rabbitmq_shovel

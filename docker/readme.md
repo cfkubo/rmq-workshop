@@ -79,6 +79,8 @@ docker run -d --name=grafana -p 3000:3000 --network rmq-network  -e GF_DATASOURC
 #### Add prometheus datasource to Grafana
 Click on "Add your first data soruce" > select prometheus > http://prometheus:9090 > save and test
 
+![RabbitMQ Screenshot](static/prom-source.png)
+
 #### Add RMQ-Overview Dashboard
 Click on create new dasboard > Import > copy the json code from rmq-overview.json file and paste it in json field and use the prometheus datasource
 
@@ -112,6 +114,10 @@ rmqadmin list queues
 ```
 rmqadmin show memory_breakdown_in_percent  --node rabbit@my-rabbit
 ```
+
+### LAB 8: RabbitMQ + Spring Cloud Data Flow + postgres
+> https://site.arullab.com/posts/REALTIMESALESORDERPROCESSING/#spring-cloud-data-flowscdf
+
 <!--
 rmqadmin shovels declare_amqp091 --name my-amqp091-shovel \
     --source-uri amqp://guest:guest@rabbitmq \

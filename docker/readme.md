@@ -1,8 +1,11 @@
 
+### Deploy RabbitMQ on Docker
 ```
 docker network create rmq-network
 
-docker run -d --name rabbitmq --network rmq-network -p 5672:5672 -p 15672:15672 -p 15692:15692 rabbitmq:4.0-management
+docker run -d --hostname my-rabbit --name rabbitmq --network rmq-network -p 5672:5672 -p 15672:15672 -p 15692:15692 rabbitmq:4.0-management
+```
+
 
 docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stream
 docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stream_management

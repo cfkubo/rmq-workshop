@@ -21,6 +21,7 @@ docker exec rabbitmq rabbitmq-plugins enable rabbitmq_shovel_management
 
 Download the binary for your OS, update permission and move it bin folder
 
+![RabbitMQ Screenshot](static/rmqadmin.png)
 ```
 cp rabbitmqadmin-2.1.0-aarch64-apple-darwin rmqadmin
 chmod +x rmqadmin
@@ -42,6 +43,8 @@ Access : http://localhost:15672
 Username: guest
 
 Password: guest
+
+![RabbitMQ Screenshot](static/rabbitmq.png)
 
 ### LAB 3: Deploy Producer & Consumer Application - leveraging RabbitMQ PerfTest
 

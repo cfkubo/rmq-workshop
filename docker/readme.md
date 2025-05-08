@@ -90,12 +90,16 @@ mvn spring-boot:run
 #### Delcare a queue
 ```
 rmqadmin declare queue --name demo
+rmqadmin declare queue --name demoQrorum --type quorum
 ```
 #### List Queues
 ```
 rmqadmin list queues
 ```
-
+#### Show Memory Breakdown %
+```
+rmqadmin show memory_breakdown_in_percent  --node rabbit@my-rabbit
+```
 <!--
 rmqadmin shovels declare_amqp091 --name my-amqp091-shovel \
     --source-uri amqp://guest:guest@rabbitmq \

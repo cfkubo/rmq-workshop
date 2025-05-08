@@ -31,6 +31,12 @@ docker exec rabbitmq rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
 docker exec rabbitmq rabbitmqctl set_user_tags arul administrator
 ```
 
+### RabbitMQ Management UI
+
+Access : http://localhost:15672
+Username: guest
+Password: guest
+
 ### Deploy Prometheus on Docker
 ```
 docker run -d --name prometheus --network rmq-network -p 9090:9090 -v $(pwd)/prometheus.yml:/etc/prometheus/config/prometheus.yml prom/prometheus --config.file=/etc/prometheus/config/prometheus.yml

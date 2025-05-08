@@ -1,6 +1,6 @@
 ## RabbitMQ
 
-### Deploy RabbitMQ on Docker
+### LAB 1: Deploy RabbitMQ on Docker
 ```
 docker network create rmq-network
 
@@ -28,7 +28,7 @@ sudo mv rmqadmin /usr/local/bin
 rmqadmin --help
 
 ```
-### Creating User and Permissions
+### LAB 2: Creating User and Permissions
 ```
 docker exec rabbitmq rabbitmqctl add_user arul password
 docker exec rabbitmq rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
@@ -43,7 +43,7 @@ Username: guest
 
 Password: guest
 
-### Deploy Producer & Consumer Application - leveraging RabbitMQ PerfTest
+### LAB 3: Deploy Producer & Consumer Application - leveraging RabbitMQ PerfTest
 
 #### Quorum
 ```
@@ -55,10 +55,13 @@ docker run --name perf-tst -d --network rmq-network pivotalrabbitmq/perf-test:la
 docker run --name perf-tst7 -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq:5672 --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 100 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
 
 ```
+# LAB 4: Everyday I'm Shovelling
+```
+docker exec rabbitmq rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://guest:guest@rabbitmq", "src-queue": "siteA", "dest-protocol": "amqp091", "dest-uri": "amqp://guest:guest@rabbitmq", "dest-queue": "siteB", "dest-queue-args": {"x-queue-type": "quorum"}}'
+```
 
 
-
-## Monitoring
+## LAB 5: Monitoring
 
 ### Deploy Prometheus on Docker
 ```
@@ -71,10 +74,7 @@ docker run -d --name=grafana -p 3000:3000 --network rmq-network  -e GF_DATASOURC
 ```
 
 
-# Everyday I'm Shovelling
-```
-docker exec rabbitmq rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://guest:guest@rabbitmq", "src-queue": "siteA", "dest-protocol": "amqp091", "dest-uri": "amqp://guest:guest@rabbitmq", "dest-queue": "siteB", "dest-queue-args": {"x-queue-type": "quorum"}}'
-```
+
 <!--
 rmqadmin shovels declare_amqp091 --name my-amqp091-shovel \
     --source-uri amqp://guest:guest@rabbitmq \

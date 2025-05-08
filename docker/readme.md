@@ -60,7 +60,7 @@ docker run --name perf-tst7 -d --network rmq-network pivotalrabbitmq/perf-test:l
 ```
 ### LAB 4: Everyday I'm Shovelling
 ```
-docker exec rabbitmq rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://guest:guest@rabbitmq", "src-queue": "siteA", "dest-protocol": "amqp091", "dest-uri": "amqp://guest:guest@rabbitmq", "dest-queue": "siteB", "dest-queue-args": {"x-queue-type": "quorum"}}'
+docker exec rabbitmq rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://guest:guest@rabbitmq", "src-queue": "sa-workshop", "dest-protocol": "amqp091", "dest-uri": "amqp://guest:guest@rabbitmq", "dest-queue": "sa-workshop-shovelq", "dest-queue-args": {"x-queue-type": "quorum"}}'
 ```
 
 
@@ -76,13 +76,25 @@ docker run -d --name prometheus --network rmq-network -p 9090:9090 -v $(pwd)/pro
 docker run -d --name=grafana -p 3000:3000 --network rmq-network  -e GF_DATASOURCE_DEFAULT_URL=http://prometheus:9090 -e GF_SECURITY_ADMIN_PASSWORD="password" grafana/grafana
 ```
 
-### LAB 6: Springboot Producer Application 
+### LAB 6: Springboot Producer Application
 ```
 git clone https://github.com/cfkubo/spring-boot-random-data-generator
 cd spring-boot-random-data-generator
 mvn spring-boot:run
 
 ```
+
+### LAB 7: Working RabbitmqAdmin cli
+
+#### Delcare a queue
+```
+rmqadmin declare queue --name demo
+```
+#### List Queues
+```
+rmqadmin list queues
+```
+
 <!--
 rmqadmin shovels declare_amqp091 --name my-amqp091-shovel \
     --source-uri amqp://guest:guest@rabbitmq \

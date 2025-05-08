@@ -5,15 +5,20 @@ docker network create rmq-network
 
 docker run -d --hostname my-rabbit --name rabbitmq --network rmq-network -p 5672:5672 -p 15672:15672 -p 15692:15692 rabbitmq:4.0-management
 ```
-### Enable plugins on RabbitMQ 
+### Enable plugins on RabbitMQ
 ```
 docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stream
 docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stream_management
 docker exec rabbitmq rabbitmq-plugins enable rabbitmq_prometheus
 ```
 
+### Deploy Prometheus on Docker
+```
 docker run -d --name prometheus --network rmq-network -p 9090:9090 -v $(pwd)/prometheus.yml:/etc/prometheus/config/prometheus.yml prom/prometheus --config.file=/etc/prometheus/config/prometheus.yml
+```
+### Deploy Grafana on Docker
 
+```
 docker run -d --name=grafana -p 3000:3000 --network rmq-network  -e GF_DATASOURCE_DEFAULT_URL=http://prometheus:9090 -e GF_SECURITY_ADMIN_PASSWORD="password" grafana/grafana
 ```
 

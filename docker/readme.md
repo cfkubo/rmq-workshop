@@ -1,4 +1,5 @@
 ## RabbitMQ
+This workshop is desgined to get handon experience with RabbitMQ.
 
 ### LAB 1: Deploy RabbitMQ on Docker
 ```

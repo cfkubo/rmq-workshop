@@ -21,8 +21,14 @@ Download the binary for your OS, update permission and move it bin folder
 cp rabbitmqadmin-2.1.0-aarch64-apple-darwin rmqadmin
 chmod +x rmqadmin
 sudo mv rmqadmin /usr/local/bin
-rmqadmin --help 
+rmqadmin --help
 
+```
+### Creating User and Permissions
+```
+docker exec rabbitmq rabbitmqctl add_user arul password
+docker exec rabbitmq rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
+docker exec rabbitmq rabbitmqctl set_user_tags arul administrator
 ```
 
 ### Deploy Prometheus on Docker

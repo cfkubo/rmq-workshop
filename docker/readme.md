@@ -76,6 +76,12 @@ docker run -d --name prometheus --network rmq-network -p 9090:9090 -v $(pwd)/pro
 ```
 docker run -d --name=grafana -p 3000:3000 --network rmq-network  -e GF_DATASOURCE_DEFAULT_URL=http://prometheus:9090 -e GF_SECURITY_ADMIN_PASSWORD="password" grafana/grafana
 ```
+#### Add prometheus datasource to Grafana
+Click on "Add your first data soruce" > select prometheus > http://prometheus:9090 > save and test
+
+#### Add RMQ-Overview Dashboard
+Click on create new dasboard > Import > copy the json code from rmq-overview.json file and paste it in json field and use the prometheus datasource
+
 
 ### LAB 5: Everyday I'm Shovelling
 ```

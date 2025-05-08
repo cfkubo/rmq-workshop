@@ -84,6 +84,8 @@ Click on "Add your first data soruce" > select prometheus > http://prometheus:90
 #### Add RMQ-Overview Dashboard
 Click on create new dasboard > Import > copy the json code from rmq-overview.json file and paste it in json field and use the prometheus datasource
 
+![RabbitMQ Screenshot](static/grafana.png)
+
 
 ### LAB 5: Everyday I'm Shovelling
 ```

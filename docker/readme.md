@@ -1,3 +1,4 @@
+## RabbitMQ
 
 ### Deploy RabbitMQ on Docker
 ```
@@ -34,8 +35,12 @@ docker exec rabbitmq rabbitmqctl set_user_tags arul administrator
 ### RabbitMQ Management UI
 
 Access : http://localhost:15672
+
 Username: guest
+
 Password: guest
+
+## Monitoring
 
 ### Deploy Prometheus on Docker
 ```

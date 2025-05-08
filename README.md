@@ -1,1 +1,1 @@
-# rmq-workshop
+# RabbitMQ Hands On Workshop

@@ -12,6 +12,9 @@ docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stream_management
 docker exec rabbitmq rabbitmq-plugins enable rabbitmq_prometheus
 ```
 
+### Intall RabbitmqAdmin CLI
+> https://github.com/rabbitmq/rabbitmqadmin-ng/releases
+
 ### Deploy Prometheus on Docker
 ```
 docker run -d --name prometheus --network rmq-network -p 9090:9090 -v $(pwd)/prometheus.yml:/etc/prometheus/config/prometheus.yml prom/prometheus --config.file=/etc/prometheus/config/prometheus.yml

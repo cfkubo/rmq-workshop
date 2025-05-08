@@ -115,8 +115,8 @@ rmqadmin list queues
 rmqadmin show memory_breakdown_in_percent  --node rabbit@my-rabbit
 ```
 
-### LAB 8: RabbitMQ + Spring Cloud Data Flow + postgres
-> https://site.arullab.com/posts/REALTIMESALESORDERPROCESSING/#spring-cloud-data-flowscdf
+### LAB 8: RabbitMQ + Spring Cloud Data Flow + postgres + gemfire
+> https://site.arullab.com/posts/REALTIMESALESORDERPROCESSING/
 
 <!--
 rmqadmin shovels declare_amqp091 --name my-amqp091-shovel \

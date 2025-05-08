@@ -1,5 +1,10 @@
 ## RabbitMQ
-This workshop is desgined to get hands on experience with RabbitMQ.
+This workshop is desgined to get hands on experience with RabbitMQ. Clone this repo and move to rmq-workshop/docker folder to continue
+
+```
+git clone https://github.com/cfkubo/rmq-workshop
+cd rmq-workshop/docker
+```
 
 ### LAB 1: Deploy RabbitMQ on Docker
 ```

@@ -83,3 +83,12 @@ echo $password
 ```
 k port-forward svc/my-tanzu-rabbit 15672:15672
 ```
+
+
+> http://localhost:15672
+Use the above default username password  or the user you have created
+
+
+### Deploy Producers and Consumer Applications - Leveraging RabbitMQ PerfTest
+#### RMQPerf Test on k8s:
+

@@ -42,16 +42,20 @@ hello-world   True               True               5m26s
 ```
 kubectl apply -f rmq.yaml
 ```
-``
-kubectl  get pods
+
 ```
+kubectl  get pods
+
+
 NAME                       READY   STATUS    RESTARTS   AGE
 hello-world-server-0       1/1     Running   0          10m
 my-tanzu-rabbit-server-0   1/1     Running   0          2m59s
 my-tanzu-rabbit-server-1   1/1     Running   0          2m59s
 my-tanzu-rabbit-server-2   1/1     Running   0          2m59s
+```
 
 ### Enable Plugins on RMQ Server
+
 ```
 kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabbitmq_stream
 kubectl -n default exec my-tanzu-rabbit-server-0 --rabbitmq-plugins enable rabbitmq_stream_management
@@ -86,8 +90,8 @@ echo $password
 k port-forward svc/my-tanzu-rabbit 15672:15672
 ```
 
-
 > http://localhost:15672
+
 Use the above default username password  or the user you have created
 
 

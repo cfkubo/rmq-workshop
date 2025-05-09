@@ -9,3 +9,12 @@ cd rmq-workshop/k8s
 ```
 kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml"
 ```
+```
+kubectl get namespaces
+```
+NAME              STATUS   AGE
+default           Active   73s
+kube-node-lease   Active   73s
+kube-public       Active   73s
+kube-system       Active   73s
+rabbitmq-system   Active   2s

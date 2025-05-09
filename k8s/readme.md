@@ -18,3 +18,16 @@ kube-node-lease   Active   73s
 kube-public       Active   73s
 kube-system       Active   73s
 rabbitmq-system   Active   2s
+
+
+### Deploy a single node RMQ Cluster
+
+```
+kubectl apply -f https://raw.githubusercontent.com/rabbitmq/cluster-operator/main/docs/examples/hello-world/rabbitmq.yaml
+```
+```
+kubectl get po
+```
+NAME                   READY   STATUS    RESTARTS   AGE
+hello-world-server-0   1/1     Running   0          3m19s
+

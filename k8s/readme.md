@@ -31,3 +31,39 @@ kubectl get po
 NAME                   READY   STATUS    RESTARTS   AGE
 hello-world-server-0   1/1     Running   0          3m19s
 
+```
+k get rabbitmqclusters.rabbitmq.com hello-world
+```
+NAME          ALLREPLICASREADY   RECONCILESUCCESS   AGE
+hello-world   True               True               5m26s
+
+
+### Deploy a multinode RMQ Cluster
+```
+kubectl apply -f rmq.yaml
+```
+``
+kubectl  get pods
+```
+NAME                       READY   STATUS    RESTARTS   AGE
+hello-world-server-0       1/1     Running   0          10m
+my-tanzu-rabbit-server-0   1/1     Running   0          2m59s
+my-tanzu-rabbit-server-1   1/1     Running   0          2m59s
+my-tanzu-rabbit-server-2   1/1     Running   0          2m59s
+
+### Enable Plugins on RMQ Server
+```
+kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabbitmq_stream
+kubectl -n default exec my-tanzu-rabbit-server-0 --rabbitmq-plugins enable rabbitmq_stream_management
+
+kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabbitmq_prometheus
+
+kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabbitmq_shovel
+kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabbitmq_shovel_management
+```
+### Creating User and Permissions
+```
+kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmqctl add_user arul password
+kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
+kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmqctl set_user_tags arul administrator
+```

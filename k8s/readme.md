@@ -67,3 +67,19 @@ kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmqctl add_user arul pa
 kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
 kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmqctl set_user_tags arul administrator
 ```
+
+
+
+### Pull the default username and password created as a k8s Secret for RMQ:
+```
+instance=my-tanzu-rabbit
+username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
+password=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.password}" | base64 --decode)
+service=${instance}
+echo $username
+echo $password
+```
+### Access RMQ Management UI
+```
+k port-forward svc/my-tanzu-rabbit 15672:15672
+```

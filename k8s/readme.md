@@ -61,6 +61,7 @@ kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabb
 kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabbitmq_shovel
 kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabbitmq_shovel_management
 ```
+
 ### Creating User and Permissions
 ```
 kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmqctl add_user arul password

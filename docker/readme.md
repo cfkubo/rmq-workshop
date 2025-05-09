@@ -1,4 +1,4 @@
-## RabbitMQ workshop is designed to get hands on experience with RabbitMQ. Clone this repo and move to rmq-workshop/docker folder to continue
+## RabbitMQ workshop is designed to get hands on experience with OSS RabbitMQ on Docker. Clone this repo and move to rmq-workshop/docker folder to continue
 
 ```
 git clone https://github.com/cfkubo/rmq-workshop

@@ -2,4 +2,9 @@
 
 Docker: https://site.arullab.com/rmq-workshop/docker/
 
-Kubernetes:
+Kubernetes: https://site.arullab.com/rmq-workshop/k8s/
+
+
+Blog:
+-  https://site.arullab.com/posts/RMQDOCKERHANDSON/
+-  https://site.arullab.com/posts/RMQK8SHANDON/

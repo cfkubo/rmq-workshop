@@ -80,6 +80,7 @@ service=${instance}
 echo $username
 echo $password
 ```
+
 ### Access RMQ Management UI
 ```
 k port-forward svc/my-tanzu-rabbit 15672:15672

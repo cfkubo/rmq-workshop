@@ -158,13 +158,34 @@ Time to see our RabbitMQ cluster in action! We'll use the rabbitmq-perf-test too
 Let's run some performance tests with standard and quorum queues (a more robust queue type):
 
 ```
-kubectl -n default  --restart=Never run sa-workshop --image=pivotalrabbitmq/perf-test -- --uri "amqp://<span class="math-inline">\{username\}\:</span>{password}@<span class="math-inline">\{service\}" \-\-producers 10 \-\-consumers 5 \-\-predeclared \-\-routing\-key "sa\-workshop" \-\-pmessages 1000 \-\-queue "sa\-workshop" \-\-rate 100 \-\-consumer\-rate 10 \-\-multi\-ack\-every 10
-kubectl \-n default  \-\-restart\=Never run sa\-workshop\-quorum \-\-image\=pivotalrabbitmq/perf\-test \-\- \-\-uri "amqp\://</span>{username}:<span class="math-inline">\{password\}@</span>{service}" --quorum-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-quorum" --pmessages 1000 --queue "sa-workshop-quorum" --rate 100 --consumer-rate 10 --multi-ack-every 10
+kubectl -n default  --restart=Never run sa-workshop --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop" --pmessages 1000 --queue "sa-workshop" --rate 100 --consumer-rate 10 --multi-ack-every 10
 
-kubectl -n default  --restart=Always run arul-perf2 --image=pivotalrabbitmq/perf-test -- --uri "amqp://<span class="math-inline">\{username\}\:</span>{password}@${service}" -i 120 -u "q.sys.synthetic-health-check" -qq -P 5 -ms -b 20 -hst 4 -dcr -c 1 -q 5
+kubectl -n default  --restart=Never run sa-workshop-quorum --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-quorum" --pmessages 1000 --queue "sa-workshop-quorum" --rate 100 --consumer-rate 10 --multi-ack-every 10
+
+kubectl -n default  --restart=Always run arul-perf2 --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" -i 120 -u "q.sys.synthetic-health-check" -qq -P 5 -ms -b 20 -hst 4 -dcr -c 1 -q 5
 ```
 
 These commands launch Kubernetes Jobs that will send and receive messages to queues named sa-workshop and sa-workshop-quorum. Keep an eye on your RabbitMQ Management UI to see the queues and message flow!
+
+
+--uri "amqp://${username}:${password}@${service}": This is an argument passed to the perf-test tool, specifying the AMQP URI to connect to the RabbitMQ server.
+amqp://: The AMQP protocol.
+${username}: A variable representing the username for connecting to RabbitMQ (likely fetched from a Kubernetes Secret in the full context).
+${password}: A variable representing the password for connecting to RabbitMQ (also likely from a Secret).
+${service}: A variable representing the hostname or service name of the RabbitMQ service within the Kubernetes cluster. This allows the perf-test container to find the RabbitMQ instance within the rmq-network.
+--producers 10: This tells perf-test to simulate 10 message producer clients. These clients will connect to the RabbitMQ server and publish messages.
+--consumers 5: This tells perf-test to simulate 5 message consumer clients. These clients will connect to the RabbitMQ server and consume messages from the specified queue.
+--predeclared: This flag indicates that the target exchange and queue already exist on the RabbitMQ server. perf-test will not attempt to declare them.
+--routing-key "<routing-key>": This specifies the routing key that the producers will use when publishing messages to an exchange (in this case, implicitly the default exchange as no exchange is specified). Consumers will bind to the queue with this routing key (again, implicitly with the default exchange).
+"sa-workshop" in the first command.
+"sa-workshop-quorum" in the second command.
+--pmessages 1000: This tells each producer to publish a total of 1000 persistent messages.
+--queue "<queue-name>": This specifies the name of the queue that the producers will publish to (via the default exchange and the specified routing key) and that the consumers will consume from.
+"sa-workshop" in the first command.
+"sa-workshop-quorum" in the second command.
+--rate 100: This sets the target publishing rate for each producer to 100 messages per second.
+--consumer-rate 10: This sets the target consumption rate for each consumer to 10 messages per second.
+--multi-ack-every 10: This tells the consumers to send a multiple acknowledgement (ack) for every 10 messages received, rather than acknowledging each message individually. This can improve performance in some scenarios.
 
 ### 🌊 PerfTest on K8s: Streams
 And let's try out the RabbitMQ Streams functionality we enabled earlier:

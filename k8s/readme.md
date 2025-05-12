@@ -110,6 +110,11 @@ kubectl -n default  --restart=Always run arul-perf2 --image=pivotalrabbitmq/perf
 
 ```
 
+#### Stream Perftest
+```
+kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 100 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
+```
+
 ### Routing Messages via Exchanges 
 - Create two queues A and B
 - Create and exchange named demo
@@ -128,8 +133,3 @@ kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabb
 <!-- rabbitmqadmin declare exchange --vhost="$RABBITMQ_VHOST" --name="my_topic_exchange" --type="topic" --durable="true" -->
 
 
-
-#### Stream
-```
-kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 100 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
-```

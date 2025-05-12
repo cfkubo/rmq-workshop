@@ -109,6 +109,7 @@ kubectl -n default  --restart=Never run sa-workshop-quorum --image=pivotalrabbit
 kubectl -n default  --restart=Always run arul-perf2 --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" -i 120 -u "q.sys.synthetic-health-check" -qq -P 5 -ms -b 20 -hst 4 -dcr -c 1 -q 5
 
 ```
+
 ### Routing Messages via Exchanges 
 - Create two queues A and B
 - Create and exchange named demo
@@ -117,19 +118,12 @@ kubectl -n default  --restart=Always run arul-perf2 --image=pivotalrabbitmq/perf
 
 #### Now publish the messages to demo exchange via perf test and see how messages are routed to queues A and B based on routing keys.
 
+```
 kubectl -n default  --restart=Never run sa-workshop-demo-route --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --exchange demo --routing-key "demo1" --pmessages 1000 --queue "A" --rate 100 --consumer-rate 10 --multi-ack-every 10
 
 kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --exchange demo --routing-key "demo2" --pmessages 1000  --rate 100 --consumer-rate 10 --multi-ack-every 10
+```
 
-
-kubectl -n default  --restart=Never run sa-workshop --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" \
-  --image pivotalrabbitmq/perf-test \
-  --uri "amqp://$RABBITMQ_USER:$RABBITMQ_PASSWORD@$RABBITMQ_HOST:$RABBITMQ_PORT/$RABBITMQ_VHOST" \
-  --exchange "demo" \
-  --routing-key "demo1" \
-  --pmessages 100 \
-  --rate 10 \
-  --producers 1
 
 <!-- rabbitmqadmin declare exchange --vhost="$RABBITMQ_VHOST" --name="my_topic_exchange" --type="topic" --durable="true" -->
 

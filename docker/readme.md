@@ -92,6 +92,20 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 docker exec rabbitmq rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://guest:guest@rabbitmq", "src-queue": "sa-workshop", "dest-protocol": "amqp091", "dest-uri": "amqp://guest:guest@rabbitmq", "dest-queue": "sa-workshop-shovelq", "dest-queue-args": {"x-queue-type": "quorum"}}'
 ```
 
+### Routing Messages via Exchanges and routing-key (topic, fanout, )
+- Create two queues A and B
+- Create and exchange named demo
+- Bind the queue A to demo exchange with routing-key demo1
+- Bind the queue B to demo exchange with routing -key demo2
+
+#### Now publish the messages to demo exchange via perf test and see how messages are routed to queues A and B based on routing keys.
+
+```
+kubectl -n default  --restart=Never run sa-workshop-demo-route --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --exchange demo --routing-key "demo1" --pmessages 1000 --queue "A" --rate 100 --consumer-rate 10 --multi-ack-every 10
+
+kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --exchange demo --routing-key "demo2" --pmessages 1000  --rate 100 --consumer-rate 10 --multi-ack-every 10
+```
+
 
 ### LAB 6: Springboot Producer Application
 ```

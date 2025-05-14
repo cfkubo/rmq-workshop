@@ -41,6 +41,10 @@ hello-world   True               True               5m26s
 ### Deploy a multinode RMQ Cluster
 ```
 kubectl apply -f rmq.yaml
+
+kubectl create ns rmq-downstream
+kubectl apply -f rmq-upstream.yaml
+kubectl apply -f rmq-downstream.yml -n rmq-downstream
 ```
 
 ```
@@ -71,6 +75,18 @@ kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabb
 kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmqctl add_user arul password
 kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
 kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmqctl set_user_tags arul administrator
+
+
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user arul password
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags arul administrator
+
+
+kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl add_user arul password
+kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
+kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags arul administrator
+
+
 ```
 
 
@@ -83,11 +99,30 @@ password=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath=
 service=${instance}
 echo $username
 echo $password
+
+instance=upstream-rabbit-new
+username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
+password=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.password}" | base64 --decode)
+service=${instance}
+echo $username
+echo $password
+
+instance=downstream-rabbit-new
+username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
+password=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.password}" | base64 --decode)
+service=${instance}
+echo $username
+echo $password
+
+
 ```
 
 ### Access RMQ Management UI
 ```
-k port-forward svc/my-tanzu-rabbit 15672:15672
+kubectl port-forward svc/my-tanzu-rabbit 15672:15672
+kubectl port-forward svc/upstream-rabbit-new 15672:15672
+kubectl -n rmq-downstream port-forward svc/downstream-rabbit-new 15673:15672
+
 ```
 
 > http://localhost:15672
@@ -133,3 +168,25 @@ kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabb
 <!-- rabbitmqadmin declare exchange --vhost="$RABBITMQ_VHOST" --name="my_topic_exchange" --type="topic" --durable="true" -->
 
 
+# target.hostname is just an example, replace it with a URI
+# of the target node (usually a member of a remote node/cluster,
+# or a URI that connects to a different virtual host within the same cluster)
+kubectl exec upstream-rabbit-new-server-0 -it -- rabbitmqctl set_parameter federation-upstream my-upstream '{"uri":"amqp://arul:password@downstream-rabbit-new.rmq-downstream.svc.cluster.local:5672","expires":3600000}'
+
+kubectl exec upstream-rabbit-new-server-0 -it -- rabbitmqctl set_policy --apply-to exchanges federate-me "^amq\." '{"federation-upstream-set":"all"}'
+
+kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -it -- rabbitmqctl set_policy --apply-to exchanges federate-me "^amq\." '{"federation-upstream-set":"all"}'
+
+
+rabbitmqctl set_parameter federation-upstream my-upstream '{"uri":"amqp://arul:password@downstream-rabbit-new.downstream-rmq.svc.cluster.local","expires":3600000}'
+
+rabbitmqctl set_policy --apply-to exchanges federate-me "^amq\." '{"federation-upstream-set":"all"}'
+
+rabbitmqadmin publish exchange=amq.topic routing_key=amq.event payload="Hello Rabbit!"
+
+
+
+####
+
+# Adds a federation upstream named "origin"
+rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@downstream-rabbit-new.downstream-rmq.svc.cluster.local:5672"}'

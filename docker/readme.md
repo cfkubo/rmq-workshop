@@ -10,6 +10,11 @@ cd rmq-workshop/docker
 docker network create rmq-network
 
 docker run -d --hostname my-rabbit --name rabbitmq --network rmq-network -p 5672:5672 -p 15672:15672 -p 15692:15692 -p 5552:5552 rabbitmq:4.0-management
+
+docker run -d --hostname my-rabbit-blue --name rabbitmq --network rmq-network -p 5672:5672 -p 15672:15672 -p 15692:15692 -p 5552:5552 rabbitmq:4.0-management
+
+docker run -d --hostname my-rabbit-green --name rabbitmq-green --network rmq-network -p 5673:5672 -p 15673:15672 -p 15691:15692 -p 5553:5552 rabbitmq:4.0-management
+
 ```
 ### Enable plugins on RabbitMQ
 ```
@@ -20,6 +25,37 @@ docker exec rabbitmq rabbitmq-plugins enable rabbitmq_prometheus
 
 docker exec rabbitmq rabbitmq-plugins enable rabbitmq_shovel
 docker exec rabbitmq rabbitmq-plugins enable rabbitmq_shovel_management
+
+docker exec rabbitmq rabbitmq-plugins enable rabbitmq_federation
+
+docker exec rabbitmq rabbitmq-plugins enable rabbitmq_federation_management
+```
+
+```
+docker exec rabbitmq-blue rabbitmq-plugins enable rabbitmq_stream
+docker exec rabbitmq-blue  rabbitmq-plugins enable rabbitmq_stream_management
+
+docker exec rabbitmq-blue  rabbitmq-plugins enable rabbitmq_prometheus
+
+docker exec rabbitmq-blue  rabbitmq-plugins enable rabbitmq_shovel
+docker exec rabbitmq-blue  rabbitmq-plugins enable rabbitmq_shovel_management
+
+docker exec rabbitmq-blue  rabbitmq-plugins enable rabbitmq_federation
+
+docker exec rabbitmq-blue  rabbitmq-plugins enable rabbitmq_federation_management
+
+
+docker exec rabbitmq-green rabbitmq-plugins enable rabbitmq_stream
+docker exec rabbitmq-green  rabbitmq-plugins enable rabbitmq_stream_management
+
+docker exec rabbitmq-green  rabbitmq-plugins enable rabbitmq_prometheus
+
+docker exec rabbitmq-green  rabbitmq-plugins enable rabbitmq_shovel
+docker exec rabbitmq-green  rabbitmq-plugins enable rabbitmq_shovel_management
+
+docker exec rabbitmq-green  rabbitmq-plugins enable rabbitmq_federation
+
+docker exec rabbitmq-green  rabbitmq-plugins enable rabbitmq_federation_management
 ```
 
 ### Intall RabbitmqAdmin CLI
@@ -40,6 +76,14 @@ rmqadmin --help
 docker exec rabbitmq rabbitmqctl add_user arul password
 docker exec rabbitmq rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
 docker exec rabbitmq rabbitmqctl set_user_tags arul administrator
+
+docker exec rabbitmq-blue rabbitmqctl add_user arul password
+docker exec rabbitmq-blue rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
+docker exec rabbitmq-blue rabbitmqctl set_user_tags arul administrator
+
+docker exec rabbitmq-green rabbitmqctl add_user arul password
+docker exec rabbitmq-green rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
+docker exec rabbitmq-green rabbitmqctl set_user_tags arul administrator
 ```
 
 ### RabbitMQ Management UI
@@ -57,11 +101,17 @@ Password: guest
 #### Quorum
 ```
 docker run --name perf-tst -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq:5672 --quorum-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop" --pmessages 10000 --queue "sa-workshop" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
+
+
+docker run --name perf-tst1 -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq-blue:5672 --quorum-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop" --pmessages 10000 --queue "sa-workshop" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
 ```
 
 #### Stream
 ```
 docker run --name perf-tst7 -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq:5672 --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 100 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
+
+
+docker run --name perf-tst2 -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq-blue:5672 --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 100 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
 
 ```
 
@@ -90,6 +140,10 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 ### LAB 5: Everyday I'm Shovelling
 ```
 docker exec rabbitmq rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://guest:guest@rabbitmq", "src-queue": "sa-workshop", "dest-protocol": "amqp091", "dest-uri": "amqp://guest:guest@rabbitmq", "dest-queue": "sa-workshop-shovelq", "dest-queue-args": {"x-queue-type": "quorum"}}'
+
+
+docker exec rabbitmq-blue rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://guest:guest@rabbitmq-blue", "src-queue": "sa-workshop", "dest-protocol": "amqp091", "dest-uri": "amqp://guest:guest@rabbitmq-blue", "dest-queue": "sa-workshop-shovelq", "dest-queue-args": {"x-queue-type": "quorum"}}'
+
 ```
 
 ### Routing Messages via Exchanges and routing-key (topic, fanout, )
@@ -131,7 +185,9 @@ rmqadmin list queues
 rmqadmin show memory_breakdown_in_percent  --node rabbit@my-rabbit
 ```
 
+### LAB 8: Federation  - Actvie - Active RMQ deployments in Docker
 
+- [https://github.com/ggreen/event-streaming-showcase/blob/main/docs/workshops/Labs/sysAdmin/active-active/01_FEDERATION.md](https://github.com/ggreen/event-streaming-showcase/blob/main/docs/workshops/Labs/sysAdmin/active-active/01_FEDERATION.md)
 
 <!--
 rmqadmin shovels declare_amqp091 --name my-amqp091-shovel \
@@ -158,3 +214,36 @@ rmqadmin shovels declare_amqp091 --name my-amqp091-shovel \
       }
     }
     EOF -->
+
+#### Need work to fix port mapping for federation to work on docker  
+
+
+#  enable rabbitmq_federation plugin
+rabbitmq-plugins enable rabbitmq_federation
+
+# enable rabbitmq federation web management plugin
+rabbitmq-plugins enable rabbitmq_federation_management
+
+# restart the broker
+service rabbitmq-server restart
+
+
+# create a queue for testing purpose
+docker exec rabbitmq-blue rabbitmqadmin declare queue name=event durable=true auto_delete=false
+
+# create binding for it
+docker exec rabbitmq-blue rabbitmqadmin declare binding source=amq.topic destination_type=queue destination=event routing_key=amq.event
+
+# define the upstream, this will create a binding on upstream broker
+docker exec rabbitmq-blue rabbitmqctl set_parameter federation-upstream my-upstream '{"uri":"amqp://arul:password@rabbitmq-green:5673","expires":3600000}'
+
+# define the exchanges that will be federated, upstream broker must have the defined exchange
+docker exec rabbitmq-blue rabbitmqctl set_policy --apply-to exchanges federate-me "^amq\." '{"federation-upstream-set":"all"}'
+
+
+# try to publish a message on broker A and see
+docker exec rabbitmq-blue rabbitmqadmin publish exchange=amq.topic routing_key=amq.event payload="Hello Rabbit!"
+
+
+# check whether the message is forwarded to broker B, you should get a message contains 'Hello Rabbit!'
+rabbitmqadmin get queue=event requeue=false

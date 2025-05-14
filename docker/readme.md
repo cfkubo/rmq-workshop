@@ -218,7 +218,7 @@ rmqadmin shovels declare_amqp091 --name my-amqp091-shovel \
     }
     EOF -->
 
-#### Need work to fix port mapping for federation to work on docker  
+<!-- #### Need work to fix port mapping for federation to work on docker  
 
 
 #  enable rabbitmq_federation plugin
@@ -249,4 +249,4 @@ docker exec rabbitmq-blue rabbitmqadmin publish exchange=amq.topic routing_key=a
 
 
 # check whether the message is forwarded to broker B, you should get a message contains 'Hello Rabbit!'
-rabbitmqadmin get queue=event requeue=false
+rabbitmqadmin get queue=event requeue=false -->

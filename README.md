@@ -15,8 +15,6 @@ Blog: (WIP)
 References: 
 - https://github.com/ggreen/event-streaming-showcase
 - https://www.rabbitmq.com
-- https://github.com/kanapuli/rabbitmq-federation-setup
-- https://gist.github.com/achmadns/4a05b4167080c106e417
-- https://www.cloudamqp.com/blog/rabbitmq-federation.html
+
 
 

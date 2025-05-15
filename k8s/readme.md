@@ -181,7 +181,21 @@ kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabb
 ```
 
 
-### LAB 6: Federation  - Actvie - Active RMQ deployments in Docker
+### Lab 6: Monitoring 
+
+```
+helm install prometheus  prometheus-community/prometheus
+helm install  grafana grafana/grafana
+```
+#### Annotate rmq pods to be able to scrape the prometheus metrics
+```
+kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true 
+
+kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true -n rmq-downstream
+
+```
+
+### LAB 7: Federation  - Actvie - Active RMQ deployments in Docker
 
 Setting up exchange and queue federation on blue cluster 
 ```
@@ -225,7 +239,7 @@ kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish e
 kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared  --pmessages 10000 --exchange "federated.exchange" --routing-key "event.test" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
 ```
 
-### LAB 7: Upgrading RMQ on K8s
+### LAB 8: Upgrading RMQ on K8s
 
 #### Upgrade the RMQ k8s operator
 ```
@@ -237,19 +251,6 @@ kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/d
  k edit rabbitmqclusters.rabbitmq.com upstream-rabbit-new
 ```
 
-### Lab 8: Monitoring 
-
-```
-helm install prometheus  prometheus-community/prometheus
-helm install  grafana grafana/grafana
-```
-#### Annotate rmq pods to be able to scrape the prometheus metrics
-```
-kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true 
-
-kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true -n rmq-downstream
-
-```
 
 ```
 kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo

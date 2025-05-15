@@ -262,6 +262,14 @@ export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/nam
 http://prometheus-server.default.svc.cluster.local:80
 ```
 
+### LAB 9: Springboot Producer Application
+```
+git clone https://github.com/cfkubo/spring-boot-random-data-generator
+cd spring-boot-random-data-generator
+mvn spring-boot:run
+
+```
+
 #### References:
 
 https://github.com/ggreen/event-streaming-showcase

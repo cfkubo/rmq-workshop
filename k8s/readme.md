@@ -18,9 +18,13 @@ cd rmq-workshop/k8s
 kubectl apply -f https://github.com/rabbitmq/cluster-operator/releases/download/v2.10.0/cluster-operator.yml
 
 ```
+
+Validate Operator Installation:
+
 ```
 kubectl get namespaces
 ```
+
 Sample Output: rabbitmq-system namespace is created and should be running the RMQ operator pod
 ```
 NAME              STATUS   AGE
@@ -35,6 +39,7 @@ rabbitmq-system   Active   2s
 Kubectl get po -n rabbitmq-system 
 ```
 Sample Output: 
+
 ```
 NAME                                         READY   STATUS    RESTARTS   AGE
 rabbitmq-cluster-operator-5f94454fb7-bnqtg   1/1     Running   0          97m

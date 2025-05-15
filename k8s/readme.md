@@ -2,6 +2,9 @@
 
 ![RabbitMQ Screenshot](../static/rabbitmq-new.png)
 
+### Prequisites 
+- K8s installed and running (Kind,Docker k8s, MiniKube)
+
 ### Clone this repo and move to rmq-workshop/K8s folder to continue
 ```
 git clone https://github.com/cfkubo/rmq-workshop

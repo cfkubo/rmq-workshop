@@ -1,14 +1,16 @@
-## RabbitMQ workshop is designed to get hands on experience with OSS RabbitMQ on Docker. Clone this repo and move to rmq-workshop/docker folder to continue
+## RabbitMQ workshop is designed to get hands on experience with OSS RabbitMQ on Docker. C
 
 ### Prequisites 
 - Docker installed and running
 
+### Clone this repo and move to rmq-workshop/docker folder to continue
 ```
 git clone https://github.com/cfkubo/rmq-workshop
 cd rmq-workshop/docker
 ```
 
 ### LAB 1: Deploy RabbitMQ on Docker
+We will create a docker network named rmq-network and deploy RabbitMQ on it.
 ```
 docker network create rmq-network
 
@@ -20,7 +22,7 @@ docker run -d --hostname my-rabbit-green --name rabbitmq-green --network rmq-net
 
 ### Enable plugins on RabbitMQ
 
-Enable stream, prometheus, shovel and federation plugins on blue server
+Enable stream, prometheus, shovel and federation plugins on blue server. We will using each of pulgins in labs below.
 ```
 docker exec rabbitmq-blue rabbitmq-plugins enable rabbitmq_stream
 docker exec rabbitmq-blue  rabbitmq-plugins enable rabbitmq_stream_management
@@ -50,6 +52,7 @@ docker exec rabbitmq-green  rabbitmq-plugins enable rabbitmq_federation_manageme
 ```
 
 ### Intall RabbitmqAdmin CLI
+Interacting with RabbitMQ Server using rabbitmqadmin v2 CLI
 > https://github.com/rabbitmq/rabbitmqadmin-ng/releases
 
 Download the binary for your OS, update permission and move it bin folder
@@ -77,17 +80,26 @@ docker exec rabbitmq-green rabbitmqctl set_user_tags arul administrator
 
 ### RabbitMQ Management UI
 
-Access : http://localhost:15672
+Access rabbitmq-blue : [http://localhost:15672](http://localhost:15672)
 
-Username: guest
+**Username:** guest
 
-Password: guest
+**Password:** guest
+
+Access rabbitmq-green : [http://localhost:15673](http://localhost:15673)
+
+**Username:**  guest
+
+**Password:** guest
 
 ![RabbitMQ Screenshot](static/rabbitmq.png)
 
 ### LAB 3: Deploy Producer & Consumer Application - leveraging RabbitMQ PerfTest
 
+RabbitMQ PerfTest is an amazing tool sumuliate producers and consumer application and also can be used to benchmark your RabbitMQ cluster. 
+
 #### Quorum
+The below two command create two quorum queues and publishes 10000 messages to each queue.
 ```
 docker run --name perf-tst-quorum -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq-blue:5672 --quorum-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-q1" --pmessages 10000 --queue "sa-workshop-q1" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
 
@@ -96,6 +108,7 @@ docker run --name perf-tst-workshop -d --network rmq-network pivotalrabbitmq/per
 ```
 
 #### Stream
+The below RabbitMQ perftest command will create a stream queue and perform the same operations as above.
 
 ```
 docker run --name perf-tst-stream -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq-blue:5672 --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 10000 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
@@ -126,18 +139,25 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 
 ### LAB 5: Everyday I'm Shovelling
 
+Shovel is an amazing plugin you can leverage to move messages from one to another queue. 
+
+Usecases: 
+- Moving messages between queues on same or different cluster
+
 ```
 docker exec rabbitmq-blue rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://guest:guest@rabbitmq-blue", "src-queue": "sa-workshop", "dest-protocol": "amqp091", "dest-uri": "amqp://guest:guest@rabbitmq-blue", "dest-queue": "sa-workshop-shovelq", "dest-queue-args": {"x-queue-type": "quorum"}}'
 
+
+docker exec rabbitmq-blue rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://guest:guest@rabbitmq-blue", "src-queue": "sa-workshop-shovelq", "dest-protocol": "amqp091", "dest-uri": "amqp://guest:guest@rabbitmq-green", "dest-queue": "sa-workshop-shovelq-green", "dest-queue-args": {"x-queue-type": "quorum"}}'
 ```
 
 ### Routing Messages via Exchanges and routing-key (topic, fanout, )
-- Create two queues A and B
-- Create and exchange named demo
-- Bind the queue A to demo exchange with routing-key demo1
-- Bind the queue B to demo exchange with routing -key demo2
+- Create an exchange named demo
+- Bind the queue event to demo exchange with routing-key event.#
+- Bind the queue new-event to demo exchange with routing-key new-event.#
+- Publish a message via exchange and see how messages are routed to queues event and new-event based on routing keys.
 
-#### Now publish the messages to demo exchange via perf test and see how messages are routed to queues A and B based on routing keys.
+#### Now publish the messages to demo exchange via perf test and see how messages are routed to queues events and new-events based on routing keys.
 ```
 
 docker exec rabbitmq-blue rabbitmqadmin declare exchange name=demo.exchange type=topic durable=true auto_delete=false
@@ -156,7 +176,7 @@ docker exec rabbitmq-blue rabbitmqadmin publish exchange=demo.exchange routing_k
 
 ```
 
-
+#### Perf test to route message via exchange with routing keys
 ```
 
 docker run --name perf-tst-stream -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri "amqp://guest:guest@rabbitmq-blue" --producers 10 --consumers 5 --predeclared --exchange demo.exchange --routing-key "event.demo" --pmessages 1000 --rate 100 --consumer-rate 10 --multi-ack-every 10

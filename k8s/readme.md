@@ -226,6 +226,7 @@ kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/d
  k edit rabbitmqclusters.rabbitmq.com upstream-rabbit-new
 ```
 
+### Lab 8: Monitoring 
 
 #### References:
 

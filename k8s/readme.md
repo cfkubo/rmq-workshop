@@ -5,7 +5,7 @@ git clone https://github.com/cfkubo/rmq-workshop
 cd rmq-workshop/k8s
 ```
 
-### Intall OSS RabbitMQ Operator on K8s (any K8s)
+### LAB 1: Intall OSS RabbitMQ Operator on K8s (any K8s)
 ```
 kubectl apply -f https://github.com/rabbitmq/cluster-operator/releases/download/v2.10.0/cluster-operator.yml
 
@@ -71,7 +71,7 @@ kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabb
 kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabbitmq_shovel_management
 ```
 
-### Creating User and Permissions
+### LAB 2: Creating User and Permissions
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user arul password
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
@@ -81,21 +81,11 @@ kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_user_tag
 kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl add_user arul password
 kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
 kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags arul administrator
-
-
 ```
-
 
 
 ### Pull the default username and password created as a k8s Secret for RMQ:
 ```
-instance=my-tanzu-rabbit
-username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
-password=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.password}" | base64 --decode)
-service=${instance}
-echo $username
-echo $password
-
 instance=upstream-rabbit-new
 username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
 password=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.password}" | base64 --decode)
@@ -110,10 +100,9 @@ service=${instance}
 echo $username
 echo $password
 
-
 ```
 
-### Access RMQ Management UI
+### LAB 3: Access RMQ Management UI
 ```
 kubectl port-forward svc/my-tanzu-rabbit 15672:15672
 kubectl port-forward svc/upstream-rabbit-new 15672:15672
@@ -126,7 +115,7 @@ kubectl -n rmq-downstream port-forward svc/downstream-rabbit-new 15673:15672
 Use the above default username password  or the user you have created
 
 
-### Deploy Producers and Consumer Applications - Leveraging RabbitMQ PerfTest
+### LAB 4: Deploy Producers and Consumer Applications - Leveraging RabbitMQ PerfTest
 
 #### RMQPerf Test on k8s:
 
@@ -146,7 +135,7 @@ kubectl -n default  --restart=Always run arul-perf2 --image=pivotalrabbitmq/perf
 kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 100 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
 ```
 
-### Routing Messages via Exchanges 
+### LAB 5: Routing Messages via Exchanges 
 
 - Create an exchange named demo
 - Bind the queue event to demo exchange with routing-key event.#
@@ -181,7 +170,7 @@ kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabb
 ```
 
 
-### LAB 8: Federation  - Actvie - Active RMQ deployments in Docker
+### LAB 6: Federation  - Actvie - Active RMQ deployments in Docker
 
 Setting up exchange and queue federation on blue cluster 
 ```
@@ -225,7 +214,7 @@ kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish e
 kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared  --pmessages 10000 --exchange "federated.exchange" --routing-key "event.test" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
 ```
 
-### Upgrading RMQ on K8s
+### LAB 7: Upgrading RMQ on K8s
 
 #### Upgrade the RMQ k8s operator
 ```
@@ -237,31 +226,4 @@ kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/d
  k edit rabbitmqclusters.rabbitmq.com upstream-rabbit-new
 ```
 
-<!-- 
 
-
-<!-- rabbitmqadmin declare exchange --vhost="$RABBITMQ_VHOST" --name="my_topic_exchange" --type="topic" --durable="true" -->
-
-
-# target.hostname is just an example, replace it with a URI
-# of the target node (usually a member of a remote node/cluster,
-# or a URI that connects to a different virtual host within the same cluster)
-kubectl exec upstream-rabbit-new-server-0 -it -- rabbitmqctl set_parameter federation-upstream my-upstream '{"uri":"amqp://arul:password@downstream-rabbit-new.rmq-downstream.svc.cluster.local:5672","expires":3600000}'
-
-kubectl exec upstream-rabbit-new-server-0 -it -- rabbitmqctl set_policy --apply-to exchanges federate-me "^amq\." '{"federation-upstream-set":"all"}'
-
-kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -it -- rabbitmqctl set_policy --apply-to exchanges federate-me "^amq\." '{"federation-upstream-set":"all"}'
-
-
-rabbitmqctl set_parameter federation-upstream my-upstream '{"uri":"amqp://arul:password@downstream-rabbit-new.downstream-rmq.svc.cluster.local","expires":3600000}'
-
-rabbitmqctl set_policy --apply-to exchanges federate-me "^amq\." '{"federation-upstream-set":"all"}'
-
-rabbitmqadmin publish exchange=amq.topic routing_key=amq.event payload="Hello Rabbit!"
-
-
-
-####
-
-# Adds a federation upstream named "origin"
-rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@downstream-rabbit-new.downstream-rmq.svc.cluster.local:5672"}' -->

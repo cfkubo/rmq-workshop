@@ -140,8 +140,10 @@ echo $password
 ```
 
 ### LAB 3: Access RMQ Management UI
-```
 
+When running on container platforms like kubernetes, we need to port forward to access the management UI. You can access the blue and green cluster using the below urls.
+
+```
 kubectl port-forward svc/upstream-rabbit-new 15672:15672
 kubectl -n rmq-downstream port-forward svc/downstream-rabbit-new 15673:15672
 

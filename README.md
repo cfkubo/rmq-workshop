@@ -6,7 +6,7 @@ The repo has a collection of hands on  labs for RabbitMQ.
 ![RabbitMQ Screenshot](static/rmq.png)
 
 Docker:
-- [(https://github.com/cfkubo/rmq-workshop/docker/blob/main/readme.md](https://github.com/cfkubo/rmq-workshop/docker/blob/main/readme.md)
+- [https://github.com/cfkubo/rmq-workshop/docker/blob/main/readme.md](https://github.com/cfkubo/rmq-workshop/docker/blob/main/readme.md)
 - https://site.arullab.com/rmq-workshop/docker/
 
 Kubernetes: https://site.arullab.com/rmq-workshop/k8s/

@@ -60,6 +60,8 @@ my-tanzu-rabbit-server-2   1/1     Running   0          2m59s
 
 ### Enable Plugins on RMQ Server
 
+**NOTE** : We have enabled the plugin using rmq yaml. This is not required if you have enabled the plugin using rmq yaml.
+
 ```
 kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabbitmq_stream
 kubectl -n default exec my-tanzu-rabbit-server-0 --rabbitmq-plugins enable rabbitmq_stream_management
@@ -72,11 +74,6 @@ kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabb
 
 ### Creating User and Permissions
 ```
-kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmqctl add_user arul password
-kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
-kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmqctl set_user_tags arul administrator
-
-
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user arul password
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags arul administrator

@@ -4,6 +4,8 @@
 
 ### Prequisites 
 - K8s installed and running (Kind,Docker k8s, MiniKube)
+- kubectl 
+- helm
 
 ### Clone this repo and move to rmq-workshop/K8s folder to continue
 ```
@@ -110,13 +112,16 @@ echo $password
 
 ### LAB 3: Access RMQ Management UI
 ```
-kubectl port-forward svc/my-tanzu-rabbit 15672:15672
+
 kubectl port-forward svc/upstream-rabbit-new 15672:15672
 kubectl -n rmq-downstream port-forward svc/downstream-rabbit-new 15673:15672
 
 ```
-
+Upstream RMQ
 > http://localhost:15672
+
+Downstream RMQ
+> http://localhost:15673
 
 Use the above default username password  or the user you have created
 
@@ -233,6 +238,10 @@ kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/d
 ```
 
 ### Lab 8: Monitoring 
+
+helm install prometheus  prometheus-community/prometheus
+helm install  grafana grafana/grafana
+
 
 #### References:
 

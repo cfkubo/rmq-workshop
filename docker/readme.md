@@ -4,6 +4,8 @@
 
 ### Prequisites 
 - Docker installed and running
+- maven
+- rabbitmqadmin v2 cli
 
 ### Clone this repo and move to rmq-workshop/docker folder to continue
 ```

@@ -12,11 +12,10 @@ cd rmq-workshop/docker
 ```
 docker network create rmq-network
 
-docker run -d --hostname my-rabbit --name rabbitmq --network rmq-network -p 5672:5672 -p 15672:15672 -p 15692:15692 -p 5552:5552 rabbitmq:4.0-management
+docker run -d --hostname my-rabbit-blue --name rabbitmq-blue --network rmq-network  -p 15672:15672 -p 15692:15692 -p 5552:5552 rabbitmq:4.0-management
 
-docker run -d --hostname my-rabbit-blue --name rabbitmq --network rmq-network -p 5672:5672 -p 15672:15672 -p 15692:15692 -p 5552:5552 rabbitmq:4.0-management
+docker run -d --hostname my-rabbit-green --name rabbitmq-green --network rmq-network  -p 15673:15672 -p 15691:15692 -p 5553:5552 rabbitmq:4.0-management
 
-docker run -d --hostname my-rabbit-green --name rabbitmq-green --network rmq-network -p 5673:5672 -p 15673:15672 -p 15691:15692 -p 5553:5552 rabbitmq:4.0-management
 
 ```
 ### Enable plugins on RabbitMQ
@@ -103,7 +102,7 @@ Password: guest
 
 #### Quorum
 ```
-docker run --name perf-tst -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq:5672 --quorum-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop" --pmessages 10000 --queue "sa-workshop" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
+docker run --name perf-tst -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq-blue:5672 --quorum-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-q1" --pmessages 10000 --queue "sa-workshop-q1" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
 
 
 docker run --name perf-tst1 -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq-blue:5672 --quorum-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop" --pmessages 10000 --queue "sa-workshop" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
@@ -114,7 +113,7 @@ docker run --name perf-tst1 -d --network rmq-network pivotalrabbitmq/perf-test:l
 docker run --name perf-tst7 -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq:5672 --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 100 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
 
 
-docker run --name perf-tst2 -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq-blue:5672 --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 100 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
+docker run --name perf-tst-stream -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq-blue:5672 --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 10000 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
 
 ```
 
@@ -188,9 +187,6 @@ rmqadmin list queues
 rmqadmin show memory_breakdown_in_percent  --node rabbit@my-rabbit
 ```
 
-### LAB 8: Federation  - Actvie - Active RMQ deployments in Docker
-
-- [https://github.com/ggreen/event-streaming-showcase/blob/main/docs/workshops/Labs/sysAdmin/active-active/01_FEDERATION.md](https://github.com/ggreen/event-streaming-showcase/blob/main/docs/workshops/Labs/sysAdmin/active-active/01_FEDERATION.md)
 
 <!--
 rmqadmin shovels declare_amqp091 --name my-amqp091-shovel \
@@ -250,3 +246,32 @@ docker exec rabbitmq-blue rabbitmqadmin publish exchange=amq.topic routing_key=a
 
 # check whether the message is forwarded to broker B, you should get a message contains 'Hello Rabbit!'
 rabbitmqadmin get queue=event requeue=false -->
+
+### LAB 8: Federation  - Actvie - Active RMQ deployments in Docker
+
+Setting up exchange and queue federation on blue cluster 
+```
+docker exec rabbitmq-blue  rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@rabbitmq-green:5672"}' 
+
+docker exec rabbitmq-blue  rabbitmqctl set_policy exchange-federation "^federated\." '{"federation-upstream-set":"all"}'  --priority 10  --apply-to exchanges
+
+docker exec rabbitmq-blue rabbitmqctl set_policy queue-federation ".*" '{"federation-upstream-set":"all"}' --priority 10 --apply-to queues
+```
+
+Setting up exchange and queue federation on green cluster 
+```
+docker exec rabbitmq-green  rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@rabbitmq-blue:5672"}' 
+
+docker exec rabbitmq-green  rabbitmqctl set_policy exchange-federation "^federated\." '{"federation-upstream-set":"all"}'  --priority 10  --apply-to exchanges
+
+docker exec rabbitmq-green rabbitmqctl set_policy queue-federation ".*" '{"federation-upstream-set":"all"}' --priority 10 --apply-to queues
+
+```
+
+#### Perf test on federated exchange
+```
+docker run --name perf-tst-exchange -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq-blue:5672 --quorum-queue --producers 10 --consumers 5 --predeclared  --pmessages 10000 --exchange "federated.test" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
+```
+
+
+

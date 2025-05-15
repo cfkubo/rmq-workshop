@@ -1,5 +1,6 @@
 # RabbitMQ Hands On Workshop
 
+
 The repo has a collection of hands on  labs for RabbitMQ. 
 
 Docker: https://site.arullab.com/rmq-workshop/docker/

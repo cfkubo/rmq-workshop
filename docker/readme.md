@@ -70,7 +70,10 @@ rmqadmin --help
 
 ```
 ### LAB 2: Creating User and Permissions
-We can use these credentials to login to RabbitMQ WebUI and setup federation between RabbitMQ instances.
+
+[https://www.rabbitmq.com/docs/access-control](https://www.rabbitmq.com/docs/access-control)
+
+You can control user permissions. For now we will create a admin user that we use to login to the RabbitMQ management UI.
 
 ```
 docker exec rabbitmq-blue rabbitmqctl add_user arul password

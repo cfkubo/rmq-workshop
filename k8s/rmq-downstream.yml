@@ -23,6 +23,9 @@ spec:
       - rabbitmq_schema_definition_sync_prometheus
       - rabbitmq_federation
       - rabbitmq_federation_management
+      - rabbitmq_stream_management
+      - rabbitmq_shovel
+      - rabbitmq_shovel_management
       # - rabbitmq_standby_replication
     # additionalConfig: |
     #   schema_definition_sync.operating_mode = upstream

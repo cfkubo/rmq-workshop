@@ -101,6 +101,11 @@ kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabb
 ```
 
 ### LAB 2: Creating User and Permissions
+
+[https://www.rabbitmq.com/docs/access-control](https://www.rabbitmq.com/docs/access-control)
+
+You can control user permissions. For now we will create a admin user that we use to login to the RabbitMQ management UI.
+
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user arul password
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
@@ -114,6 +119,9 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set
 
 
 ### Pull the default username and password created as a k8s Secret for RMQ:
+
+
+
 ```
 instance=upstream-rabbit-new
 username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)

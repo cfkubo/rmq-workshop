@@ -272,5 +272,5 @@ mvn spring-boot:run
 
 #### References:
 
-https://github.com/ggreen/event-streaming-showcase
-https://www.rabbitmq.com
+- https://github.com/ggreen/event-streaming-showcase
+- https://www.rabbitmq.com

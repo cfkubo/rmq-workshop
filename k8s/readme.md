@@ -151,10 +151,30 @@ kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-tes
 ```
 
 ### Routing Messages via Exchanges 
-- Create two queues A and B
-- Create and exchange named demo
-- Bind the queue A to demo exchange with routing-key demo1
-- Bind the queue B to demo exchange with routing -key demo2
+
+- Create an exchange named demo
+- Bind the queue event to demo exchange with routing-key event.#
+- Bind the queue new-event to demo exchange with routing-key new-event.#
+- Publish a message via exchange and see how messages are routed to queues event and new-event based on routing keys.
+
+#### Now publish the messages to demo exchange via perf test and see how messages are routed to queues A and B based on routing keys.
+```
+
+kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare exchange name=demo.exchange type=topic durable=true auto_delete=false
+
+kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare queue name=event durable=true auto_delete=false
+
+kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare queue name=new-event durable=true auto_delete=false
+
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqadmin declare binding source=demo.exchange destination_type=queue destination=event routing_key=event.#
+
+kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare binding source=demo.exchange destination_type=queue destination=new-event routing_key=new-event.#
+
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqadmin publish exchange=demo.exchange routing_key=event.test payload="Hello from demo exchange to event"
+
+kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish exchange=demo.exchange routing_key=new-event.test payload="Hello from demo exchange to new-event"
+
+```
 
 #### Now publish the messages to demo exchange via perf test and see how messages are routed to queues A and B based on routing keys.
 

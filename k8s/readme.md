@@ -21,14 +21,24 @@ kubectl apply -f https://github.com/rabbitmq/cluster-operator/releases/download/
 ```
 kubectl get namespaces
 ```
+Sample Output: rabbitmq-system namespace is created and should be running the RMQ operator pod
+```
 NAME              STATUS   AGE
 default           Active   73s
 kube-node-lease   Active   73s
 kube-public       Active   73s
 kube-system       Active   73s
 rabbitmq-system   Active   2s
+```
 
-
+```
+Kubectl get po -n rabbitmq-system 
+```
+Sample Output: 
+```
+NAME                                         READY   STATUS    RESTARTS   AGE
+rabbitmq-cluster-operator-5f94454fb7-bnqtg   1/1     Running   0          97m
+```
 ### Deploy a single node RMQ Cluster
 
 ```
@@ -37,15 +47,20 @@ kubectl apply -f https://raw.githubusercontent.com/rabbitmq/cluster-operator/mai
 ```
 kubectl get po
 ```
+Sample Output:
+```
 NAME                   READY   STATUS    RESTARTS   AGE
 hello-world-server-0   1/1     Running   0          3m19s
+```
 
 ```
 k get rabbitmqclusters.rabbitmq.com hello-world
 ```
+Sample Output:
+```
 NAME          ALLREPLICASREADY   RECONCILESUCCESS   AGE
 hello-world   True               True               5m26s
-
+```
 
 ### Deploy a multinode RMQ Cluster
 ```
@@ -56,8 +71,9 @@ kubectl apply -f rmq-downstream.yml -n rmq-downstream
 
 ```
 kubectl  get pods
-
-
+```
+Sample Output:
+```
 NAME                       READY   STATUS    RESTARTS   AGE
 hello-world-server-0       1/1     Running   0          10m
 my-tanzu-rabbit-server-0   1/1     Running   0          2m59s

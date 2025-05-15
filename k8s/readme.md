@@ -239,9 +239,28 @@ kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/d
 
 ### Lab 8: Monitoring 
 
+```
 helm install prometheus  prometheus-community/prometheus
 helm install  grafana grafana/grafana
+```
+#### Annotate rmq pods to be able to scrape the prometheus metrics
+```
+kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true 
 
+kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true -n rmq-downstream
+
+```
+
+```
+kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o jsonpath="{.items[0].metadata.name}")
+     kubectl --namespace default port-forward $POD_NAME 3000
+```
+
+```
+http://prometheus-server.default.svc.cluster.local:80
+```
 
 #### References:
 

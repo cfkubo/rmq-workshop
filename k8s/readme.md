@@ -9,7 +9,6 @@ cd rmq-workshop/k8s
 ```
 kubectl apply -f https://github.com/rabbitmq/cluster-operator/releases/download/v2.10.0/cluster-operator.yml
 
-kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml"
 ```
 ```
 kubectl get namespaces
@@ -226,7 +225,19 @@ kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish e
 kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared  --pmessages 10000 --exchange "federated.exchange" --routing-key "event.test" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
 ```
 
+### Upgrading RMQ on K8s
 
+#### Upgrade the RMQ k8s operator
+```
+kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml"
+```
+
+#### Edit the upstream-rabbit-new cluster yaml and remove the image line and save it 
+```
+ k edit rabbitmqclusters.rabbitmq.com upstream-rabbit-new
+```
+
+<!-- 
 
 
 <!-- rabbitmqadmin declare exchange --vhost="$RABBITMQ_VHOST" --name="my_topic_exchange" --type="topic" --durable="true" -->
@@ -253,4 +264,4 @@ rabbitmqadmin publish exchange=amq.topic routing_key=amq.event payload="Hello Ra
 ####
 
 # Adds a federation upstream named "origin"
-rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@downstream-rabbit-new.downstream-rmq.svc.cluster.local:5672"}'
+rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@downstream-rabbit-new.downstream-rmq.svc.cluster.local:5672"}' -->

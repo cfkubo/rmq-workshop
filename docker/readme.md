@@ -87,6 +87,9 @@ docker exec rabbitmq-green rabbitmqctl set_user_tags arul administrator
 
 ### RabbitMQ Management UI
 
+
+When running on docker container , we need to port forward to access the management UI. You can access the blue and green cluster using the below urls.
+
 Access rabbitmq-blue : [http://localhost:15672](http://localhost:15672)
 
 **Username:** guest

@@ -1,5 +1,7 @@
 ## RabbitMQ workshop is designed to get hands on experience with OSS RabbitMQ on Docker. C
 
+![RabbitMQ Screenshot](../static/rabbitmq-new.png)
+
 ### Prequisites 
 - Docker installed and running
 

@@ -250,6 +250,7 @@ kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/d
 ```
  k edit rabbitmqclusters.rabbitmq.com upstream-rabbit-new
 ```
+Repeate the above for downstream cluster to perform upgrade
 
 
 ```

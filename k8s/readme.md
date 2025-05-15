@@ -227,3 +227,7 @@ kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/d
 ```
 
 
+#### References:
+
+https://github.com/ggreen/event-streaming-showcase
+https://www.rabbitmq.com

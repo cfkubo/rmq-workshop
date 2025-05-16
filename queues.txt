@@ -1,11 +1,12 @@
 +---------------------------------------------------------+----------+
 |                          name                           | messages |
 +---------------------------------------------------------+----------+
-| event                                                   | 10001    |
-| federated-event                                         | 2        |
+| event                                                   | 110005   |
+| federated-event                                         | 100006   |
+| federated-event-new                                     | 4        |
 | federation: federated.exchange -> downstream-rabbit-new | 0        |
-| new-event                                               | 10001    |
+| new-event                                               | 110005   |
 | q.sys.synthetic-health-check                            | 0        |
-| sa-workshop                                             | 94920    |
-| sa-workshop-quorum                                      | 9320     |
+| sa-workshop                                             | 194924   |
+| sa-workshop-quorum                                      | 109324   |
 +---------------------------------------------------------+----------+

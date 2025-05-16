@@ -235,14 +235,15 @@ kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqadmin declare bi
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare binding source=demo.exchange destination_type=queue destination=new-event routing_key=new-event.#
 ```
 - Publish a message to demo.exchange with routing key event.test and see the message routed to event queue
+
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqadmin publish exchange=demo.exchange routing_key=event.test payload="Hello from demo exchange to event"
 ```
 
 - Publish a message to demo.exchange with routing key new-event.test and see the message routed to new-event queue
+
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish exchange=demo.exchange routing_key=new-event.test payload="Hello from demo exchange to new-event"
-
 ```
 
 #### Now publish the messages to demo exchange via perf test and see how messages are routed to queues events and new-events based on routing keys.
@@ -261,6 +262,7 @@ helm install prometheus  prometheus-community/prometheus
 helm install  grafana grafana/grafana
 ```
 #### Annotate rmq pods to be able to scrape the prometheus metrics
+
 ```
 kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true 
 
@@ -268,6 +270,7 @@ kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692
 
 ```
 #### Access Grafana 
+
 ```
 kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 
@@ -378,18 +381,6 @@ kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/d
  k edit rabbitmqclusters.rabbitmq.com upstream-rabbit-new
 ```
 Repeate the above for downstream cluster to perform upgrade
-
-
-```
-kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
-
-export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o jsonpath="{.items[0].metadata.name}")
-     kubectl --namespace default port-forward $POD_NAME 3000
-```
-
-```
-http://prometheus-server.default.svc.cluster.local:80
-```
 
 ### LAB 9: Springboot Producer Application
 ```

@@ -256,9 +256,19 @@ docker exec rabbitmq-green rabbitmqadmin declare binding source=federated.exchan
 
 docker exec rabbitmq-blue rabbitmqadmin publish exchange=federated.exchange routing_key=event.test payload="Hello from demo exchange to event"
 
-docker exec rabbitmq-blue rabbitmqadmin publish exchange=demo.exchange routing_key=new-event.test payload="Hello from demo exchange to new-event"
+docker exec rabbitmq-blue rabbitmqadmin publish exchange=federated.exchange routing_key=new-event.test payload="Hello from demo exchange to new-event"
 ```
 
+#### Now lets bind all queues to federated exchange on both blue and green RMQ servers.
+
+```
+docker exec rabbitmq-blue rabbitmqadmin list queues > queues.txt
+
+for i in `cat queues.txt | awk '{print $2}' | grep -v name` ; do docker exec rabbitmq-blue rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=$i routing_key=event.# ; done
+
+for i in `cat queues.txt | awk '{print $2}' | grep -v name` ; do docker exec rabbitmq-green  rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=$i routing_key=event.# ; done
+
+```
 
 #### Perf test on federated exchange
 ```

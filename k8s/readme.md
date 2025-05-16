@@ -228,7 +228,7 @@ kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692
 
 ### LAB 7: Federation  - Actvie - Active RMQ deployments in Docker
 
-Setting up exchange and queue federation on blue cluster 
+#### Setting up exchange and queue federation on blue cluster 
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@downstream-rabbit-new.rmq-downstream.svc.cluster.local:5672"}' 
 
@@ -237,7 +237,7 @@ kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_policy 
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_policy queue-federation ".*" '{"federation-upstream-set":"all"}' --priority 10 --apply-to queues
 ```
 
-Setting up exchange and queue federation on green cluster 
+#### Setting up exchange and queue federation on green cluster 
 ```
 kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672"}' 
 
@@ -263,7 +263,8 @@ kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish e
 
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish exchange=federated.exchange routing_key=new-event.test payload="Hello from demo exchange to new-event"
 ```
-#### Now lets bind all queues to federated exchange.
+
+#### Now lets bind all queues to federated exchange on both blue and green RMQ servers.
 
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -it  --  rabbitmqadmin list queues > queues.txt

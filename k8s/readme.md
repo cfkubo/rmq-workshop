@@ -274,11 +274,19 @@ kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-passwor
 export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o jsonpath="{.items[0].metadata.name}")
      kubectl --namespace default port-forward $POD_NAME 3000
 ```
-#### Setup Prometheus Data Source in Grafana
 
-http://prometheus-server.default.svc.cluster.local:80
+#### Add prometheus datasource to Grafana
+Click on "Add your first data soruce" > select prometheus > http://prometheus-server.default.svc.cluster.local:80 > save and test
+
+![RabbitMQ Screenshot](grafana.png)
+
+#### Add RMQ-Overview Dashboard
+Click on create new dasboard > Import > copy the json code from rmq-overview.json file and paste it in json field and use the prometheus datasource
+
+![RabbitMQ Screenshot](../static/grafana.png)
 
 #### Install the RMQ Overview Dashboard
+
 
 
 

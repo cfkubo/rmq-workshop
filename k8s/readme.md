@@ -313,18 +313,24 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set
 #### Creating queue, exchange, bindinging on both blue & green cluster , publish a message to blue cluster and observe the message on both clusters
 
 - Delcare an exchange named federated.exchange on upstream RMQ
+
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare exchange name=federated.exchange type=fanout durable=true auto_delete=false
 ```
 
 - Delcare a queue named federated-event on upstream RMQ
+
+
 ```
+
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare queue name=federated-event durable=true auto_delete=false
 
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare queue name=federated-event-new durable=true auto_delete=false
+
 ```
 
 - Declare a binding between the federated.exchange and federated-event queue on Upstream RMQ
+
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=federated-event routing_key=event.#
 
@@ -332,6 +338,7 @@ kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare b
 ```
 
 - Declare a binding between the federated.exchange and federated-event queue on Downstream RMQ
+
 ```
 kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=federated-event routing_key=event.#
 
@@ -339,6 +346,7 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqadmin d
 ```
 
 - Publish a message to federated exachange with routing key event.test and see the message routed to both RMQ Servers
+
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish exchange=federated.exchange routing_key=event.test payload="Hello from demo exchange to with key event"
 
@@ -357,6 +365,7 @@ for i in `cat queues.txt | awk '{print $2}' | grep -v name` ; do kubectl -n defa
 ```
 
 #### Perf test on federated exchange
+
 ```
 instance=upstream-rabbit-new
 username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
@@ -372,17 +381,20 @@ kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotal
 ### LAB 8: Upgrading RMQ on K8s
 
 #### Upgrade the RMQ k8s operator
+
 ```
 kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml"
 ```
 
 #### Edit the upstream-rabbit-new cluster yaml and remove the image line and save it 
+
 ```
  k edit rabbitmqclusters.rabbitmq.com upstream-rabbit-new
 ```
 Repeate the above for downstream cluster to perform upgrade
 
 ### LAB 9: Springboot Producer Application
+
 ```
 git clone https://github.com/cfkubo/spring-boot-random-data-generator
 cd spring-boot-random-data-generator
@@ -391,6 +403,7 @@ mvn spring-boot:run
 ```
 
 ##### Kubectl cmd to clean up pods that are not in Running State. Usefull when trying to rerun perftest pods
+
 ```
 kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[?(@.status.phase!="Running")].metadata.name}')
 ```

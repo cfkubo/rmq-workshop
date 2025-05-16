@@ -285,10 +285,6 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 
 ![RabbitMQ Screenshot](../static/grafana.png)
 
-#### Install the RMQ Overview Dashboard
-
-
-
 
 ### LAB 7: Federation  - Actvie - Active RMQ deployments in Docker
 
@@ -385,6 +381,7 @@ mvn spring-boot:run
 
 ```
 
+##### Kubectl cmd to clean up pods that are not in Running State. Usefull when trying to rerun perftest pods
 ```
 kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[?(@.status.phase!="Running")].metadata.name}')
 ```

@@ -412,6 +412,10 @@ kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[
 
 [RabbitMQ Tutorials](https://www.rabbitmq.com/tutorials)
 
+### RabbitMQ Labs for Developers and DevOps Engineers
+
+[RabbitMQ AppDev Labs](https://github.com/ggreen/event-streaming-showcase/tree/main/docs/workshops/Labs/appDev)
+
 #### References:
 
 - https://github.com/ggreen/event-streaming-showcase

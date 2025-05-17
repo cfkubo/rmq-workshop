@@ -26,3 +26,12 @@ helm -n rabbitmq-system install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.b
 ```
 kubectl apply -f https://raw.githubusercontent.com/rabbitmq/cluster-operator/main/docs/examples/hello-world/rabbitmq.yaml
 ```
+
+
+```
+kubectl apply -f rmq-upstream.yaml
+
+kubectl create ns rmq-downstream
+
+kubectl apply -f rmq-downstream.yml
+```

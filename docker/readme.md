@@ -275,6 +275,13 @@ for i in `cat queues.txt | awk '{print $2}' | grep -v name` ; do docker exec rab
 docker run --name perf-tst-exchange -d --network rmq-network pivotalrabbitmq/perf-test:latest --uri amqp://guest:guest@rabbitmq-blue:5672 --quorum-queue --producers 10 --consumers 5 --predeclared  --pmessages 10000 --exchange "federated.exchange" --routing-key "event.test" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
 ```
 
+### RabbitMQ Tutorials  cover the basics of creating messaging applications using RabbitMQ.
+
+[RabbitMQ Tutorials](https://www.rabbitmq.com/tutorials)
+
+### RabbitMQ Labs for Developers and DevOps Engineers
+
+[RabbitMQ AppDev Labs](https://github.com/ggreen/event-streaming-showcase/tree/main/docs/workshops/Labs/appDev)
 
 #### References:
 

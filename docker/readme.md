@@ -1,4 +1,4 @@
-## RabbitMQ workshop is designed to get hands on experience with OSS RabbitMQ on Docker.
+## RabbitMQ workshop is designed to get hands on operational experience with OSS RabbitMQ on Docker.
 
 ![RabbitMQ Screenshot](../static/rabbitmq-new.png)
 

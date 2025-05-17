@@ -5,16 +5,16 @@ metadata:
 spec:
   service:
     type: ClusterIP
-  replicas: 3
-  # resources:
-  #   requests:
-  #     cpu: "1"
-  #     memory: "2Gi"
-  #   limits:
-  #     cpu: "1"
-  #     memory: "2Gi"
-  # imagePullSecrets:
-  # - name: reg-creds
+    replicas: 3
+    # resources:
+    #   requests:
+    #     cpu: "1"
+    #     memory: "2Gi"
+    #   limits:
+    #     cpu: "1"
+    #     memory: "2Gi"
+    imagePullSecrets:
+    - name: tanzu-rabbitmq-registry-creds
   rabbitmq:
     additionalPlugins:
       - rabbitmq_stream

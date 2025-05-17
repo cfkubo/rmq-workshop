@@ -5,7 +5,16 @@ metadata:
 spec:
   service:
     type: ClusterIP
-  replicas: 3
+    replicas: 3
+  # resources:
+  #   requests:
+  #     cpu: "1"
+  #     memory: "2Gi"
+  #   limits:
+  #     cpu: "1"
+  #     memory: "2Gi"
+  # imagePullSecrets:
+  # - name: reg-creds
   rabbitmq:
     additionalPlugins:
       - rabbitmq_stream
@@ -28,3 +37,221 @@ spec:
       # schema_definition_sync.ssl_options.keyfile               = /etc/rabbitmq-tls/tls.key
       # schema_definition_sync.ssl_options.verify                = verify_none
       # schema_definition_sync.ssl_options.fail_if_no_peer_cert  = false
+
+
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: upstream-rabbit-new
+spec:
+  service:
+    type: ClusterIP
+  replicas: 2
+  resources:
+    requests:
+      cpu: "1"
+      memory: "2Gi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+  imagePullSecrets:
+  - name: reg-creds
+  rabbitmq:
+    additionalPlugins:
+      - rabbitmq_stream
+      - rabbitmq_schema_definition_sync
+      - rabbitmq_schema_definition_sync_prometheus # optional
+      - rabbitmq_standby_replication
+    additionalConfig: |
+      schema_definition_sync.operating_mode = upstream
+      standby.replication.operating_mode = upstream
+      # message stream retention limit (can either be size or time based)
+      standby.replication.retention.size_limit.messages = 5000000000
+      # standby.replication.retention.time_limit.messages = 12h
+      # schema_definition_sync.ssl_options.certfile              = /etc/rabbitmq-tls/tls.crt
+      # schema_definition_sync.ssl_options.keyfile               = /etc/rabbitmq-tls/tls.key
+      # schema_definition_sync.ssl_options.verify                = verify_none
+      # schema_definition_sync.ssl_options.fail_if_no_peer_cert  = false
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: upstream-secret
+type: Opaque
+stringData:
+  username: test-user222
+  password: testwerpa#$%assDfword
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: User
+metadata:
+  name: rabbitmq-replicator-new
+spec:
+  tags:
+  - administrator
+  rabbitmqClusterReference:
+    name: upstream-rabbit-new # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
+  importCredentialsSecret:
+    name: upstream-secret
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Permission
+metadata:
+  name: rabbitmq-replicator-new.rabbitmq-schema-definition-sync.all-new
+spec:
+  vhost: "rabbitmq_schema_definition_sync" # name of a vhost
+  userReference:
+    name: rabbitmq-replicator-new
+  permissions:
+    write: ".*"
+    configure: ".*"
+    read: ".*"
+  rabbitmqClusterReference:
+    name: upstream-rabbit-new  # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: SchemaReplication
+metadata:
+  name: upstream-new
+  namespace: default
+spec:
+  endpoints: rabbit1.upstream.arullab.com #"UPSTREAM_EXTERNAL_IP:5672"
+  upstreamSecret:
+    name: upstream-secret
+  rabbitmqClusterReference:
+    name: upstream-rabbit-new  # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
+---
+apiVersion: rabbitmq.tanzu.vmware.com/v1beta1
+kind: StandbyReplication
+metadata:
+  name: upstream-configuration-new
+spec:
+  operatingMode: "upstream" # has to be "upstream" to configure an upstream RabbitMQ cluster; required value
+  upstreamModeConfiguration: # list of policies that Operator will create
+    replicationPolicies:
+      - name: test-policy # policy name; required value
+        pattern: "^.*" # any regex expression that will be used to match quorum queues name; required value
+        vhost: "/" # vhost name; must be an existing vhost; required value
+  rabbitmqClusterReference:
+    name: upstream-rabbit-new # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Vhost
+metadata:
+  name: new
+spec:
+  name: "/" # vhost name
+  tags: ["standby_replication"]
+  rabbitmqClusterReference:
+    name: upstream-rabbit-new # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Permission
+metadata:
+  name: rabbitmq-replicator-new.defaultvhost.all-new1
+spec:
+  vhost: "/" # name of a vhost
+  userReference:
+    name: rabbitmq-replicator-new
+  permissions:
+    write: ".*"
+    configure: ".*"
+    read: ".*"
+  rabbitmqClusterReference:
+    name: upstream-rabbit-new  # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
+
+# ---
+# apiVersion: projectcontour.io/v1
+# kind: HTTPProxy
+# metadata:
+#   name: grafana
+#   namespace: monitoring-tools
+# spec:
+#   virtualhost:
+#     fqdn: "monitor.upstream.arullab.com"
+#     tls:
+#       secretName: upstream-monitor
+#   routes:
+#    - conditions:
+#      - prefix: ""
+#      services:
+#        - name: grafana
+#          port: 3000
+#
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: htttpproxy-monitor1
+#   namespace: monitoring-tools
+# spec:
+#   commonName: monitor.upstream.arullab.com
+#   dnsNames:
+#   - monitor.upstream.arullab.com
+#   issuerRef:
+#     name: letsencrypt-prod
+#     kind: ClusterIssuer
+#   secretName: upstream-monitor
+
+# ---
+# apiVersion: projectcontour.io/v1
+# kind: HTTPProxy
+# metadata:
+#   name: rmq2proxy
+# spec:
+#   virtualhost:
+#     fqdn: "upstream1.gke.arullab.com"
+#     # tls:
+#     #   secretName: tls-secret-gke
+#   routes:
+#    - conditions:
+#      - prefix: ""
+#      services:
+#        - name: upstream-rabbit-new
+#          port: 5552
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: rmq3proxy
+spec:
+  virtualhost:
+    fqdn: "rabbit.upstream.arullab.com"
+    # tls:
+    #   secretName: tls-secret-gke
+  routes:
+   - conditions:
+     - prefix: ""
+     services:
+       - name: upstream-rabbit-new
+         port: 15672
+
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: rmq3proxy1
+spec:
+  virtualhost:
+    fqdn: "rabbit1.upstream.arullab.com"
+    # tls:
+    #   secretName: tls-secret-gke
+  routes:
+   - conditions:
+     - prefix: ""
+     services:
+       - name: upstream-rabbit-new
+         port: 5672
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: rmq-cert
+spec:
+  commonName: rabbit.upstream.arullab.com
+  dnsNames:
+  - rabbit.upstream.arullab.com
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  secretName: tls-secret-gke

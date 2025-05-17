@@ -5,6 +5,8 @@ metadata:
 spec:
   service:
     type: ClusterIP
+  imagePullSecrets:
+    - name: tanzu-rabbitmq-registry-creds
   replicas: 3
   rabbitmq:
     additionalPlugins:

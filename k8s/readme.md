@@ -291,6 +291,8 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 
 ### LAB 7: Federation  - Actvie - Active RMQ deployments in Docker
 
+[https://www.rabbitmq.com/docs/federation](https://www.rabbitmq.com/docs/federation)
+
 #### Setting up exchange and queue federation on blue cluster 
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@downstream-rabbit-new.rmq-downstream.svc.cluster.local:5672"}' 

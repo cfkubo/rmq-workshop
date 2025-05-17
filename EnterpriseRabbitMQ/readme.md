@@ -4,7 +4,11 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
 ```
 
 ```
-helm registry login rabbitmq-helmoci.packages.broadcom.com -u username -p <token>
+export token="<YOUR-BROADCOM-SUPPORT-TOKEN-FOR-RMQ-K8S>"
+```
+
+```
+helm registry login rabbitmq-helmoci.packages.broadcom.com -u username -p $token 
 ```
 
 ```

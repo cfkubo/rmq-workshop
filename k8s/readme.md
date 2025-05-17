@@ -1,4 +1,4 @@
-## RabbitMQ workshop is designed to get hands on experience with OSS RabbitMQ on K8s. 
+## RabbitMQ workshop is designed to get hands on operational experience with OSS RabbitMQ on K8s. 
 
 ![RabbitMQ Screenshot](../static/rabbitmq-new.png)
 
@@ -407,6 +407,10 @@ mvn spring-boot:run
 ```
 kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[?(@.status.phase!="Running")].metadata.name}')
 ```
+
+### RabbitMQ Tutorials  cover the basics of creating messaging applications using RabbitMQ.
+
+[RabbitMQ Tutorials](https://www.rabbitmq.com/tutorials)
 
 #### References:
 

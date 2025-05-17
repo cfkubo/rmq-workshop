@@ -20,7 +20,7 @@ kubectl create secret docker-registry tanzu-rabbitmq-registry-creds --docker-ser
 ```
 
 ```
-helm install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --set rabbitmqImage.repository="vmware-tanzu-rabbitmq-arm64"
+helm -n rabbitmq-system install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --set rabbitmqImage.repository="vmware-tanzu-rabbitmq-arm64"
 ```
 
 ```

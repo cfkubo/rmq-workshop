@@ -284,6 +284,5 @@ docker run --name perf-tst-exchange -d --network rmq-network pivotalrabbitmq/per
 [RabbitMQ AppDev Labs](https://github.com/ggreen/event-streaming-showcase/tree/main/docs/workshops/Labs/appDev)
 
 #### References:
-
-- https://github.com/ggreen/event-streaming-showcase
-- https://www.rabbitmq.com
+- [Streaming with RabbitMQ](https://github.com/ggreen/event-streaming-showcase)
+- [RabbitMQ Website](https://www.rabbitmq.com)

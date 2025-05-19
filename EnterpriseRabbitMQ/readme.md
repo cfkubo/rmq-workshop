@@ -30,7 +30,16 @@ kubectl create secret docker-registry tanzu-rabbitmq-registry-creds --docker-ser
 helm install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --version 4.0.1 --namespace rabbitmq-system
 ```
 
-
+### Verify Enterprise RMQ Operations installations
+```
+kubectl get pods  -n rabbitmq-system
+```
+#### Sample output
+```
+NAME                                           READY   STATUS    RESTARTS   AGE
+messaging-topology-operator-68bdb4ffcd-9fq6n   1/1     Running   0          54m
+rabbitmq-cluster-operator-645d7645c-sshhm      1/1     Running   0          54m
+```
 
 <!-- 
 ```

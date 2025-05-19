@@ -27,10 +27,10 @@ kubectl create secret docker-registry tanzu-rabbitmq-registry-creds --docker-ser
 
 ### Install the RMQ Enterprise Operators.
 ```
-helm install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --namespace rabbitmq-system
+helm install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --version 4.0.1 --namespace rabbitmq-system
 ```
 
-helm install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --version 4.0.1
+
 
 <!-- 
 ```

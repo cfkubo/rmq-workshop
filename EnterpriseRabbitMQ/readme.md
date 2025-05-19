@@ -6,7 +6,7 @@
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.5.3/cert-manager.yaml
 ```
 
-### Grad your Broadcom Support Token form broadcom support portal and set it as an environment variable.
+### Grab your Broadcom Support Token form broadcom support portal and set it as an environment variable.
 ```
 export token="<YOUR-BROADCOM-SUPPORT-TOKEN-FOR-RMQ-K8S>"
 ```

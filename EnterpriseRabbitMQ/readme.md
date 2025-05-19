@@ -87,9 +87,20 @@ rmqadmin --help
 You can control user permissions. For now we will create a admin user that we use to login to the RabbitMQ management UI.
 
 ```
-rmqadmin declare permissions --user arul1 --configure ".*" --read ".*" --write ".*"
+
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user arul password
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags arul administrator
+
+
+kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl add_user arul password
+kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
+kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags arul administrator
+
 
 rmqadmin declare user --name arul1 --password password1
+rmqadmin declare permissions --user arul1 --configure ".*" --read ".*" --write ".*"
+
 ```
 
 
@@ -191,6 +202,8 @@ kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-tes
 - Delcare and exchange named demo.exchange type=topic durable=true auto_delete=false
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare exchange name=demo.exchange type=topic durable=true auto_delete=false
+
+rmqadmin --vhost "default" declare exchange --name "demo.exchange" --type "topic" --durable true
 ```
 - Delcare a queue named event durable=true auto_delete=false
 ```
@@ -422,3 +435,6 @@ Currenty the below appdev labs leverages docker rmq for the hands on labs.
 #### References:
 - [Streaming with RabbitMQ](https://github.com/ggreen/event-streaming-showcase)
 - [RabbitMQ Website](https://www.rabbitmq.com)
+
+#### Streams: (All you need is a Stream)
+[https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu](https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu)

@@ -22,13 +22,15 @@ kubectl create ns rabbitmq-system
 ```
 ### Create a docker-registry secret to be able to pull the images
 ```
-kubectl create secret docker-registry tanzu-rabbitmq-registry-creds --docker-server "rabbitmq.packages.broadcom.com" --docker-username "<your broadcom email>" --docker-password $token -n rabbitmq-system
+kubectl create secret docker-registry tanzu-rabbitmq-registry-creds --docker-server "rabbitmq.packages.broadcom.com" --docker-username "support-registered-email" --docker-password $token -n rabbitmq-system
 ```
 
 ### Install the RMQ Enterprise Operators.
 ```
 helm install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --namespace rabbitmq-system
 ```
+
+helm install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --version 4.0.1
 
 <!-- 
 ```

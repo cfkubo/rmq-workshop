@@ -63,6 +63,21 @@ kubectl create ns rmq-downstream
 kubectl apply -f rmq-downstream.yml
 ```
 
+### Intall RabbitmqAdmin CLI
+Interacting with RabbitMQ Server using rabbitmqadmin v2 CLI
+> https://github.com/rabbitmq/rabbitmqadmin-ng/releases
+
+Download the binary for your OS, update permission and move it bin folder
+
+![RabbitMQ Screenshot](static/rmqadmin.png)
+```
+cp rabbitmqadmin-2.1.0-aarch64-apple-darwin rmqadmin
+chmod +x rmqadmin
+sudo mv rmqadmin /usr/local/bin
+rmqadmin --help
+
+```
+
 
 
 ### LAB 2: Creating User and Permissions
@@ -72,15 +87,9 @@ kubectl apply -f rmq-downstream.yml
 You can control user permissions. For now we will create a admin user that we use to login to the RabbitMQ management UI.
 
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user arul password
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags arul administrator
+rmqadmin declare permissions --user arul1 --configure ".*" --read ".*" --write ".*"
 
-
-kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl add_user arul password
-kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
-kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags arul administrator
-
+rmqadmin declare user --name arul1 --password password1
 ```
 
 

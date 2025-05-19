@@ -404,6 +404,30 @@ mvn spring-boot:run
 
 ```
 
+### LAB 7: Working RabbitmqAdmin cli
+
+```
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user guest guest
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / guest ".*" ".*" ".*"
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags guest administrator
+```
+
+
+#### Delcare a queue
+```
+rmqadmin declare queue --name demo
+rmqadmin declare queue --name demoQrorum --type quorum
+```
+#### List Queues
+```
+rmqadmin list queues
+```
+#### Show Memory Breakdown %
+```
+rmqadmin show memory_breakdown_in_percent  --node rabbit@upstream-rabbit-new-server-0.upstream-rabbit-new-nodes.default
+```
+
+
 ##### Kubectl cmd to clean up pods that are not in Running State. Usefull when trying to rerun perftest pods
 
 ```

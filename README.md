@@ -1,7 +1,6 @@
 # RabbitMQ Hands On Workshop
 
-
-The repo has a collection of hands on  labs for RabbitMQ. 
+This repo has a collection of hands on  labs for RabbitMQ.
 
 ![RabbitMQ Screenshot](static/rmq.png)
 

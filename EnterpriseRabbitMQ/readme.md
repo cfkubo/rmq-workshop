@@ -51,9 +51,9 @@ helm -n rabbitmq-system install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.b
 
 ### Deploying the setup
 ```
-kubectl apply -f upstream-confnig.yaml
+kubectl apply -f upstream-config.yaml
 
-kubectl apply -f downstream-config.yml
+kubectl apply -f downstream-config.yaml
 ```
 
 ### Intall RabbitmqAdmin CLI

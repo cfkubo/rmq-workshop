@@ -145,22 +145,21 @@ Use the above default username password  or the user you have created
 ### LAB 4: Standby Replication (Enterprise feature for RMQ)
 
 
-# Specify local (upstream cluster) nodes and credentials to be used
-# for WSR.
-#
-# Note that the target port is that of the RabbitMQ Stream protocol, *not* AMQP 1.0.
+#### Specify local (upstream cluster) nodes and credentials to be used for WSR.
+#### Note that the target port is that of the RabbitMQ Stream protocol, *not* AMQP 1.0.
+
 ```
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_standby_replication_upstream_endpoints '{"endpoints": ["upstream-rabbit:5552","upstream2-rabbit:5552","upstream3-rabbit:5552"], "username": "test-user", "password": "test-password"}'
 ```
 
-# Create a user and grant it permissions to the virtual host that will be used for schema replication.
-# This command is similar to 'rabbitmqctl add_user' but also grants full permissions
-# to the virtual host used for definition sync.
+#### Create a user and grant it permissions to the virtual host that will be used for schema replication.
+#### This command is similar to 'rabbitmqctl add_user' but also grants full permissions to the virtual host used for definition sync.
+
 ```
 kubectl -n default exec downstream-rabbit-server-0 --  rabbitmqctl add_schema_replication_user "test-user" "test-password"
 ```
-# specify local (upstream cluster) nodes and credentials to be used
-# for schema replication
+#### specify local (upstream cluster) nodes and credentials to be used for schema replication
+
 ```
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_schema_replication_upstream_endpoints '{"endpoints": ["upstream-rabbit:5672","upstream2-rabbit:5672","upstream3-rabbit:5672"], "username": "test-user", "password": "test-password"}'
 ```

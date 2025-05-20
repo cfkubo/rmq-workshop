@@ -58,6 +58,16 @@ rabbitmq-cluster-operator-645d7645c-sshhm      1/1     Running   0          54m
 
 
 ### Deploying the setup
+
+Please review the yaml file for the configuration on how you define the users and permission levearging the Messaging toplogy Operator.
+
+- This Kubernetes configuration defines an upstream RabbitMQ cluster named upstream-rabbit with specific plugins enabled, including stream, schema sync, and standby replication. It configures schema and standby replication to connect to specific endpoints with provided credentials.
+
+- A Secret named upstream-secret stores the username and password. A User named rabbitmq-replicator is created, referencing the upstream cluster and importing credentials from the Secret. Permissions are granted to this user for the rabbitmq_schema_definition_sync vhost and a new vhost named test.
+
+ - A Policy named upstream-policy is applied to queues in the test vhost, enabling remote data center replication. Finally, configurations for the default vhost ("/") are also included with similar replication policies and permissions for the rabbitmq-replicator user.
+
+
 ```
 kubectl apply -f upstream-config.yaml
 

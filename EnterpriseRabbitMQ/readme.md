@@ -8,7 +8,7 @@
 - helm
 
 
-## Install instruction for Enterprise RabbitMQ on Kubernetes.
+## 🚀🐰📦 Install instruction for Enterprise RabbitMQ on Kubernetes.🚀🐰📦
 
 
 ### Install Cert Manager

@@ -67,19 +67,21 @@ kubectl apply -f downstream-config.yaml
 ```
 
 ### Intall RabbitmqAdmin CLI
-Interacting with RabbitMQ Server using rabbitmqadmin v2 CLI
+Interacting with RabbitMQ Server using rabbitmqadmin v2 CLI . Below steps work on MAC. For other OS please download the executalbe from git releases and move it to /usr/local/bin.
 > https://github.com/rabbitmq/rabbitmqadmin-ng/releases
 
 Download the binary for your OS, update permission and move it bin folder
 
-![RabbitMQ Screenshot](../static/rmqadmin.png)
+![RabbitMQ Screenshot](static/rmqadmin.png)
 ```
+wget https://github.com/rabbitmq/rabbitmqadmin-ng/releases/download/v2.1.0/rabbitmqadmin-2.1.0-aarch64-apple-darwin
 cp rabbitmqadmin-2.1.0-aarch64-apple-darwin rmqadmin
 chmod +x rmqadmin
 sudo mv rmqadmin /usr/local/bin
 rmqadmin --help
 
 ```
+
 
 ### LAB 2: Creating User and Permissions
 
@@ -479,6 +481,8 @@ mvn spring-boot:run
 
 
 ### LAB 11: Working RabbitmqAdmin cli
+
+**NOTE** To simply interacting with rabbitmqadmin v2 cli. We can create the below guest user with admin priviliages. Consider using the default creds and specifiy them as options to rabbitmqadmin v2 cli. 
 
 ```
 kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl add_user guest guest

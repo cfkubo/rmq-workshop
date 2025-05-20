@@ -428,6 +428,19 @@ rmqadmin show memory_breakdown_in_percent  --node rabbit@upstream-rabbit-new-ser
 ```
 
 
+### RabbitMQ Tutorials  cover the basics of creating messaging applications using RabbitMQ.
+
+[RabbitMQ Tutorials](https://www.rabbitmq.com/tutorials)
+
+### RabbitMQ Labs for Developers and DevOps Engineers
+
+Currenty the below appdev labs leverages docker rmq for the hands on labs.
+
+[RabbitMQ AppDev Labs](https://github.com/ggreen/event-streaming-showcase/tree/main/docs/workshops/Labs/appDev)
+
+
+
+
 ##### Kubectl cmd to clean up pods that are not in Running State. Usefull when trying to rerun perftest pods
 
 ```

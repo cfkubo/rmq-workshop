@@ -44,6 +44,23 @@ Sample Output:
 NAME                                         READY   STATUS    RESTARTS   AGE
 rabbitmq-cluster-operator-5f94454fb7-bnqtg   1/1     Running   0          97m
 ```
+
+### Intall RabbitmqAdmin CLI
+Interacting with RabbitMQ Server using rabbitmqadmin v2 CLI . Below steps work on MAC. For other OS please download the executalbe from git releases and move it to /usr/local/bin.
+> https://github.com/rabbitmq/rabbitmqadmin-ng/releases
+
+Download the binary for your OS, update permission and move it bin folder
+
+![RabbitMQ Screenshot](static/rmqadmin.png)
+```
+wget https://github.com/rabbitmq/rabbitmqadmin-ng/releases/download/v2.1.0/rabbitmqadmin-2.1.0-aarch64-apple-darwin
+cp rabbitmqadmin-2.1.0-aarch64-apple-darwin rmqadmin
+chmod +x rmqadmin
+sudo mv rmqadmin /usr/local/bin
+rmqadmin --help
+
+```
+
 ### Deploy a single node RMQ Cluster
 
 ```

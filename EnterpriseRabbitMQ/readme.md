@@ -472,9 +472,6 @@ Currenty the below appdev labs leverages docker rmq for the hands on labs.
 
 [RabbitMQ AppDev Labs](https://github.com/ggreen/event-streaming-showcase/tree/main/docs/workshops/Labs/appDev)
 
-#### References:
-- [Streaming with RabbitMQ](https://github.com/ggreen/event-streaming-showcase)
-- [RabbitMQ Website](https://www.rabbitmq.com)
 
 
 ### RabbitMQ HTTP API Reference: 
@@ -494,3 +491,8 @@ rmqadmin --host=localhost --port=15672  --username=arul --password=password  sho
 
 #### Streams: (All you need is a Stream)
 [https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu](https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu)
+
+
+#### References:
+- [Streaming with RabbitMQ](https://github.com/ggreen/event-streaming-showcase)
+- [RabbitMQ Website](https://www.rabbitmq.com)

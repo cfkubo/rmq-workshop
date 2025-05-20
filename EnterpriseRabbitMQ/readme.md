@@ -106,14 +106,14 @@ kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl set_user_tags gu
 Below perftest are configured to user defalut user created by the operator. Run this in your terminal for the instance you want run the below labs. The below script will export the username and password to your terminal session.
 
 ```
-instance=upstream-rabbit-new
+instance=upstream-rabbit
 username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
 password=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.password}" | base64 --decode)
 service=${instance}
 echo $username
 echo $password
 
-instance=downstream-rabbit-new
+instance=downstream-rabbit
 username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
 password=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.password}" | base64 --decode)
 service=${instance}

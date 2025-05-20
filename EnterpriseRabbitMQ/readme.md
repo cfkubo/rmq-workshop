@@ -102,6 +102,10 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set
 rmqadmin declare user --name arul1 --password password1
 rmqadmin declare permissions --user arul1 --configure ".*" --read ".*" --write ".*"
 
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user guest guest
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / guest ".*" ".*" ".*"
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags guest administrator
+
 ```
 
 
@@ -239,6 +243,12 @@ kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish e
 - Declare an exchange named demo.exchange type=topic durable=true auto_delete=false
 
 rmqadmin --host=localhost --port=15672 --username=arul --password=password declare exchange --vhost="default" --name "demo.exchange" --type "topic" --durable true
+
+rmqadmin declare exchange --host=localhost --port=15672 --username=arul --password=password --vhost "default"  --name "events.all_types.topic" --type "topic" --durable true
+
+rabbitmqadmin --vhost "events" declare queue --name "target.quorum.queue.name" --type "quorum" --durable true
+
+rmqadmin --host=localhost --port=15672  --username=guest --password=guest  show overview
 
 - Declare a queue named event durable=true auto_delete=false
 
@@ -471,3 +481,11 @@ Currenty the below appdev labs leverages docker rmq for the hands on labs.
 
 ### RabbitMQ HTTP API Reference: 
 [http://localhost:15672/api/index.html](http://localhost:15672/api/index.html)
+
+```
+curl -i -u guest:guest http://localhost:15672/api/vhosts
+```
+
+```
+rmqadmin --host=localhost --port=15672  --username=guest --password=guest  show overview
+```

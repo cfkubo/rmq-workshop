@@ -255,7 +255,7 @@ kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabb
 ```
 
 
-### Lab 6: Monitoring 
+### Lab 6: Monitoring RabbitMQ on Kubernetes
 
 ```
 helm install prometheus  prometheus-community/prometheus
@@ -289,7 +289,7 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 ![RabbitMQ Screenshot](../static/grafana.png)
 
 
-### LAB 7: Federation  - Actvie - Active RMQ deployments in Docker
+### LAB 7: Federation  - Actvie - Active RMQ deployments in Kubernetes
 
 [https://www.rabbitmq.com/docs/federation](https://www.rabbitmq.com/docs/federation)
 

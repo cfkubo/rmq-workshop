@@ -72,7 +72,7 @@ Interacting with RabbitMQ Server using rabbitmqadmin v2 CLI . Below steps work o
 
 Download the binary for your OS, update permission and move it bin folder
 
-![RabbitMQ Screenshot](static/rmqadmin.png)
+![RabbitMQ Screenshot](../static/rmqadmin.png)
 ```
 wget https://github.com/rabbitmq/rabbitmqadmin-ng/releases/download/v2.1.0/rabbitmqadmin-2.1.0-aarch64-apple-darwin
 cp rabbitmqadmin-2.1.0-aarch64-apple-darwin rmqadmin

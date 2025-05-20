@@ -70,7 +70,11 @@ Please review the yaml file for the configuration on how you define the users an
 
 ```
 kubectl apply -f upstream-config.yaml
+```
 
+- This Kubernetes configuration defines a downstream RabbitMQ cluster, downstream-rabbit, designed to replicate schema and data from an upstream cluster. It enables necessary plugins like stream and standby replication. The configuration specifies the upstream connection details, including address and credentials. It also defines rules for synchronizing schema definitions and managing local entities (users, queues, etc.) on the downstream cluster, filtering out those matching specified patterns.
+
+```
 kubectl apply -f downstream-config.yaml
 ```
 

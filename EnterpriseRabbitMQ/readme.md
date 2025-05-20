@@ -52,12 +52,6 @@ messaging-topology-operator-68bdb4ffcd-9fq6n   1/1     Running   0          54m
 rabbitmq-cluster-operator-645d7645c-sshhm      1/1     Running   0          54m
 ```
 
-<!--
-```
-helm -n rabbitmq-system install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --set rabbitmqImage.repository="vmware-tanzu-rabbitmq-arm64"
-```
-helm -n rabbitmq-system install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --set rabbitmqImage.repository="rabbitmq-kubernetes.packages.broadcom.com/tanzu-rabbitmq-package-repo:3.13.3-arm64"
-``` -->
 
 ### Deploying the setup
 ```
@@ -87,7 +81,9 @@ rmqadmin --help
 
 [https://www.rabbitmq.com/docs/access-control](https://www.rabbitmq.com/docs/access-control)
 
-You can control user permissions. For now we will create a admin user that we use to login to the RabbitMQ management UI.
+**NOTE** The RMQ Operators create a default user we will use those creds to login to WebUI.
+
+You can control user permissions. Below are sample commands to create a admin user. 
 
 ```
 
@@ -129,18 +125,22 @@ echo $password
 
 When running on container platforms like kubernetes, we need to port forward to access the management UI. You can access the blue and green cluster using the below urls.
 
+#### Upstream RMQ Server port-forward to port 15672
 ```
 kubectl port-forward svc/upstream-rabbit 15672:15672
-kubectl -n default port-forward svc/downstream-rabbit 15673:15672
-
 ```
-Upstream RMQ
+
+#### Downstream RMQ Server port-forward to port 15673
+```
+kubectl -n default port-forward svc/downstream-rabbit 15673:15672
+```
+### Access Upstream RMQ
 > http://localhost:15672
 
-Downstream RMQ
+### Access Downstream RMQ
 > http://localhost:15673
 
-Use the above default username password  or the user you have created
+**Use the above default username password**
 
 
 

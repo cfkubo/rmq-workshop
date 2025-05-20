@@ -214,49 +214,13 @@ echo $password
 kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 10000 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
 ```
 
-### LAB 5: Routing Messages via Exchanges (Need updates)
+### LAB 5: Routing Messages via Exchanges (Need updates - WIP)
 
 - Create an exchange named demo
 - Bind the queue event to demo exchange with routing-key event.#
 - Bind the queue event to demo exchange with routing-key event.#
 - Publish a message via exchange and see how messages are routed to queues event and event based on routing keys.
 
-<!-- #### Now publish the messages to demo exchange via perf test and see how messages are routed to queues A and B based on routing keys.
-
-- Delcare and exchange named demo.exchange type=topic durable=true auto_delete=false
-```
-kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin declare exchange name=demo.exchange type=topic durable=true auto_delete=false
-
-rmqadmin --vhost "default" declare exchange --name "demo.exchange" --type "topic" --durable true
-```
-- Delcare a queue named event durable=true auto_delete=false
-```
-kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin declare queue name=event durable=true auto_delete=false
-```
-- Delcare a queue named event durable=true auto_delete=false
-```
-kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin declare queue name=event durable=true auto_delete=false
-```
-- Declare a binding between demo.exchange and event queue with routing key event.#
-```
-kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqadmin declare binding source=demo.exchange destination_type=queue destination=event routing_key=event.#
-```
-
-- Delcare a binding between demo.exchange and event queue with routing key event.#
-```
-kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin declare binding source=demo.exchange destination_type=queue destination=event routing_key=event.#
-```
-- Publish a message to demo.exchange with routing key event.test and see the message routed to event queue
-
-```
-kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqadmin publish exchange=demo.exchange routing_key=event.test payload="Hello from demo exchange to event"
-```
-
-- Publish a message to demo.exchange with routing key event.test and see the message routed to event queue
-
-```
-kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin publish exchange=demo.exchange routing_key=event.test payload="Hello from demo exchange to event"
-``` -->
 <!--
 ### Updates to rabbitmqadmin v2 formats: (Testing needed)
 
@@ -303,7 +267,7 @@ kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabb
 ``` -->
 
 
-### Lab 6: Monitoring
+### Lab 6: Monitoring RabbitMQ with Prometheus and Grafana
 
 ```
 helm install prometheus  prometheus-community/prometheus

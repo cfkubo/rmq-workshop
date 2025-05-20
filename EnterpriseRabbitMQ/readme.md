@@ -327,7 +327,7 @@ export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/nam
 #### Add prometheus datasource to Grafana
 Click on "Add your first data soruce" > select prometheus > http://prometheus-server.default.svc.cluster.local:80 > save and test
 
-![RabbitMQ Screenshot](grafana.png)
+![RabbitMQ Screenshot](../static/grafana.png)
 
 #### Add RMQ-Overview Dashboard
 Click on create new dasboard > Import > copy the json code from rmq-overview.json file and paste it in json field and use the prometheus datasource

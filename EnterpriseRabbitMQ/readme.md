@@ -81,8 +81,6 @@ rmqadmin --help
 
 ```
 
-
-
 ### LAB 2: Creating User and Permissions
 
 [https://www.rabbitmq.com/docs/access-control](https://www.rabbitmq.com/docs/access-control)
@@ -99,14 +97,6 @@ kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl set_user_tags ar
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl add_user arul password
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_user_tags arul administrator
-
-
-rmqadmin declare user --name arul1 --password password1
-rmqadmin declare permissions --user arul1 --configure ".*" --read ".*" --write ".*"
-
-kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl add_user guest guest
-kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl set_permissions  -p / guest ".*" ".*" ".*"
-kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl set_user_tags guest administrator
 
 ```
 
@@ -436,6 +426,7 @@ echo $password
 
 kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared  --pmessages 10000 --exchange "federated.exchange" --routing-key "event.test" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
 ``` -->
+### Inpsecting Standby Replication on Downstream RMQ
 
 ```
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmq-diagnostics inspect_local_data_available_for_standby_replication_recovery
@@ -449,8 +440,6 @@ kubectl -n default exec downstream-rabbit-server-0 -- rabbitmq-diagnostics inspe
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl list_streams_available_for_standby_replication_recovery 
 ```
 [--vhost <vhost>]
-
-
 
 
 

@@ -95,7 +95,7 @@ rmqadmin --help
 ```
 
 
-### LAB 2: Creating User and Permissions
+###🚀🐰📦 LAB 2: Creating User and Permissions 🚀🐰📦
 
 [https://www.rabbitmq.com/docs/access-control](https://www.rabbitmq.com/docs/access-control)
 
@@ -139,7 +139,7 @@ echo $password
 ```
 
 
-### LAB 3: Access RMQ Management UI
+### 🚀🐰📦 LAB 3: Access RMQ Management UI 🚀🐰📦
 
 When running on container platforms like kubernetes, we need to port forward to access the management UI. You can access the blue and green cluster using the below urls.
 
@@ -162,7 +162,7 @@ kubectl -n default port-forward svc/downstream-rabbit 15673:15672
 
 
 
-### LAB 4: Standby Replication (Enterprise feature for RMQ)
+### 🚀🐰📦 LAB 4: Standby Replication (Enterprise feature for RMQ) 🚀🐰📦
 
 ### NOTE: Most of configuration is done via yaml. Please review the upstream-config.yaml and downstream-config.yaml for standby replication configuration.
 
@@ -186,7 +186,7 @@ kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_schema_rep
 ```
 
 
-### LAB 5: Deploy Producers and Consumer Applications - Leveraging RabbitMQ PerfTest
+### 🚀🐰📦 LAB 5: Deploy Producers and Consumer Applications - Leveraging RabbitMQ PerfTest 🚀🐰📦
 
 #### RMQPerf Test on k8s:
 
@@ -286,7 +286,7 @@ kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabb
 ``` -->
 
 
-### Lab 6: Monitoring RabbitMQ with Prometheus and Grafana
+### 🚀🐰📦 Lab 6: Monitoring RabbitMQ with Prometheus and Grafana 🚀🐰📦
 
 ```
 helm install prometheus  prometheus-community/prometheus
@@ -319,7 +319,7 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 
 ![RabbitMQ Screenshot](../static/grafana.png)
 
-### Lab 7: Disaster Recovery
+### 🚀🐰📦 Lab 7: Disaster Recovery 🚀🐰📦
 ### Inpsecting Standby Replication on Downstream RMQ
 
 ```
@@ -337,7 +337,7 @@ kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl list_streams_a
 
 
 
-### LAB 9: Upgrading RMQ on K8s
+### 🚀🐰📦 LAB 9: Upgrading RMQ on K8s 🚀🐰📦
 
 #### Upgrade the RMQ k8s operator to the latest version using Helm
 
@@ -366,7 +366,7 @@ kubectl get rabbitmqclusters.rabbitmq.com downstream-rabbit -n default -o yaml |
 ![RabbitMQ Screenshot](../static/rabbit4.png)
 
 
-### LAB 10: Springboot Producer Application
+### 🚀🐰📦 LAB 10: Springboot Producer Application 🚀🐰📦
 
 ```
 git clone https://github.com/cfkubo/spring-boot-random-data-generator
@@ -376,7 +376,7 @@ mvn spring-boot:run
 ```
 
 
-### LAB 11: Working RabbitmqAdmin cli
+### 🚀🐰📦 LAB 11: Working RabbitmqAdmin cli 🚀🐰📦
 
 **NOTE** To simply interacting with rabbitmqadmin v2 cli. We can create the below guest user with admin priviliages. Consider using the default creds and specifiy them as options to rabbitmqadmin v2 cli. 
 
@@ -419,7 +419,7 @@ Currenty the below appdev labs leverages docker rmq for the hands on labs.
 
 
 
-### RabbitMQ HTTP API Reference:
+### 🚀🐰📦 RabbitMQ HTTP API Reference:🚀🐰📦
 [http://localhost:15672/api/index.html](http://localhost:15672/api/index.html)
 
 ```
@@ -434,11 +434,11 @@ rmqadmin --host=localhost --port=15672  --username=guest --password=guest  show 
 rmqadmin --host=localhost --port=15672  --username=arul --password=password  show churn
 ```
 
-#### Streams: (All you need is a Stream)
+#### 🚀🐰📦 Streams: (All you need is a Stream) 🚀🐰📦
 [https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu](https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu)
 
 
-#### References:
+#### 🚀🐰📦 References:🚀🐰📦
 - [Streaming with RabbitMQ](https://github.com/ggreen/event-streaming-showcase)
 - [RabbitMQ Website](https://www.rabbitmq.com)
 

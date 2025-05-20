@@ -238,7 +238,7 @@ kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqadmin publish ex
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish exchange=demo.exchange routing_key=new-event.test payload="Hello from demo exchange to new-event"
 ``` -->
-
+<!-- 
 ### Updates to rabbitmqadmin v2 formats: (Testing needed)
 
 - Declare an exchange named demo.exchange type=topic durable=true auto_delete=false
@@ -281,7 +281,7 @@ rmqadmin --host=localhost --port=15672 --username=arul --password=password publi
 kubectl -n default  --restart=Never run sa-workshop-demo-route --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --exchange demo.exchange --routing-key "event.demo1" --pmessages 1000  --rate 100 --consumer-rate 10 --multi-ack-every 10
 
 kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --exchange demo.exchange --routing-key "new-event.demo2" --pmessages 1000  --rate 100 --consumer-rate 10 --multi-ack-every 10
-```
+``` -->
 
 
 ### Lab 6: Monitoring 
@@ -317,7 +317,7 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 
 ![RabbitMQ Screenshot](../static/grafana.png)
 
-
+<!-- 
 ### LAB 7: Federation  - Actvie - Active RMQ deployments in Docker
 
 [https://www.rabbitmq.com/docs/federation](https://www.rabbitmq.com/docs/federation)
@@ -407,9 +407,14 @@ echo $password
 
 
 kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared  --pmessages 10000 --exchange "federated.exchange" --routing-key "event.test" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
-```
+``` -->
 
-### LAB 8: Upgrading RMQ on K8s
+### LAB 8: Standby Replication (Enterprise feature for RMQ)
+
+
+
+
+### LAB 9: Upgrading RMQ on K8s
 
 #### Upgrade the RMQ k8s operator
 
@@ -424,7 +429,7 @@ kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/d
 ```
 Repeate the above for downstream cluster to perform upgrade
 
-### LAB 9: Springboot Producer Application
+### LAB 10: Springboot Producer Application
 
 ```
 git clone https://github.com/cfkubo/spring-boot-random-data-generator
@@ -434,7 +439,7 @@ mvn spring-boot:run
 ```
 
 
-### LAB 7: Working RabbitmqAdmin cli
+### LAB 11: Working RabbitmqAdmin cli
 
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user guest guest

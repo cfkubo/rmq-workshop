@@ -476,8 +476,6 @@ Currenty the below appdev labs leverages docker rmq for the hands on labs.
 - [Streaming with RabbitMQ](https://github.com/ggreen/event-streaming-showcase)
 - [RabbitMQ Website](https://www.rabbitmq.com)
 
-#### Streams: (All you need is a Stream)
-[https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu](https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu)
 
 ### RabbitMQ HTTP API Reference: 
 [http://localhost:15672/api/index.html](http://localhost:15672/api/index.html)
@@ -489,3 +487,10 @@ curl -i -u guest:guest http://localhost:15672/api/vhosts
 ```
 rmqadmin --host=localhost --port=15672  --username=guest --password=guest  show overview
 ```
+
+```
+rmqadmin --host=localhost --port=15672  --username=arul --password=password  show churn
+```
+
+#### Streams: (All you need is a Stream)
+[https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu](https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu)

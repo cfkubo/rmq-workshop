@@ -21,15 +21,15 @@ This repo has a collection of hands on  labs for RabbitMQ.
 
 
 
-Blog: (WIP)
+### Blog: (WIP)
 -  https://site.arullab.com/posts/RMQDOCKERHANDSON/
 -  https://site.arullab.com/posts/RMQK8SHANDON/
 
 
-References: 
+### References: 
 - https://github.com/ggreen/event-streaming-showcase
 - https://www.rabbitmq.com
 
 
-Contirbutions:
+### Contirbutions:
 If you are interested in contributing to the project, Fork this repo and create a pull request with your changes.

@@ -202,7 +202,7 @@ kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-tes
 - Bind the queue new-event to demo exchange with routing-key new-event.#
 - Publish a message via exchange and see how messages are routed to queues event and new-event based on routing keys.
 
-#### Now publish the messages to demo exchange via perf test and see how messages are routed to queues A and B based on routing keys.
+<!-- #### Now publish the messages to demo exchange via perf test and see how messages are routed to queues A and B based on routing keys.
 
 - Delcare and exchange named demo.exchange type=topic durable=true auto_delete=false
 ```
@@ -237,7 +237,8 @@ kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqadmin publish ex
 
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish exchange=demo.exchange routing_key=new-event.test payload="Hello from demo exchange to new-event"
-```
+``` -->
+
 ### Updates to rabbitmqadmin v2 formats:
 
 - Declare an exchange named demo.exchange type=topic durable=true auto_delete=false

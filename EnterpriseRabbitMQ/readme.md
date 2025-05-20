@@ -212,7 +212,7 @@ echo $password
 kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 10000 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
 ```
 
-### LAB 5: Routing Messages via Exchanges
+### LAB 5: Routing Messages via Exchanges (Need updates)
 
 - Create an exchange named demo
 - Bind the queue event to demo exchange with routing-key event.#
@@ -444,18 +444,29 @@ kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl list_streams_a
 
 ### LAB 9: Upgrading RMQ on K8s
 
-#### Upgrade the RMQ k8s operator
+#### Upgrade the RMQ k8s operator to the latest version using Helm
 
 ```
-kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml"
+helm upgrade tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --namespace rabbitmq-system
 ```
 
-#### Edit the upstream-rabbit-new cluster yaml and remove the image line and save it
+### Verify Enterprise RMQ Operations Upgrade for Operators
+```
+kubectl get pods  -n rabbitmq-system
+```
+
+#### Edit the upstream-rabbit-new cluster yaml and remove the image line and save it. 
 
 ```
- k edit rabbitmqclusters.rabbitmq.com upstream-rabbit-new
+kubectl get rabbitmqclusters.rabbitmq.com upstream-rabbit -n default -o yaml | grep -v 'image:' | kubectl apply -f -
 ```
+
+
 Repeate the above for downstream cluster to perform upgrade
+
+```
+kubectl get rabbitmqclusters.rabbitmq.com downstream-rabbit -n default -o yaml | grep -v 'image:' | kubectl apply -f -
+```
 
 ### LAB 10: Springboot Producer Application
 

@@ -13,7 +13,7 @@ export token="<YOUR-BROADCOM-SUPPORT-TOKEN-FOR-RMQ-K8S>"
 
 ### Login to registry.
 ```
-helm registry login rabbitmq-helmoci.packages.broadcom.com -u username -p $token 
+helm registry login rabbitmq-helmoci.packages.broadcom.com -u username -p $token
 ```
 
 ### Create teh rabbitmq-system namespace to install the RMQ Enterprise Operators.
@@ -42,26 +42,18 @@ messaging-topology-operator-68bdb4ffcd-9fq6n   1/1     Running   0          54m
 rabbitmq-cluster-operator-645d7645c-sshhm      1/1     Running   0          54m
 ```
 
-<!-- 
+<!--
 ```
 helm -n rabbitmq-system install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --set rabbitmqImage.repository="vmware-tanzu-rabbitmq-arm64"
 ```
 helm -n rabbitmq-system install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --set rabbitmqImage.repository="rabbitmq-kubernetes.packages.broadcom.com/tanzu-rabbitmq-package-repo:3.13.3-arm64"
 ``` -->
 
-
-### Deploy a single node cluster
+### Deploying the setup
 ```
-kubectl apply -f https://raw.githubusercontent.com/rabbitmq/cluster-operator/main/docs/examples/hello-world/rabbitmq.yaml
-```
+kubectl apply -f upstream-confnig.yaml
 
-### Deploying the setup 
-```
-kubectl apply -f rmq-upstream.yaml
-
-kubectl create ns rmq-downstream
-
-kubectl apply -f rmq-downstream.yml
+kubectl apply -f downstream-config.yml
 ```
 
 ### Intall RabbitmqAdmin CLI
@@ -89,22 +81,22 @@ You can control user permissions. For now we will create a admin user that we us
 
 ```
 
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user arul password
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags arul administrator
+kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl add_user arul password
+kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
+kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl set_user_tags arul administrator
 
 
-kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl add_user arul password
-kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
-kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags arul administrator
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl add_user arul password
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_permissions  -p / arul ".*" ".*" ".*"
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_user_tags arul administrator
 
 
 rmqadmin declare user --name arul1 --password password1
 rmqadmin declare permissions --user arul1 --configure ".*" --read ".*" --write ".*"
 
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user guest guest
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / guest ".*" ".*" ".*"
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags guest administrator
+kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl add_user guest guest
+kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl set_permissions  -p / guest ".*" ".*" ".*"
+kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl set_user_tags guest administrator
 
 ```
 
@@ -136,7 +128,7 @@ When running on container platforms like kubernetes, we need to port forward to 
 
 ```
 kubectl port-forward svc/upstream-rabbit-new 15672:15672
-kubectl -n rmq-downstream port-forward svc/downstream-rabbit-new 15673:15672
+kubectl -n default port-forward svc/downstream-rabbit-new 15673:15672
 
 ```
 Upstream RMQ
@@ -195,50 +187,50 @@ echo $password
 kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 10000 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
 ```
 
-### LAB 5: Routing Messages via Exchanges 
+### LAB 5: Routing Messages via Exchanges
 
 - Create an exchange named demo
 - Bind the queue event to demo exchange with routing-key event.#
-- Bind the queue new-event to demo exchange with routing-key new-event.#
-- Publish a message via exchange and see how messages are routed to queues event and new-event based on routing keys.
+- Bind the queue event to demo exchange with routing-key event.#
+- Publish a message via exchange and see how messages are routed to queues event and event based on routing keys.
 
 <!-- #### Now publish the messages to demo exchange via perf test and see how messages are routed to queues A and B based on routing keys.
 
 - Delcare and exchange named demo.exchange type=topic durable=true auto_delete=false
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare exchange name=demo.exchange type=topic durable=true auto_delete=false
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin declare exchange name=demo.exchange type=topic durable=true auto_delete=false
 
 rmqadmin --vhost "default" declare exchange --name "demo.exchange" --type "topic" --durable true
 ```
 - Delcare a queue named event durable=true auto_delete=false
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare queue name=event durable=true auto_delete=false
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin declare queue name=event durable=true auto_delete=false
 ```
-- Delcare a queue named new-event durable=true auto_delete=false
+- Delcare a queue named event durable=true auto_delete=false
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare queue name=new-event durable=true auto_delete=false
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin declare queue name=event durable=true auto_delete=false
 ```
 - Declare a binding between demo.exchange and event queue with routing key event.#
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqadmin declare binding source=demo.exchange destination_type=queue destination=event routing_key=event.#
+kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqadmin declare binding source=demo.exchange destination_type=queue destination=event routing_key=event.#
 ```
 
-- Delcare a binding between demo.exchange and new-event queue with routing key new-event.#
+- Delcare a binding between demo.exchange and event queue with routing key event.#
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare binding source=demo.exchange destination_type=queue destination=new-event routing_key=new-event.#
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin declare binding source=demo.exchange destination_type=queue destination=event routing_key=event.#
 ```
 - Publish a message to demo.exchange with routing key event.test and see the message routed to event queue
 
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqadmin publish exchange=demo.exchange routing_key=event.test payload="Hello from demo exchange to event"
+kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqadmin publish exchange=demo.exchange routing_key=event.test payload="Hello from demo exchange to event"
 ```
 
-- Publish a message to demo.exchange with routing key new-event.test and see the message routed to new-event queue
+- Publish a message to demo.exchange with routing key event.test and see the message routed to event queue
 
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish exchange=demo.exchange routing_key=new-event.test payload="Hello from demo exchange to new-event"
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin publish exchange=demo.exchange routing_key=event.test payload="Hello from demo exchange to event"
 ``` -->
-<!-- 
+<!--
 ### Updates to rabbitmqadmin v2 formats: (Testing needed)
 
 - Declare an exchange named demo.exchange type=topic durable=true auto_delete=false
@@ -255,36 +247,36 @@ rmqadmin --host=localhost --port=15672  --username=guest --password=guest  show 
 
 rmqadmin --host=localhost --port=15672 --username=arul --password=password declare queue --vhost="default" --name "event" --durable true --auto-delete false
 
-- Declare a queue named new-event durable=true auto_delete=false
+- Declare a queue named event durable=true auto_delete=false
 
-rmqadmin --host=localhost --port=15672 --username=arul --password=password declare queue --vhost="default" --name "new-event" --durable true --auto-delete false
+rmqadmin --host=localhost --port=15672 --username=arul --password=password declare queue --vhost="default" --name "event" --durable true --auto-delete false
 
 - Declare a binding between demo.exchange and event queue with routing key event.#
 
 rmqadmin --host=localhost --port=15672 --username=arul --password=password declare binding --vhost="default" --source "demo.exchange" --destination_type "queue" --destination "event" --routing_key "event.#"
 
-- Declare a binding between demo.exchange and new-event queue with routing key new-event.#
+- Declare a binding between demo.exchange and event queue with routing key event.#
 
-rmqadmin --host=localhost --port=15672 --username=arul --password=password declare binding --vhost="default" --source "demo.exchange" --destination_type "queue" --destination "new-event" --routing_key "new-event.#"
+rmqadmin --host=localhost --port=15672 --username=arul --password=password declare binding --vhost="default" --source "demo.exchange" --destination_type "queue" --destination "event" --routing_key "event.#"
 
 - Publish a message to demo.exchange with routing key event.test and see the message routed to event queue
 
 rmqadmin --host=localhost --port=15672 --username=arul --password=password publish --vhost="default" --exchange "demo.exchange" --routing_key "event.test" --payload "Hello from demo exchange to event"
 
-- Publish a message to demo.exchange with routing key new-event.test and see the message routed to new-event queue
+- Publish a message to demo.exchange with routing key event.test and see the message routed to event queue
 
-rmqadmin --host=localhost --port=15672 --username=arul --password=password publish --vhost="default" --exchange "demo.exchange" --routing_key "new-event.test" --payload "Hello from demo exchange to new-event"
+rmqadmin --host=localhost --port=15672 --username=arul --password=password publish --vhost="default" --exchange "demo.exchange" --routing_key "event.test" --payload "Hello from demo exchange to event"
 
-#### Now publish the messages to demo exchange via perf test and see how messages are routed to queues events and new-events based on routing keys.
+#### Now publish the messages to demo exchange via perf test and see how messages are routed to queues events and events based on routing keys.
 
 ```
 kubectl -n default  --restart=Never run sa-workshop-demo-route --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --exchange demo.exchange --routing-key "event.demo1" --pmessages 1000  --rate 100 --consumer-rate 10 --multi-ack-every 10
 
-kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --exchange demo.exchange --routing-key "new-event.demo2" --pmessages 1000  --rate 100 --consumer-rate 10 --multi-ack-every 10
+kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --exchange demo.exchange --routing-key "event.demo2" --pmessages 1000  --rate 100 --consumer-rate 10 --multi-ack-every 10
 ``` -->
 
 
-### Lab 6: Monitoring 
+### Lab 6: Monitoring
 
 ```
 helm install prometheus  prometheus-community/prometheus
@@ -293,12 +285,12 @@ helm install  grafana grafana/grafana
 #### Annotate rmq pods to be able to scrape the prometheus metrics
 
 ```
-kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true 
+kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true
 
-kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true -n rmq-downstream
+kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true -n default
 
 ```
-#### Access Grafana 
+#### Access Grafana
 
 ```
 kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
@@ -317,27 +309,27 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 
 ![RabbitMQ Screenshot](../static/grafana.png)
 
-<!-- 
+<!--
 ### LAB 7: Federation  - Actvie - Active RMQ deployments in Docker
 
 [https://www.rabbitmq.com/docs/federation](https://www.rabbitmq.com/docs/federation)
 
-#### Setting up exchange and queue federation on blue cluster 
+#### Setting up exchange and queue federation on blue cluster
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@downstream-rabbit-new.rmq-downstream.svc.cluster.local:5672"}' 
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@downstream-rabbit-new.rmq-downstream.svc.cluster.local:5672"}'
 
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_policy exchange-federation "^federated\." '{"federation-upstream-set":"all"}'  --priority 10  --apply-to exchanges
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqctl set_policy exchange-federation "^federated\." '{"federation-upstream-set":"all"}'  --priority 10  --apply-to exchanges
 
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_policy queue-federation ".*" '{"federation-upstream-set":"all"}' --priority 10 --apply-to queues
+kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl set_policy queue-federation ".*" '{"federation-upstream-set":"all"}' --priority 10 --apply-to queues
 ```
 
-#### Setting up exchange and queue federation on green cluster 
+#### Setting up exchange and queue federation on green cluster
 ```
-kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672"}' 
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672"}'
 
-kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 --  rabbitmqctl set_policy exchange-federation "^federated\." '{"federation-upstream-set":"all"}'  --priority 10  --apply-to exchanges
+kubectl -n default exec downstream-rabbit-server-0 --  rabbitmqctl set_policy exchange-federation "^federated\." '{"federation-upstream-set":"all"}'  --priority 10  --apply-to exchanges
 
-kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_policy queue-federation ".*" '{"federation-upstream-set":"all"}' --priority 10 --apply-to queues
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_policy queue-federation ".*" '{"federation-upstream-set":"all"}' --priority 10 --apply-to queues
 
 ```
 
@@ -346,7 +338,7 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set
 - Delcare an exchange named federated.exchange on upstream RMQ
 
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare exchange name=federated.exchange type=fanout durable=true auto_delete=false
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin declare exchange name=federated.exchange type=fanout durable=true auto_delete=false
 ```
 
 - Delcare a queue named federated-event on upstream RMQ
@@ -354,44 +346,44 @@ kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare e
 
 ```
 
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare queue name=federated-event durable=true auto_delete=false
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin declare queue name=federated-event durable=true auto_delete=false
 
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare queue name=federated-event-new durable=true auto_delete=false
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin declare queue name=federated-event-new durable=true auto_delete=false
 
 ```
 
 - Declare a binding between the federated.exchange and federated-event queue on Upstream RMQ
 
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=federated-event routing_key=event.#
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=federated-event routing_key=event.#
 
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=federated-event-new routing_key=event.#
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=federated-event-new routing_key=event.#
 ```
 
 - Declare a binding between the federated.exchange and federated-event queue on Downstream RMQ
 
 ```
-kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=federated-event routing_key=event.#
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=federated-event routing_key=event.#
 
-kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=federated-event-new routing_key=event.#
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=federated-event-new routing_key=event.#
 ```
 
 - Publish a message to federated exachange with routing key event.test and see the message routed to both RMQ Servers
 
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish exchange=federated.exchange routing_key=event.test payload="Hello from demo exchange to with key event"
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin publish exchange=federated.exchange routing_key=event.test payload="Hello from demo exchange to with key event"
 
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish exchange=federated.exchange routing_key=new-event.test payload="Hello from demo exchange to with key new-event"
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqadmin publish exchange=federated.exchange routing_key=event.test payload="Hello from demo exchange to with key event"
 ```
 
 #### Now lets bind all queues to federated exchange on both blue and green RMQ servers.
 
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 -it  --  rabbitmqadmin list queues > queues.txt
+kubectl -n default exec upstream-rabbit-server-0 -it  --  rabbitmqadmin list queues > queues.txt
 
-for i in `cat queues.txt | awk '{print $2}' | grep -v name` ; do kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=$i routing_key=event.# ; done
+for i in `cat queues.txt | awk '{print $2}' | grep -v name` ; do kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=$i routing_key=event.# ; done
 
-for i in `cat queues.txt | awk '{print $2}' | grep -v name` ; do kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=$i routing_key=event.# ; done
+for i in `cat queues.txt | awk '{print $2}' | grep -v name` ; do kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqadmin declare binding source=federated.exchange destination_type=queue destination=$i routing_key=event.# ; done
 
 ```
 
@@ -412,6 +404,26 @@ kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotal
 ### LAB 8: Standby Replication (Enterprise feature for RMQ)
 
 
+# Specify local (upstream cluster) nodes and credentials to be used
+# for WSR.
+#
+# Note that the target port is that of the RabbitMQ Stream protocol, *not* AMQP 1.0.
+```
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_standby_replication_upstream_endpoints '{"endpoints": ["upstream-rabbit:5552","upstream2-rabbit:5552","upstream3-rabbit:5552"], "username": "test-user", "password": "test-password"}'
+```
+
+# Create a user and grant it permissions to the virtual host that will be used for schema replication.
+# This command is similar to 'rabbitmqctl add_user' but also grants full permissions
+# to the virtual host used for definition sync.
+```
+kubectl -n default exec downstream-rabbit-server-0 --  rabbitmqctl add_schema_replication_user "test-user" "test-password"
+```
+# specify local (upstream cluster) nodes and credentials to be used
+# for schema replication
+```
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_schema_replication_upstream_endpoints '{"endpoints": ["upstream-rabbit:5672","upstream2-rabbit:5672","upstream3-rabbit:5672"], "username": "test-user", "password": "test-password"}'
+```
+
 
 
 ### LAB 9: Upgrading RMQ on K8s
@@ -422,7 +434,7 @@ kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotal
 kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml"
 ```
 
-#### Edit the upstream-rabbit-new cluster yaml and remove the image line and save it 
+#### Edit the upstream-rabbit-new cluster yaml and remove the image line and save it
 
 ```
  k edit rabbitmqclusters.rabbitmq.com upstream-rabbit-new
@@ -442,9 +454,9 @@ mvn spring-boot:run
 ### LAB 11: Working RabbitmqAdmin cli
 
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user guest guest
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / guest ".*" ".*" ".*"
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_user_tags guest administrator
+kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl add_user guest guest
+kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl set_permissions  -p / guest ".*" ".*" ".*"
+kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl set_user_tags guest administrator
 ```
 
 
@@ -459,7 +471,7 @@ rmqadmin list queues
 ```
 #### Show Memory Breakdown %
 ```
-rmqadmin show memory_breakdown_in_percent  --node rabbit@upstream-rabbit-new-server-0.upstream-rabbit-new-nodes.default
+rmqadmin show memory_breakdown_in_percent  --node rabbit@upstream-rabbit-server-0.upstream-rabbit-nodes.default
 ```
 
 ##### Kubectl cmd to clean up pods that are not in Running State. Usefull when trying to rerun perftest pods
@@ -480,7 +492,7 @@ Currenty the below appdev labs leverages docker rmq for the hands on labs.
 
 
 
-### RabbitMQ HTTP API Reference: 
+### RabbitMQ HTTP API Reference:
 [http://localhost:15672/api/index.html](http://localhost:15672/api/index.html)
 
 ```

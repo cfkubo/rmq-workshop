@@ -150,6 +150,7 @@ kubectl -n default port-forward svc/downstream-rabbit 15673:15672
 
 ### LAB 4: Standby Replication (Enterprise feature for RMQ)
 
+### NOTE: Most of configuration is done via yaml. Please review the upstream-config.yaml and downstream-config.yaml for standby replication configuration.
 
 #### Specify local (upstream cluster) nodes and credentials to be used for WSR.
 #### Note that the target port is that of the RabbitMQ Stream protocol, *not* AMQP 1.0.

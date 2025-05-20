@@ -239,7 +239,7 @@ kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqadmin publish ex
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish exchange=demo.exchange routing_key=new-event.test payload="Hello from demo exchange to new-event"
 ``` -->
 
-### Updates to rabbitmqadmin v2 formats:
+### Updates to rabbitmqadmin v2 formats: (Testing needed)
 
 - Declare an exchange named demo.exchange type=topic durable=true auto_delete=false
 

@@ -427,10 +427,18 @@ echo $password
 kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared  --pmessages 10000 --exchange "federated.exchange" --routing-key "event.test" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
 ``` -->
 
-
+```
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmq-diagnostics inspect_local_data_available_for_standby_replication_recovery
+```
+
+```
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmq-diagnostics inspect_local_stream_data_available_for_standby_replication_recovery
-kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl list_streams_available_for_standby_replication_recovery [--vhost <vhost>]
+```
+
+```
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl list_streams_available_for_standby_replication_recovery 
+```
+[--vhost <vhost>]
 
 
 

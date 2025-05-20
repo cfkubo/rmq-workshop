@@ -34,6 +34,7 @@ type: Opaque
 stringData:
   username: test-user
   password: test-password
+
 ---
 apiVersion: rabbitmq.com/v1beta1
 kind: User
@@ -44,6 +45,7 @@ spec:
     name:  upstream-rabbit # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
   importCredentialsSecret:
     name: upstream-secret
+
 ---
 apiVersion: rabbitmq.com/v1beta1
 kind: Permission
@@ -95,6 +97,50 @@ metadata:
 spec:
   name: osr # name of the policy
   vhost: "test" # default to '/' if not provided
+  pattern: "^.*" # regex used to match queues and exchanges
+  applyTo: "queues" # set to 'queues', 'exchanges', or 'all'
+  definition: # policy definition
+    remote-dc-replicate: true
+  rabbitmqClusterReference:
+    name: upstream-rabbit # rabbitmqCluster must exist in the same namespace as this resource
+
+
+
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Vhost
+metadata:
+  name: default-vhost-new
+spec:
+  name: "/" # vhost name
+  tags: ["standby_replication"]
+  rabbitmqClusterReference:
+    name: upstream-rabbit
+
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Permission
+metadata:
+  name: rabbitmq-replicator.rabbitmq-schema-definition-sync.test-default-new
+spec:
+  vhost: "/" # name of the vhost
+  userReference:
+    name: rabbitmq-replicator
+  permissions:
+    write: ".*"
+    configure: ".*"
+    read: ".*"
+  rabbitmqClusterReference:
+    name: upstream-rabbit  # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
+
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Policy
+metadata:
+  name: upstream-policy-default-new
+spec:
+  name: osr # name of the policy
+  vhost: "/" # default to '/' if not provided
   pattern: "^.*" # regex used to match queues and exchanges
   applyTo: "queues" # set to 'queues', 'exchanges', or 'all'
   definition: # policy definition

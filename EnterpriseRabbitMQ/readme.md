@@ -95,7 +95,7 @@ rmqadmin --help
 ```
 
 
-###🚀🐰📦 LAB 2: Creating User and Permissions 🚀🐰📦
+### 🚀🐰📦 LAB 2: Creating User and Permissions 🚀🐰📦
 
 [https://www.rabbitmq.com/docs/access-control](https://www.rabbitmq.com/docs/access-control)
 

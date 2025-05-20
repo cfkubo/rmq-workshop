@@ -30,6 +30,7 @@ kubectl create secret docker-registry tanzu-rabbitmq-registry-creds --docker-ser
 helm install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-rabbitmq-operators --version 4.0.1 --namespace rabbitmq-system
 ```
 
+
 ### Verify Enterprise RMQ Operations installations
 ```
 kubectl get pods  -n rabbitmq-system
@@ -233,6 +234,27 @@ kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqadmin publish ex
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish exchange=demo.exchange routing_key=new-event.test payload="Hello from demo exchange to new-event"
 ```
+
+# Declare an exchange named demo.exchange type=topic durable=true auto_delete=false
+rmqadmin --host=localhost --port=15672 --username=arul --password=password declare exchange --vhost="default" --name "demo.exchange" --type "topic" --durable true
+
+# Declare a queue named event durable=true auto_delete=false
+rmqadmin --host=localhost --port=15672 --username=arul --password=password declare queue --vhost="default" --name "event" --durable true --auto-delete false
+
+# Declare a queue named new-event durable=true auto_delete=false
+rmqadmin --host=localhost --port=15672 --username=arul --password=password declare queue --vhost="default" --name "new-event" --durable true --auto-delete false
+
+# Declare a binding between demo.exchange and event queue with routing key event.#
+rmqadmin --host=localhost --port=15672 --username=arul --password=password declare binding --vhost="default" --source "demo.exchange" --destination_type "queue" --destination "event" --routing_key "event.#"
+
+# Declare a binding between demo.exchange and new-event queue with routing key new-event.#
+rmqadmin --host=localhost --port=15672 --username=arul --password=password declare binding --vhost="default" --source "demo.exchange" --destination_type "queue" --destination "new-event" --routing_key "new-event.#"
+
+# Publish a message to demo.exchange with routing key event.test and see the message routed to event queue
+rmqadmin --host=localhost --port=15672 --username=arul --password=password publish --vhost="default" --exchange "demo.exchange" --routing_key "event.test" --payload "Hello from demo exchange to event"
+
+# Publish a message to demo.exchange with routing key new-event.test and see the message routed to new-event queue
+rmqadmin --host=localhost --port=15672 --username=arul --password=password publish --vhost="default" --exchange "demo.exchange" --routing_key "new-event.test" --payload "Hello from demo exchange to new-event"
 
 #### Now publish the messages to demo exchange via perf test and see how messages are routed to queues events and new-events based on routing keys.
 
@@ -438,3 +460,6 @@ Currenty the below appdev labs leverages docker rmq for the hands on labs.
 
 #### Streams: (All you need is a Stream)
 [https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu](https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu)
+
+### RabbitMQ HTTP API Reference: 
+[http://localhost:15672/api/index.html](http://localhost:15672/api/index.html)

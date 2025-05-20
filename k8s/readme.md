@@ -462,17 +462,6 @@ Currenty the below appdev labs leverages docker rmq for the hands on labs.
 kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[?(@.status.phase!="Running")].metadata.name}')
 ```
 
-### RabbitMQ Tutorials  cover the basics of creating messaging applications using RabbitMQ.
-
-[RabbitMQ Tutorials](https://www.rabbitmq.com/tutorials)
-
-### RabbitMQ Labs for Developers and DevOps Engineers
-
-Currenty the below appdev labs leverages docker rmq for the hands on labs.
-
-[RabbitMQ AppDev Labs](https://github.com/ggreen/event-streaming-showcase/tree/main/docs/workshops/Labs/appDev)
-
-
 ### RabbitMQ HTTP API Reference: 
 [http://localhost:15672/api/index.html](http://localhost:15672/api/index.html)
 

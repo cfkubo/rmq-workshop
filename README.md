@@ -31,5 +31,5 @@ This repo has a collection of hands on  labs for RabbitMQ.
 - https://www.rabbitmq.com
 
 
-### Contirbutions:
-If you are interested in contributing to the project, Fork this repo and create a pull request with your changes.
+### Contirbutions and Questions:
+If you are interested in contributing to the project, Fork this repo and create a pull request with your changes. Please feel free to open an issue if you unable to find the answer or have any questions.

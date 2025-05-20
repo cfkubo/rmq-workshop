@@ -407,6 +407,20 @@ rmqadmin show memory_breakdown_in_percent  --node rabbit@upstream-rabbit-server-
 kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[?(@.status.phase!="Running")].metadata.name}')
 ```
 
+### 🚀🐰📦 LAB 12: Scaling RMQ  🚀🐰📦
+
+```
+k scale statefulsets.apps upstream-rabbit-server --replicas=3
+```
+
+```
+k scale statefulsets.apps downstream-rabbit-server --replicas=3
+```
+
+### 🚀🐰📦 LAB 13: Promoting Downstream RMQ
+
+
+
 ### RabbitMQ Tutorials  cover the basics of creating messaging applications using RabbitMQ.
 
 [RabbitMQ Tutorials](https://www.rabbitmq.com/tutorials)

@@ -428,6 +428,13 @@ kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotal
 ``` -->
 
 
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmq-diagnostics inspect_local_data_available_for_standby_replication_recovery
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmq-diagnostics inspect_local_stream_data_available_for_standby_replication_recovery
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl list_streams_available_for_standby_replication_recovery [--vhost <vhost>]
+
+
+
+
 
 ### LAB 9: Upgrading RMQ on K8s
 

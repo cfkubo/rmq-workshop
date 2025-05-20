@@ -204,7 +204,21 @@ echo $password
 kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 10000 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
 ```
 
-### LAB 5: Routing Messages via Exchanges 
+### LAB 5: Everyday I'm Shovelling
+
+Shovel is an amazing plugin you can leverage to move messages from one to another queue. 
+
+Usecases: 
+- Moving messages between queues on same or different cluster
+
+```
+docker exec rabbitmq-blue rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://guest:guest@rabbitmq-blue", "src-queue": "sa-workshop", "dest-protocol": "amqp091", "dest-uri": "amqp://guest:guest@rabbitmq-blue", "dest-queue": "sa-workshop-shovelq", "dest-queue-args": {"x-queue-type": "quorum"}}'
+
+
+docker exec rabbitmq-blue rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://guest:guest@rabbitmq-blue", "src-queue": "sa-workshop-shovelq", "dest-protocol": "amqp091", "dest-uri": "amqp://guest:guest@rabbitmq-green", "dest-queue": "sa-workshop-shovelq-green", "dest-queue-args": {"x-queue-type": "quorum"}}'
+```
+
+### LAB 6: Routing Messages via Exchanges 
 
 - Create an exchange named demo
 - Bind the queue event to demo exchange with routing-key event.#
@@ -255,7 +269,7 @@ kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabb
 ```
 
 
-### Lab 6: Monitoring RabbitMQ on Kubernetes
+### Lab 7: Monitoring RabbitMQ on Kubernetes
 
 ```
 helm install prometheus  prometheus-community/prometheus
@@ -289,7 +303,7 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 ![RabbitMQ Screenshot](../static/grafana.png)
 
 
-### LAB 7: Federation  - Actvie - Active RMQ deployments in Kubernetes
+### LAB 8: Federation  - Actvie - Active RMQ deployments in Kubernetes
 
 [https://www.rabbitmq.com/docs/federation](https://www.rabbitmq.com/docs/federation)
 
@@ -380,7 +394,7 @@ echo $password
 kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared  --pmessages 10000 --exchange "federated.exchange" --routing-key "event.test" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
 ```
 
-### LAB 8: Upgrading RMQ on K8s
+### LAB 9: Upgrading RMQ on K8s
 
 #### Upgrade the RMQ k8s operator
 
@@ -395,7 +409,7 @@ kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/d
 ```
 Repeate the above for downstream cluster to perform upgrade
 
-### LAB 9: Springboot Producer Application
+### LAB 10: Springboot Producer Application
 
 ```
 git clone https://github.com/cfkubo/spring-boot-random-data-generator
@@ -404,7 +418,7 @@ mvn spring-boot:run
 
 ```
 
-### LAB 7: Working RabbitmqAdmin cli
+### LAB 11: Working RabbitmqAdmin cli
 
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user guest guest
@@ -427,6 +441,7 @@ rmqadmin list queues
 rmqadmin show memory_breakdown_in_percent  --node rabbit@upstream-rabbit-new-server-0.upstream-rabbit-new-nodes.default
 ```
 
+## Whats Next ???
 
 ### RabbitMQ Tutorials  cover the basics of creating messaging applications using RabbitMQ.
 

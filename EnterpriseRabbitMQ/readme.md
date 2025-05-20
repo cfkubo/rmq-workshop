@@ -122,13 +122,14 @@ echo $password
 
 ```
 
+
 ### LAB 3: Access RMQ Management UI
 
 When running on container platforms like kubernetes, we need to port forward to access the management UI. You can access the blue and green cluster using the below urls.
 
 ```
-kubectl port-forward svc/upstream-rabbit-new 15672:15672
-kubectl -n default port-forward svc/downstream-rabbit-new 15673:15672
+kubectl port-forward svc/upstream-rabbit 15672:15672
+kubectl -n default port-forward svc/downstream-rabbit 15673:15672
 
 ```
 Upstream RMQ
@@ -140,7 +141,32 @@ Downstream RMQ
 Use the above default username password  or the user you have created
 
 
-### LAB 4: Deploy Producers and Consumer Applications - Leveraging RabbitMQ PerfTest
+
+### LAB 4: Standby Replication (Enterprise feature for RMQ)
+
+
+# Specify local (upstream cluster) nodes and credentials to be used
+# for WSR.
+#
+# Note that the target port is that of the RabbitMQ Stream protocol, *not* AMQP 1.0.
+```
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_standby_replication_upstream_endpoints '{"endpoints": ["upstream-rabbit:5552","upstream2-rabbit:5552","upstream3-rabbit:5552"], "username": "test-user", "password": "test-password"}'
+```
+
+# Create a user and grant it permissions to the virtual host that will be used for schema replication.
+# This command is similar to 'rabbitmqctl add_user' but also grants full permissions
+# to the virtual host used for definition sync.
+```
+kubectl -n default exec downstream-rabbit-server-0 --  rabbitmqctl add_schema_replication_user "test-user" "test-password"
+```
+# specify local (upstream cluster) nodes and credentials to be used
+# for schema replication
+```
+kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_schema_replication_upstream_endpoints '{"endpoints": ["upstream-rabbit:5672","upstream2-rabbit:5672","upstream3-rabbit:5672"], "username": "test-user", "password": "test-password"}'
+```
+
+
+### LAB 5: Deploy Producers and Consumer Applications - Leveraging RabbitMQ PerfTest
 
 #### RMQPerf Test on k8s:
 
@@ -400,29 +426,6 @@ echo $password
 
 kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared  --pmessages 10000 --exchange "federated.exchange" --routing-key "event.test" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
 ``` -->
-
-### LAB 8: Standby Replication (Enterprise feature for RMQ)
-
-
-# Specify local (upstream cluster) nodes and credentials to be used
-# for WSR.
-#
-# Note that the target port is that of the RabbitMQ Stream protocol, *not* AMQP 1.0.
-```
-kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_standby_replication_upstream_endpoints '{"endpoints": ["upstream-rabbit:5552","upstream2-rabbit:5552","upstream3-rabbit:5552"], "username": "test-user", "password": "test-password"}'
-```
-
-# Create a user and grant it permissions to the virtual host that will be used for schema replication.
-# This command is similar to 'rabbitmqctl add_user' but also grants full permissions
-# to the virtual host used for definition sync.
-```
-kubectl -n default exec downstream-rabbit-server-0 --  rabbitmqctl add_schema_replication_user "test-user" "test-password"
-```
-# specify local (upstream cluster) nodes and credentials to be used
-# for schema replication
-```
-kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_schema_replication_upstream_endpoints '{"endpoints": ["upstream-rabbit:5672","upstream2-rabbit:5672","upstream3-rabbit:5672"], "username": "test-user", "password": "test-password"}'
-```
 
 
 

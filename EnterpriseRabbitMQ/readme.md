@@ -20,6 +20,10 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
 ```
 export token="<YOUR-BROADCOM-SUPPORT-TOKEN-FOR-RMQ-K8S>"
 ```
+![RabbitMQ Screenshot](../static/k8s-ent-rmq.png)
+
+![RabbitMQ Screenshot](../static/token.png)
+
 
 ### Login to registry.
 ```
@@ -343,6 +347,9 @@ Repeate the above for downstream cluster to perform upgrade
 ```
 kubectl get rabbitmqclusters.rabbitmq.com downstream-rabbit -n default -o yaml | grep -v 'image:' | kubectl apply -f -
 ```
+
+![RabbitMQ Screenshot](../static/rabbit4.png)
+
 
 ### LAB 10: Springboot Producer Application
 

@@ -173,7 +173,7 @@ kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_schema_rep
 #### Classic Queue Perf Test
 
 ```
-instance=upstream-rabbit-new
+instance=upstream-rabbit
 username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
 password=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.password}" | base64 --decode)
 service=${instance}
@@ -187,7 +187,7 @@ kubectl -n default  --restart=Never run sa-workshop --image=pivotalrabbitmq/perf
 #### Quorum Queue Perf Test
 
 ```
-instance=upstream-rabbit-new
+instance=upstream-rabbit
 username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
 password=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.password}" | base64 --decode)
 service=${instance}
@@ -203,7 +203,7 @@ kubectl -n default  --restart=Always run perf-syn-check --image=pivotalrabbitmq/
 
 #### Stream RMQ Perftest
 ```
-instance=upstream-rabbit-new
+instance=upstream-rabbit
 username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
 password=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.password}" | base64 --decode)
 service=${instance}

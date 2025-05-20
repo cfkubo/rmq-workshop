@@ -1,0 +1,31 @@
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: downstream-rabbit
+spec:
+  rabbitmq:
+    additionalPlugins:
+      - rabbitmq_stream
+      - rabbitmq_stream_management
+      - rabbitmq_schema_definition_sync
+      - rabbitmq_schema_definition_sync_prometheus   # optional
+      - rabbitmq_standby_replication
+      - rabbitmq_warm_standby
+    additionalConfig: |
+      schema_definition_sync.operating_mode = downstream
+      schema_definition_sync.downstream.minimum_sync_interval = 30
+      schema_definition_sync.connection.endpoints.one = upstream-rabbit:5672
+      schema_definition_sync.connection.username = test-user
+      schema_definition_sync.connection.password = test-password
+      schema_definition_sync.downstream.locals.users = ^default_user_
+      # schema_definition_sync.downstream.locals.permissions = ^default_user_
+      schema_definition_sync.downstream.locals.queues = ^local
+      schema_definition_sync.downstream.locals.parameters = ^standby
+      schema_definition_sync.downstream.locals.global_parameters = ^standby
+      standby.replication.operating_mode = downstream
+      standby.replication.connection.endpoints.one = upstream-rabbit:5552
+      standby.replication.connection.username = test-user
+      standby.replication.connection.password = test-password
+      standby.replication.retention.size_limit.messages = 5000000000
+     # standby.replication.retention.time_limit.messages = 12h

@@ -6,13 +6,13 @@ metadata:
 spec:
   service:
     type: ClusterIP
-    # resources:
-    #   requests:
-    #     cpu: "1"
-    #     memory: "2Gi"
-    #   limits:
-    #     cpu: "1"
-    #     memory: "2Gi"
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "250m"
+      memory: "512Mi"
   imagePullSecrets:
     - name: tanzu-rabbitmq-registry-creds
   replicas: 3

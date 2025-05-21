@@ -4,6 +4,15 @@ kind: RabbitmqCluster
 metadata:
   name: downstream-rabbit
 spec:
+  service:
+    type: ClusterIP
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "250m"
+      memory: "512Mi"
   rabbitmq:
     additionalPlugins:
       - rabbitmq_stream

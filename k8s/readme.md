@@ -108,13 +108,13 @@ my-tanzu-rabbit-server-2   1/1     Running   0          2m59s
 **NOTE** : We have enabled the plugin using rmq yaml. This is not required if you have enabled the plugin using rmq yaml.
 
 ```
-kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabbitmq_stream
-kubectl -n default exec my-tanzu-rabbit-server-0 --rabbitmq-plugins enable rabbitmq_stream_management
+kubectl -n default exec upstream-rabbit-new-server-0  -- rabbitmq-plugins enable rabbitmq_stream
+kubectl -n default exec upstream-rabbit-new-server-0  --rabbitmq-plugins enable rabbitmq_stream_management
 
-kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabbitmq_prometheus
+kubectl -n default exec upstream-rabbit-new-server-0  -- rabbitmq-plugins enable rabbitmq_prometheus
 
-kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabbitmq_shovel
-kubectl -n default exec my-tanzu-rabbit-server-0 -- rabbitmq-plugins enable rabbitmq_shovel_management
+kubectl -n default exec upstream-rabbit-new-server-0  -- rabbitmq-plugins enable rabbitmq_shovel
+kubectl -n default exec upstream-rabbit-new-server-0  -- rabbitmq-plugins enable rabbitmq_shovel_management
 ```
 
 ### 🚀🐰📦 LAB 2: Creating User and Permissions 🚀🐰📦
@@ -443,7 +443,7 @@ kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotal
 #### Upgrade the RMQ k8s operator
 
 ```
-kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml"
+kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/download/v2.13.0/cluster-operator.yml"
 ```
 
 #### Edit the upstream-rabbit-new cluster yaml and remove the image line and save it 

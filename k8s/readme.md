@@ -478,6 +478,8 @@ mvn spring-boot:run
 
 ### 🚀🐰📦 LAB 10: Working RabbitmqAdmin cli 🚀🐰📦
 
+**NOTE** To simply interacting with rabbitmqadmin v2 cli. We can create the below guest user with admin priviliages. Consider using the default creds and specifiy them as options to rabbitmqadmin v2 cli. 
+
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user guest guest
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_permissions  -p / guest ".*" ".*" ".*"

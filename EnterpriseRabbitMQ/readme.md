@@ -239,7 +239,7 @@ kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-tes
 ```
 
 
-### LAB 6: Everyday I'm Shovelling 
+### 🚀🐰📦  LAB 6: Everyday I'm Shovelling 🚀🐰📦 
 
 Shovel is an amazing plugin you can leverage to move messages from one to another queue. 
 
@@ -310,7 +310,7 @@ kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabb
 ``` -->
 
 
-### 🚀🐰📦 Lab 6: Monitoring RabbitMQ with Prometheus and Grafana 🚀🐰📦
+### 🚀🐰📦 Lab 7: Monitoring RabbitMQ with Prometheus and Grafana 🚀🐰📦
 
 ```
 helm install prometheus  prometheus-community/prometheus
@@ -343,7 +343,7 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 
 ![RabbitMQ Screenshot](../static/grafana.png)
 
-### 🚀🐰📦 Lab 7: Disaster Recovery 🚀🐰📦
+### 🚀🐰📦 Lab 8: Disaster Recovery 🚀🐰📦
 #### Inspecting Standby Replication on Downstream RMQ
 
 ```
@@ -430,12 +430,6 @@ rmqadmin list queues
 rmqadmin show memory_breakdown_in_percent  --node rabbit@upstream-rabbit-server-0.upstream-rabbit-nodes.default
 ```
 
-##### Kubectl cmd to clean up pods that are not in Running State. Usefull when trying to rerun perftest pods
-
-```
-kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[?(@.status.phase!="Running")].metadata.name}')
-```
-
 
 ### 🚀🐰📦 LAB 12: Promoting Downstream RMQ
 
@@ -499,6 +493,15 @@ Keep exploring, experimenting, and having fun with RabbitMQ and Kubernetes! The 
 An AI generated song dedicated to RabbitMQ and Kubernetes. Enjoy the music! 🎶🥁🚀🐰📦
 
 [https://suno.com/s/yfhHe8JGZUdx2EDn](https://suno.com/s/yfhHe8JGZUdx2EDn)
+
+
+#### Troubleshooting
+- Verfity typo in token or username when logging to helm repo to pull enterprise images
+- Check the pods logs
+- Kubectl cmd to clean up pods that are not in Running State. Usefull when trying to rerun perftest pods
+```
+kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[?(@.status.phase!="Running")].metadata.name}')
+```
 
 
 #### 🚀🐰📦 References:🚀🐰📦

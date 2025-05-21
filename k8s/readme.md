@@ -554,7 +554,7 @@ kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[
 ```
 
 
-#### 🚀🐰📦 Everything about Streams: (All you need is a Stream) 🚀🐰📦
+# 🚀🐰📦 Everything about Streams: (All you need is a Stream) 🚀🐰📦
 
 [https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu](https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu)
 

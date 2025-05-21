@@ -179,13 +179,19 @@ Use the above default username password  or the user you have created
 
 ### LAB 4: Deploy Producers and Consumer Applications - Leveraging RabbitMQ PerfTest
 
-- Lets adjust teh memory high watermark to be able run the below perf test without issues
+**NOTE** Lets adjust teh memory high watermark to be able run the below perf test without issues
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_vm_memory_high_watermark absolute "700MiB"
 
 kubectl -n default exec upstream-rabbit-new-server-1 --  rabbitmqctl set_vm_memory_high_watermark absolute "700MiB"
 
 kubectl -n default exec upstream-rabbit-new-server-2 --  rabbitmqctl set_vm_memory_high_watermark absolute "700MiB"
+
+kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_vm_memory_high_watermark absolute "700MiB"
+
+kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_vm_memory_high_watermark absolute "700MiB"
+
+kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_vm_memory_high_watermark absolute "700MiB"
 ```
 
 #### RMQPerf Test on k8s:

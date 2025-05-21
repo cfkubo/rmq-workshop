@@ -209,9 +209,6 @@ echo $password
 kubectl -n default  --restart=Never run sa-workshop --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop" --pmessages 10000 --queue "sa-workshop" --rate 100 --consumer-rate 10 --multi-ack-every 10 --auto-delete false
 ```
 
-
-
-
 #### Quorum Queue Perf Test
 
 ```
@@ -269,6 +266,10 @@ export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/nam
 
 #### Add prometheus datasource to Grafana
 Click on "Add your first data soruce" > select prometheus > http://prometheus-server.default.svc.cluster.local:80 > save and test
+
+```
+http://prometheus-server.default.svc.cluster.local:80
+```
 
 ![RabbitMQ Screenshot](grafana.png)
 

@@ -487,10 +487,6 @@ rmqadmin --host=localhost --port=15672  --username=arul --password=password  sho
 [https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu](https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu)
 
 
-#### 🚀🐰📦 References:🚀🐰📦
-- [Streaming with RabbitMQ](https://github.com/ggreen/event-streaming-showcase)
-- [RabbitMQ Website](https://www.rabbitmq.com)
-
 
 🎉 Congratulations, Messaging Maestro! 🎉
 You’ve now taken a fantastic journey through deploying and interacting with RabbitMQ on Kubernetes! You’ve installed the operator, deployed single and multi-node clusters, enabled plugins, managed users, and even run performance tests.
@@ -498,8 +494,14 @@ You’ve now taken a fantastic journey through deploying and interacting with Ra
 Keep exploring, experimenting, and having fun with RabbitMQ and Kubernetes! The world of distributed messaging awaits your command! 🚀🐰📦
 
 
-##  🎶🥁🚀🐰📦 One Server to Queue them All !!!!!!! 🚀🐰📦🥁🎶
+##  🎶🥁🚀🐰📦 One Server to Queue them All !!!!!!! 🚀🐰📦🥁🎶 
+
+An AI generated song dedicated to RabbitMQ and Kubernetes. Enjoy the music! 🎶🥁🚀🐰📦
 
 [https://suno.com/s/yfhHe8JGZUdx2EDn](https://suno.com/s/yfhHe8JGZUdx2EDn)
 
 
+#### 🚀🐰📦 References:🚀🐰📦
+- [Streaming with RabbitMQ](https://github.com/ggreen/event-streaming-showcase)
+- [RabbitMQ Website](https://www.rabbitmq.com)
+- [Broadcom/VMware RabbitMQ for K8s Docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-rabbitmq-on-kubernetes/4-0/tanzu-rabbitmq-kubernetes/installation-using-helm.html)

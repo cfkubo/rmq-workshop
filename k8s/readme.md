@@ -179,7 +179,7 @@ Use the above default username password  or the user you have created
 
 ### 🚀🐰📦 LAB 4: Deploy Producers and Consumer Applications - Leveraging RabbitMQ PerfTest 🚀🐰📦
 
-**NOTE** Lets adjust teh memory high watermark to be able run the below perf test without issues
+**NOTE** Lets adjust the memory high watermark to be able run the below perf test without issues
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_vm_memory_high_watermark absolute "700MiB"
 
@@ -502,6 +502,23 @@ rmqadmin list queues
 rmqadmin show memory_breakdown_in_percent  --node rabbit@upstream-rabbit-new-server-0.upstream-rabbit-new-nodes.default
 ```
 
+
+### 🚀🐰📦 LAB 11: RabbitMQ HTTP API Reference: 🚀🐰📦
+[http://localhost:15672/api/index.html](http://localhost:15672/api/index.html)
+
+```
+curl -i -u arul:password http://localhost:15672/api/vhosts
+```
+
+```
+rmqadmin --host=localhost --port=15672  --username=guest --password=guest  show overview
+```
+
+```
+rmqadmin --host=localhost --port=15672  --username=arul --password=password  show churn
+```
+
+
 ## Whats Next ???
 
 ### RabbitMQ Tutorials  cover the basics of creating messaging applications using RabbitMQ.
@@ -523,20 +540,6 @@ Currenty the below appdev labs leverages docker rmq for the hands on labs.
 kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[?(@.status.phase!="Running")].metadata.name}')
 ```
 
-### RabbitMQ HTTP API Reference:
-[http://localhost:15672/api/index.html](http://localhost:15672/api/index.html)
-
-```
-curl -i -u arul:password http://localhost:15672/api/vhosts
-```
-
-```
-rmqadmin --host=localhost --port=15672  --username=guest --password=guest  show overview
-```
-
-```
-rmqadmin --host=localhost --port=15672  --username=arul --password=password  show churn
-```
 
 #### 🚀🐰📦 Everything about Streams: (All you need is a Stream) 🚀🐰📦
 

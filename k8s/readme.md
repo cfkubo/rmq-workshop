@@ -42,7 +42,7 @@ Sample Output:
 
 ```
 NAME                                         READY   STATUS    RESTARTS   AGE
-rabbitmq-cluster-operator-5f94454fb7-bnqtg   1/1     Running   0          97m
+rabbitmq-cluster-operator-5f94454fb7-bnqtg   1/1     Running   0          4s
 ```
 
 ### Intall RabbitmqAdmin CLI
@@ -72,11 +72,11 @@ kubectl get po
 Sample Output:
 ```
 NAME                   READY   STATUS    RESTARTS   AGE
-hello-world-server-0   1/1     Running   0          3m19s
+hello-world-server-0   1/1     Running   0          1m
 ```
 
 ```
-k get rabbitmqclusters.rabbitmq.com hello-world
+kubectl get rabbitmqclusters.rabbitmq.com hello-world
 ```
 Sample Output:
 ```

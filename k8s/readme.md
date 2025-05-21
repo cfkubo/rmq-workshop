@@ -249,6 +249,8 @@ helm install  grafana grafana/grafana
 ```
 #### Annotate rmq pods to be able to scrape the prometheus metrics
 
+**NOTE** Patched annotation will be removed when a pod restarts. To make it permanent, you need to add the annotation to the deployment or statefulset of RabbitMQ.
+
 ```
 kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true
 

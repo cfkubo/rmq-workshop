@@ -176,6 +176,15 @@ Use the above default username password  or the user you have created
 
 ### LAB 4: Deploy Producers and Consumer Applications - Leveraging RabbitMQ PerfTest
 
+- Lets adjust teh memory high watermark to be able run the below perf test without issues
+```
+kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_vm_memory_high_watermark absolute "700MiB"
+
+kubectl -n default exec upstream-rabbit-new-server-1 --  rabbitmqctl set_vm_memory_high_watermark absolute "700MiB"
+
+kubectl -n default exec upstream-rabbit-new-server-2 --  rabbitmqctl set_vm_memory_high_watermark absolute "700MiB"
+```
+
 #### RMQPerf Test on k8s:
 
 #### Classic Queue Perf Test
@@ -188,9 +197,11 @@ service=${instance}
 echo $username
 echo $password
 
-
 kubectl -n default  --restart=Never run sa-workshop --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop" --pmessages 10000 --queue "sa-workshop" --rate 100 --consumer-rate 10 --multi-ack-every 10 --auto-delete false
 ```
+
+
+
 
 #### Quorum Queue Perf Test
 
@@ -204,6 +215,7 @@ echo $password
 
 
 kubectl -n default  --restart=Never run sa-workshop-quorum --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-quorum" --pmessages 1000 --queue "sa-workshop-quorum" --rate 100 --consumer-rate 10 --multi-ack-every 10
+
 
 kubectl -n default  --restart=Always run perf-syn-check --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" -i 120 -u "q.sys.synthetic-health-check" -qq -P 5 -ms -b 20 -hst 4 -dcr -c 1 -q 5
 
@@ -219,6 +231,8 @@ echo $username
 echo $password
 
 kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 10000 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
+
+
 ```
 
 ### LAB 5: Everyday I'm Shovelling
@@ -229,12 +243,11 @@ Usecases:
 - Moving messages between queues on same or different cluster
 
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://guest:guest@rabbitmq-blue", "src-queue": "sa-workshop", "dest-protocol": "amqp091", "dest-uri": "amqp://guest:guest@rabbitmq-blue", "dest-queue": "sa-workshop-shovelq", "dest-queue-args": {"x-queue-type": "quorum"}}'
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672", "src-queue": "sa-workshop", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672", "dest-queue": "sa-workshop-shovelq", "dest-queue-args": {"x-queue-type": "quorum"}}'
 ```
 
-
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://guest:guest@rabbitmq-blue", "src-queue": "sa-workshop-shovelq", "dest-protocol": "amqp091", "dest-uri": "amqp://guest:guest@rabbitmq-green", "dest-queue": "sa-workshop-shovelq-green", "dest-queue-args": {"x-queue-type": "quorum"}}'
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "src-queue": "sa-workshop-shovelq", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "dest-queue": "sa-workshop-shovelq-green", "dest-queue-args": {"x-queue-type": "quorum"}}'
 ```
 
 ### LAB 6: Routing Messages via Exchanges 

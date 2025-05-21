@@ -6,13 +6,13 @@ spec:
   service:
     type: ClusterIP
   replicas: 3
-  # resources:
-  #   requests:
-  #     cpu: "1"
-  #     memory: "2Gi"
-  #   limits:
-  #     cpu: "1"
-  #     memory: "2Gi"
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "250m"
+      memory: "512Mi"
   # imagePullSecrets:
   # - name: reg-creds
   rabbitmq:

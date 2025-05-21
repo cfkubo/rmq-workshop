@@ -160,10 +160,13 @@ echo $password
 
 When running on container platforms like kubernetes, we need to port forward to access the management UI. You can access the blue and green cluster using the below urls.
 
+- Access the upstream RMQ server via
 ```
 kubectl port-forward svc/upstream-rabbit-new 15672:15672
+```
+- Access the upstream RMQ server via
+```
 kubectl -n rmq-downstream port-forward svc/downstream-rabbit-new 15673:15672
-
 ```
 Upstream RMQ
 > http://localhost:15672

@@ -449,14 +449,22 @@ kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/download
 #### Edit the upstream-rabbit-new cluster yaml and remove the image line and save it 
 
 ```
-kubectl get rabbitmqclusters.rabbitmq.com upstream-rabbit-new -n default -o yaml | grep -v 'image:' | kubectl apply -f -
+k edit rabbitmqclusters.rabbitmq.com -n default upstream-rabbit-new
 ```
+
+<!-- ```
+kubectl get rabbitmqclusters.rabbitmq.com upstream-rabbit-new -n default -o yaml | grep -v 'image:' | kubectl apply -f -
+``` -->
 
 Repeate the above for downstream cluster to perform upgrade
 
 ```
-kubectl get rabbitmqclusters.rabbitmq.com downstream-rabbit-new -n rmq-downstream -o yaml | grep -v 'image:' | kubectl apply -f -
+k edit rabbitmqclusters.rabbitmq.com -n rmq-downstream downstream-rabbit-new
 ```
+
+<!-- ```
+kubectl get rabbitmqclusters.rabbitmq.com downstream-rabbit-new -n rmq-downstream -o yaml | grep -v 'image:' | kubectl apply -f -
+``` -->
 
 
 <!-- ### LAB 10: Springboot Producer Application

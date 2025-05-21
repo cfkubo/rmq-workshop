@@ -537,7 +537,7 @@ rmqadmin --host=localhost --port=15672  --username=guest --password=guest  show 
 rmqadmin --host=localhost --port=15672  --username=arul --password=password  show churn
 ```
 
-#### 🚀🐰📦 Streams: (All you need is a Stream) 🚀🐰📦
+#### 🚀🐰📦 Everything about Streams: (All you need is a Stream) 🚀🐰📦
 [https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu](https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu)
 
 

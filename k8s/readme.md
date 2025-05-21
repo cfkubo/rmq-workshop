@@ -274,7 +274,7 @@ http://prometheus-server.default.svc.cluster.local:80
 ![RabbitMQ Screenshot](grafana.png)
 
 #### Add RMQ-Overview Dashboard
-Click on create new dasboard > Import > copy the json code from rmq-overview.json file and paste it in json field and use the prometheus datasource
+Click on create new dasboard > Import > copy the json code from **rmq-overview.json** file and paste it in json field and use the prometheus datasource
 
 ![RabbitMQ Screenshot](../static/grafana.png)
 

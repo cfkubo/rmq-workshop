@@ -109,7 +109,7 @@ my-tanzu-rabbit-server-2   1/1     Running   0          2m59s
 
 ```
 kubectl -n default exec upstream-rabbit-new-server-0  -- rabbitmq-plugins enable rabbitmq_stream
-kubectl -n default exec upstream-rabbit-new-server-0  --rabbitmq-plugins enable rabbitmq_stream_management
+kubectl -n default exec upstream-rabbit-new-server-0  -- rabbitmq-plugins enable rabbitmq_stream_management
 
 kubectl -n default exec upstream-rabbit-new-server-0  -- rabbitmq-plugins enable rabbitmq_prometheus
 

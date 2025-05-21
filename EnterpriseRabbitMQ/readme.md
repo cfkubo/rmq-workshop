@@ -395,17 +395,17 @@ kubectl get rabbitmqclusters.rabbitmq.com downstream-rabbit -n default -o yaml |
 ![RabbitMQ Screenshot](../static/rabbit4.png)
 
 
-### 🚀🐰📦 LAB 10: Springboot Producer Application 🚀🐰📦
+<!-- ### 🚀🐰📦 LAB 10: Springboot Producer Application 🚀🐰📦
 
 ```
 git clone https://github.com/cfkubo/spring-boot-random-data-generator
 cd spring-boot-random-data-generator
 mvn spring-boot:run
 
-```
+``` -->
 
 
-### 🚀🐰📦 LAB 11: Working RabbitmqAdmin cli 🚀🐰📦
+### 🚀🐰📦 LAB 10: Working RabbitmqAdmin cli 🚀🐰📦
 
 **NOTE** To simply interacting with rabbitmqadmin v2 cli. We can create the below guest user with admin priviliages. Consider using the default creds and specifiy them as options to rabbitmqadmin v2 cli. 
 
@@ -431,14 +431,14 @@ rmqadmin show memory_breakdown_in_percent  --node rabbit@upstream-rabbit-server-
 ```
 
 
-### 🚀🐰📦 LAB 12: Promoting Downstream RMQ
+### 🚀🐰📦 LAB 11: Promoting Downstream RMQ
 
 
 ```
 kubectl -n default exec downstream-rabbit-server-0 --  rabbitmqctl promote_standby_replication_downstream_cluster
 ```
 
-### 🚀🐰📦 LAB 13: Scaling RMQ  🚀🐰📦
+### 🚀🐰📦 LAB 12: Scaling RMQ  🚀🐰📦
 
 ```
 k scale statefulsets.apps upstream-rabbit-server --replicas=3

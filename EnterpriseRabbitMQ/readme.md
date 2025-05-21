@@ -202,6 +202,9 @@ echo $password
 
 
 kubectl -n default  --restart=Never run sa-workshop --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop" --pmessages 10000 --queue "sa-workshop" --rate 100 --consumer-rate 10 --multi-ack-every 10 --auto-delete false
+
+kubectl -n default  --restart=Never run sa-workshop-new --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10  --predeclared --routing-key "sa-workshop-new" --pmessages 10000 --queue "sa-workshop-new" --rate 100 --auto-delete false
+
 ```
 
 #### Quorum Queue Perf Test
@@ -216,6 +219,8 @@ echo $password
 
 
 kubectl -n default  --restart=Never run sa-workshop-quorum --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-quorum" --pmessages 1000 --queue "sa-workshop-quorum" --rate 100 --consumer-rate 10 --multi-ack-every 10
+
+kubectl -n default  --restart=Never run sa-workshop-quorum-new --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10  --predeclared --routing-key "sa-workshop-quorum-new" --pmessages 1000 --queue "sa-workshop-quorum" --rate 100 
 
 kubectl -n default  --restart=Always run perf-syn-check --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" -i 120 -u "q.sys.synthetic-health-check" -qq -P 5 -ms -b 20 -hst 4 -dcr -c 1 -q 5
 
@@ -333,6 +338,11 @@ kubectl -n default exec downstream-rabbit-server-0 -- rabbitmq-diagnostics inspe
 ```
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl list_streams_available_for_standby_replication_recovery 
 ```
+
+```
+kubectl -n default exec downstream-rabbit-server-0 --  rabbitmqctl list_vhosts_available_for_standby_replication_recovery
+```
+
 [--vhost <vhost>]
 
 
@@ -418,6 +428,11 @@ k scale statefulsets.apps downstream-rabbit-server --replicas=3
 ```
 
 ### 🚀🐰📦 LAB 13: Promoting Downstream RMQ
+
+
+```
+kubectl -n default exec downstream-rabbit-server-0 --  rabbitmqctl promote_standby_replication_downstream_cluster
+```
 
 
 

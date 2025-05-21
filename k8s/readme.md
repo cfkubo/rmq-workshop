@@ -432,7 +432,7 @@ echo $username
 echo $password
 
 
-kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared  --pmessages 10000 --exchange "federated.exchange" --routing-key "event.test" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
+kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared  --pmessages 1000 --exchange "federated.exchange" --routing-key "event.test" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
 ```
 
 ### LAB 9: Upgrading RMQ on K8s
@@ -446,20 +446,26 @@ kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/d
 #### Edit the upstream-rabbit-new cluster yaml and remove the image line and save it 
 
 ```
- k edit rabbitmqclusters.rabbitmq.com upstream-rabbit-new
+kubectl get rabbitmqclusters.rabbitmq.com upstream-rabbit-new -n default -o yaml | grep -v 'image:' | kubectl apply -f -
 ```
+
 Repeate the above for downstream cluster to perform upgrade
 
-### LAB 10: Springboot Producer Application
+```
+kubectl get rabbitmqclusters.rabbitmq.com downstream-rabbit-new -n rmq-downstream -o yaml | grep -v 'image:' | kubectl apply -f -
+```
+
+
+<!-- ### LAB 10: Springboot Producer Application
 
 ```
 git clone https://github.com/cfkubo/spring-boot-random-data-generator
 cd spring-boot-random-data-generator
 mvn spring-boot:run
 
-```
+``` -->
 
-### LAB 11: Working RabbitmqAdmin cli
+### LAB 10: Working RabbitmqAdmin cli
 
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user guest guest

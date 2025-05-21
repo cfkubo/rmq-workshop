@@ -477,3 +477,6 @@ rmqadmin --host=localhost --port=15672  --username=arul --password=password  sho
 You’ve now taken a fantastic journey through deploying and interacting with RabbitMQ on Kubernetes! You’ve installed the operator, deployed single and multi-node clusters, enabled plugins, managed users, and even run performance tests.
 
 Keep exploring, experimenting, and having fun with RabbitMQ and Kubernetes! The world of distributed messaging awaits your command! 🚀🐰📦
+
+##  🚀🐰📦 One Server to Queue them All !!!!!!! 🚀🐰📦
+[https://suno.com/s/yfhHe8JGZUdx2EDn](https://suno.com/s/yfhHe8JGZUdx2EDn)

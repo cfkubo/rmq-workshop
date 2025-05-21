@@ -45,7 +45,7 @@ helm install tanzu-rabbitmq oci://rabbitmq-helmoci.packages.broadcom.com/tanzu-r
 ```
 
 
-### Verify Enterprise RMQ Operations installations
+### Verify Enterprise RMQ Operators installations
 ```
 kubectl get pods  -n rabbitmq-system
 ```
@@ -238,12 +238,31 @@ echo $password
 kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 10000 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
 ```
 
-### LAB 5: Routing Messages via Exchanges (Need updates - WIP)
+
+### LAB 6: Everyday I'm Shovelling 
+
+Shovel is an amazing plugin you can leverage to move messages from one to another queue. 
+
+Usecases: 
+- Moving messages between queues on same or different cluster
+
+
+- Below command will move messages from `sa-workshop-stream` to `sa-workshop-shovel`
+```
+kubectl -n default exec upstream-rabbit-server-0 --  rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit.default.svc.cluster.local:5672", "src-queue": "sa-workshop-quorum", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit.default.svc.cluster.local:5672", "dest-queue": "sa-workshop-shovelq", "dest-queue-args": {"x-queue-type": "quorum"}}'
+```
+
+- Below command will move messages from `sa-workshop-shovelq` to `sa-workshop-shovelq-green`
+```
+kubectl -n default exec upstream-rabbit-server-0 -- rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit.default.svc.cluster.local:5672", "src-queue": "sa-workshop-shovelq", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit.default.svc.cluster.local:5672", "dest-queue": "sa-workshop-shovelq-green", "dest-queue-args": {"x-queue-type": "quorum"}}'
+```
+
+<!-- ### LAB 5: Routing Messages via Exchanges (Need updates - WIP)
 
 - Create an exchange named demo
 - Bind the queue event to demo exchange with routing-key event.#
 - Bind the queue event to demo exchange with routing-key event.#
-- Publish a message via exchange and see how messages are routed to queues event and event based on routing keys.
+- Publish a message via exchange and see how messages are routed to queues event and event based on routing keys. -->
 
 <!--
 ### Updates to rabbitmqadmin v2 formats: (Testing needed)
@@ -478,5 +497,9 @@ You’ve now taken a fantastic journey through deploying and interacting with Ra
 
 Keep exploring, experimenting, and having fun with RabbitMQ and Kubernetes! The world of distributed messaging awaits your command! 🚀🐰📦
 
-##  🚀🐰📦 One Server to Queue them All !!!!!!! 🚀🐰📦
+
+##  🎶🥁🚀🐰📦 One Server to Queue them All !!!!!!! 🚀🐰📦🥁🎶
+
 [https://suno.com/s/yfhHe8JGZUdx2EDn](https://suno.com/s/yfhHe8JGZUdx2EDn)
+
+

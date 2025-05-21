@@ -2,9 +2,9 @@
 
 ![RabbitMQ Screenshot](../static/rabbitmq-new.png)
 
-### Prequisites 
+### Prequisites
 - K8s installed and running (Kind,Docker k8s, MiniKube)
-- kubectl 
+- kubectl
 - helm
 
 ### Clone this repo and move to rmq-workshop/K8s folder to continue
@@ -36,9 +36,9 @@ rabbitmq-system   Active   2s
 ```
 
 ```
-Kubectl get po -n rabbitmq-system 
+Kubectl get po -n rabbitmq-system
 ```
-Sample Output: 
+Sample Output:
 
 ```
 NAME                                         READY   STATUS    RESTARTS   AGE
@@ -158,7 +158,7 @@ echo $password
 
 ### 🚀🐰📦 LAB 3: Access RMQ Management UI 🚀🐰📦
 
-When running on container platforms like kubernetes, we need to port forward to access the management UI. You can access the blue and green cluster using the below urls.
+When running on container platforms like kubernetes, we need to port forward to access the management UI. You can access the Upstream and Downstream cluster using the below urls.
 
 - Access the upstream RMQ server via
 ```
@@ -253,12 +253,12 @@ helm install  grafana grafana/grafana
 #### Annotate rmq pods to be able to scrape the prometheus metrics
 
 ```
-kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true 
+kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true
 
 kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true -n rmq-downstream
 
 ```
-#### Access Grafana 
+#### Access Grafana
 
 ```
 kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
@@ -280,9 +280,9 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 
 ### 🚀🐰📦 LAB 6: Everyday I'm Shovelling 🚀🐰📦
 
-Shovel is an amazing plugin you can leverage to move messages from one to another queue. 
+Shovel is an amazing plugin you can leverage to move messages from one to another queue.
 
-Usecases: 
+Usecases:
 - Moving messages between queues on same or different cluster
 - Queues types changed
 - Queue names changed
@@ -293,7 +293,7 @@ kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_paramete
 ```
 
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "src-queue": "sa-workshop-shovelq", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "dest-queue": "sa-workshop-shovelq-green", "dest-queue-args": {"x-queue-type": "quorum"}}'
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "src-queue": "sa-workshop-shovelq", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "dest-queue": "sa-workshop-shovelq-Downstream", "dest-queue-args": {"x-queue-type": "quorum"}}'
 ```
 
 ### 🚀🐰📦 LAB 7: Routing Messages via Exchanges 🚀🐰📦
@@ -351,18 +351,18 @@ kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabb
 
 [https://www.rabbitmq.com/docs/federation](https://www.rabbitmq.com/docs/federation)
 
-#### Setting up exchange and queue federation on blue cluster 
+#### Setting up exchange and queue federation on upstream cluster
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@downstream-rabbit-new.rmq-downstream.svc.cluster.local:5672"}' 
+kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@downstream-rabbit-new.rmq-downstream.svc.cluster.local:5672"}'
 
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_policy exchange-federation "^federated\." '{"federation-upstream-set":"all"}'  --priority 10  --apply-to exchanges
 
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_policy queue-federation ".*" '{"federation-upstream-set":"all"}' --priority 10 --apply-to queues
 ```
 
-#### Setting up exchange and queue federation on green cluster 
+#### Setting up exchange and queue federation on downstream cluster
 ```
-kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672"}' 
+kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672"}'
 
 kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 --  rabbitmqctl set_policy exchange-federation "^federated\." '{"federation-upstream-set":"all"}'  --priority 10  --apply-to exchanges
 
@@ -370,7 +370,7 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set
 
 ```
 
-#### Creating queue, exchange, bindinging on both blue & green cluster , publish a message to blue cluster and observe the message on both clusters
+#### Creating queue, exchange, bindinging on both Upstream & Downstream cluster , publish a message to Upstream cluster and observe the message on both clusters
 
 - Delcare an exchange named federated.exchange on upstream RMQ
 
@@ -413,7 +413,7 @@ kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish e
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish exchange=federated.exchange routing_key=new-event.test payload="Hello from demo exchange to with key new-event"
 ```
 
-#### Now lets bind all queues to federated exchange on both blue and green RMQ servers.
+#### Now lets bind all queues to federated exchange on both Upstream and Downstream RMQ servers.
 
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -it  --  rabbitmqadmin list queues > queues.txt
@@ -446,7 +446,7 @@ kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotal
 kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/download/v2.13.0/cluster-operator.yml"
 ```
 
-#### Edit the upstream-rabbit-new cluster yaml and remove the image line and save it 
+#### Edit the upstream-rabbit-new cluster yaml and remove the image line and save it
 
 ```
 k edit rabbitmqclusters.rabbitmq.com -n default upstream-rabbit-new
@@ -478,7 +478,7 @@ mvn spring-boot:run
 
 ### 🚀🐰📦 LAB 10: Working RabbitmqAdmin cli 🚀🐰📦
 
-**NOTE** To simply interacting with rabbitmqadmin v2 cli. We can create the below guest user with admin priviliages. Consider using the default creds and specifiy them as options to rabbitmqadmin v2 cli. 
+**NOTE** To simply interacting with rabbitmqadmin v2 cli. We can create the below guest user with admin priviliages. Consider using the default creds and specifiy them as options to rabbitmqadmin v2 cli.
 
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user guest guest
@@ -511,7 +511,7 @@ rmqadmin show memory_breakdown_in_percent  --node rabbit@upstream-rabbit-new-ser
 
 Currenty the below appdev labs leverages docker rmq for the hands on labs.
 
-[RabbitMQ AppDev Labs](https://github.com/ggreen/event-streaming-showcase/tree/main/docs/workshops/Labs/appDev)
+[RabbitMQ AppDev Labs](https://github.com/gDownstream/event-streaming-showcase/tree/main/docs/workshops/Labs/appDev)
 
 
 
@@ -522,7 +522,7 @@ Currenty the below appdev labs leverages docker rmq for the hands on labs.
 kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[?(@.status.phase!="Running")].metadata.name}')
 ```
 
-### RabbitMQ HTTP API Reference: 
+### RabbitMQ HTTP API Reference:
 [http://localhost:15672/api/index.html](http://localhost:15672/api/index.html)
 
 ```
@@ -549,7 +549,7 @@ You’ve now taken a fantastic journey through deploying and interacting with Ra
 Keep exploring, experimenting, and having fun with RabbitMQ and Kubernetes! The world of distributed messaging awaits your command! 🚀🐰📦
 
 
-##  🎶🥁🚀🐰📦 One Server to Queue them All !!!!!!! 🚀🐰📦🥁🎶 
+##  🎶🥁🚀🐰📦 One Server to Queue them All !!!!!!! 🚀🐰📦🥁🎶
 
 An AI generated song dedicated to RabbitMQ and Kubernetes. Enjoy the music! 🎶🥁🚀🐰📦
 
@@ -566,6 +566,6 @@ kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[
 
 
 #### 🚀🐰📦 References:🚀🐰📦
-- [Streaming with RabbitMQ](https://github.com/ggreen/event-streaming-showcase)
+- [Streaming with RabbitMQ](https://github.com/gDownstream/event-streaming-showcase)
 - [RabbitMQ Website](https://www.rabbitmq.com)
 - [Broadcom/VMware RabbitMQ for K8s Docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-rabbitmq-on-kubernetes/4-0/tanzu-rabbitmq-kubernetes/installation-using-helm.html)

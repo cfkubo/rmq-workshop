@@ -19,6 +19,8 @@ spec:
       - rabbitmq_schema_definition_sync_prometheus  # optional
       - rabbitmq_standby_replication
       - rabbitmq_warm_standby
+      - rabbitmq_shovel
+      - rabbitmq_shovel_management
     additionalConfig: |
       log.console.level = debug
       schema_definition_sync.operating_mode = upstream

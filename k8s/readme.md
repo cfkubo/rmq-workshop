@@ -291,10 +291,13 @@ Usecases:
 - Queue names changed
 - Queue is full and need to be drained
 
+- In this sample we are moving messages from a classic queue to quorum queue
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672", "src-queue": "sa-workshop", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672", "dest-queue": "sa-workshop-shovelq", "dest-queue-args": {"x-queue-type": "quorum"}}'
 ```
+**Checkout the changes in Managment UI** 
 
+- In this sample we are moving messages from a quorum queue to quorum queue in same cluster (same could be achieved with different clusters as well)
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "src-queue": "sa-workshop-shovelq", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "dest-queue": "sa-workshop-shovelq-Downstream", "dest-queue-args": {"x-queue-type": "quorum"}}'
 ```

@@ -304,6 +304,14 @@ kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_paramete
 
 ### 🚀🐰📦 LAB 7: Routing Messages via Exchanges 🚀🐰📦
 
+- Fanout for Broad Notifications: Use a fanout exchange (like your demo example without specific routing keys) to broadcast the same message to multiple independent consumer queues (e.g., logging, analytics).
+
+- Topic-Based Event Handling: Employ a topic exchange (like your demo with # wildcards) to route different types of events to specific consumer queues based on the routing key (e.g., event.created goes to "event" queue, new-event.processed to "new-event").
+
+- Direct Routing for Specific Tasks: Utilize a direct exchange to send messages with a precise routing key to a single bound queue, ideal for task queues where specific workers handle particular jobs.
+
+
+
 - Create an exchange named demo
 - Bind the queue event to demo exchange with routing-key event.#
 - Bind the queue new-event to demo exchange with routing-key new-event.#

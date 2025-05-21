@@ -16,7 +16,7 @@ This repo has a collection of hands on  labs for RabbitMQ.
 - Checkout the windows folder in the project
 
 ### Enterprise RabbitMQ on K8s:
-- [Enterprise RabbitMQ K8s Hands On Labs](https://github.com/cfkubo/rmq-workshop/tree/a72ba615e222d369adc7bc25ca6de0aa27c3a5a9/EnterpriseRabbitMQ)
+- [Enterprise RabbitMQ K8s Hands On Labs](https://github.com/cfkubo/rmq-workshop/tree/a879dc3dbfba24c1d1dd3cbc82b71c2eca1d28b6/EnterpriseRabbitMQ)
 - [Enterprise RabbitMQ K8s Hands On Labs GitHub Pages](https://site.arullab.com/rmq-workshop/EnterpriseRabbitMQ/)
 
 

@@ -417,7 +417,15 @@ rmqadmin show memory_breakdown_in_percent  --node rabbit@upstream-rabbit-server-
 kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[?(@.status.phase!="Running")].metadata.name}')
 ```
 
-### 🚀🐰📦 LAB 12: Scaling RMQ  🚀🐰📦
+
+### 🚀🐰📦 LAB 12: Promoting Downstream RMQ
+
+
+```
+kubectl -n default exec downstream-rabbit-server-0 --  rabbitmqctl promote_standby_replication_downstream_cluster
+```
+
+### 🚀🐰📦 LAB 13: Scaling RMQ  🚀🐰📦
 
 ```
 k scale statefulsets.apps upstream-rabbit-server --replicas=3
@@ -425,13 +433,6 @@ k scale statefulsets.apps upstream-rabbit-server --replicas=3
 
 ```
 k scale statefulsets.apps downstream-rabbit-server --replicas=3
-```
-
-### 🚀🐰📦 LAB 13: Promoting Downstream RMQ
-
-
-```
-kubectl -n default exec downstream-rabbit-server-0 --  rabbitmqctl promote_standby_replication_downstream_cluster
 ```
 
 

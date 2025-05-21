@@ -325,7 +325,7 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 ![RabbitMQ Screenshot](../static/grafana.png)
 
 ### 🚀🐰📦 Lab 7: Disaster Recovery 🚀🐰📦
-### Inpsecting Standby Replication on Downstream RMQ
+#### Inspecting Standby Replication on Downstream RMQ
 
 ```
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmq-diagnostics inspect_local_data_available_for_standby_replication_recovery

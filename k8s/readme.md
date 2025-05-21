@@ -240,11 +240,45 @@ echo $username
 echo $password
 
 kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --stream-queue --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop-stream" --pmessages 10000 --queue "sa-workshop-stream" --rate 100 --consumer-rate 10 --multi-ack-every 1 -c 10
-
-
 ```
 
-### 🚀🐰📦 LAB 5: Everyday I'm Shovelling 🚀🐰📦
+
+
+### 🚀🐰📦 Lab 5: Monitoring RabbitMQ on Kubernetes 🚀🐰📦
+
+```
+helm install prometheus  prometheus-community/prometheus
+helm install  grafana grafana/grafana
+```
+#### Annotate rmq pods to be able to scrape the prometheus metrics
+
+```
+kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true 
+
+kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true -n rmq-downstream
+
+```
+#### Access Grafana 
+
+```
+kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o jsonpath="{.items[0].metadata.name}")
+     kubectl --namespace default port-forward $POD_NAME 3000
+```
+
+#### Add prometheus datasource to Grafana
+Click on "Add your first data soruce" > select prometheus > http://prometheus-server.default.svc.cluster.local:80 > save and test
+
+![RabbitMQ Screenshot](grafana.png)
+
+#### Add RMQ-Overview Dashboard
+Click on create new dasboard > Import > copy the json code from rmq-overview.json file and paste it in json field and use the prometheus datasource
+
+![RabbitMQ Screenshot](../static/grafana.png)
+
+
+### 🚀🐰📦 LAB 6: Everyday I'm Shovelling 🚀🐰📦
 
 Shovel is an amazing plugin you can leverage to move messages from one to another queue. 
 
@@ -262,7 +296,7 @@ kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_paramete
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "src-queue": "sa-workshop-shovelq", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "dest-queue": "sa-workshop-shovelq-green", "dest-queue-args": {"x-queue-type": "quorum"}}'
 ```
 
-### 🚀🐰📦 LAB 6: Routing Messages via Exchanges 🚀🐰📦
+### 🚀🐰📦 LAB 7: Routing Messages via Exchanges 🚀🐰📦
 
 - Create an exchange named demo
 - Bind the queue event to demo exchange with routing-key event.#
@@ -311,40 +345,6 @@ kubectl -n default  --restart=Never run sa-workshop-demo-route --image=pivotalra
 
 kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --exchange demo.exchange --routing-key "new-event.demo2" --pmessages 1000  --rate 100 --consumer-rate 10 --multi-ack-every 10
 ```
-
-
-### 🚀🐰📦 Lab 7: Monitoring RabbitMQ on Kubernetes 🚀🐰📦
-
-```
-helm install prometheus  prometheus-community/prometheus
-helm install  grafana grafana/grafana
-```
-#### Annotate rmq pods to be able to scrape the prometheus metrics
-
-```
-kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true 
-
-kubectl annotate pods --all prometheus.io/path=/metrics prometheus.io/port=15692 prometheus.io/scheme=http prometheus.io/scrape=true -n rmq-downstream
-
-```
-#### Access Grafana 
-
-```
-kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
-
-export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o jsonpath="{.items[0].metadata.name}")
-     kubectl --namespace default port-forward $POD_NAME 3000
-```
-
-#### Add prometheus datasource to Grafana
-Click on "Add your first data soruce" > select prometheus > http://prometheus-server.default.svc.cluster.local:80 > save and test
-
-![RabbitMQ Screenshot](grafana.png)
-
-#### Add RMQ-Overview Dashboard
-Click on create new dasboard > Import > copy the json code from rmq-overview.json file and paste it in json field and use the prometheus datasource
-
-![RabbitMQ Screenshot](../static/grafana.png)
 
 
 ### 🚀🐰📦 LAB 8: Federation  - Actvie - Active RMQ deployments in Kubernetes 🚀🐰📦
@@ -516,7 +516,7 @@ kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[
 [http://localhost:15672/api/index.html](http://localhost:15672/api/index.html)
 
 ```
-curl -i -u guest:guest http://localhost:15672/api/vhosts
+curl -i -u arul:password http://localhost:15672/api/vhosts
 ```
 
 ```

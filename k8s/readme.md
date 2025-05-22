@@ -299,7 +299,7 @@ kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_paramete
 
 - In this sample we are moving messages from a quorum queue to stream queue in same cluster (same could be achieved with different clusters as well)
 ```
-kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "src-queue": "sa-workshop-shovelq", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "dest-queue": "sa-workshop-shovelq-Downstream", "dest-queue-args": {"x-queue-type": "stream"}}'
+kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel2 '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "src-queue": "sa-workshop-shovelq", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "dest-queue": "sa-workshop-shovelq-Upstream", "dest-queue-args": {"x-queue-type": "stream"}}'
 ```
 
 ### 🚀🐰📦 LAB 7: Routing Messages via Exchanges 🚀🐰📦
@@ -465,6 +465,15 @@ kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/download
 ```
 k edit rabbitmqclusters.rabbitmq.com -n default upstream-rabbit-new
 ```
+OR
+
+```
+kubectl patch rabbitmqclusters.rabbitmq.com upstream-rabbit-new -n default --type merge -p '{"spec": {"image": "rabbitmq:4.1.0-management"}}'
+```
+<!-- rabbitmq:3.13.7-management
+
+
+rabbitmq:4.1.0-management -->
 
 <!-- ```
 kubectl get rabbitmqclusters.rabbitmq.com upstream-rabbit-new -n default -o yaml | grep -v 'image:' | kubectl apply -f -
@@ -474,6 +483,12 @@ Repeate the above for downstream cluster to perform upgrade
 
 ```
 k edit rabbitmqclusters.rabbitmq.com -n rmq-downstream downstream-rabbit-new
+```
+
+OR 
+
+```
+kubectl patch rabbitmqclusters.rabbitmq.com downstream-rabbit-new -n rmq-downstream --type merge -p '{"spec": {"image": "rabbitmq:4.1.0-management"}}'
 ```
 
 <!-- ```

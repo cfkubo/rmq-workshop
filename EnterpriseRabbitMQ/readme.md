@@ -381,16 +381,26 @@ kubectl get pods  -n rabbitmq-system
 
 #### Edit the upstream-rabbit-new cluster yaml and remove the image line and save it. 
 
+
 ```
+k edit rabbitmqclusters.rabbitmq.com -n default upstream-rabbit
+```
+
+<!-- ```
 kubectl get rabbitmqclusters.rabbitmq.com upstream-rabbit -n default -o yaml | grep -v 'image:' | kubectl apply -f -
-```
+``` -->
 
 
 Repeate the above for downstream cluster to perform upgrade
 
+
 ```
+k edit rabbitmqclusters.rabbitmq.com -n default downstream-rabbit
+```
+
+<!-- ```
 kubectl get rabbitmqclusters.rabbitmq.com downstream-rabbit -n default -o yaml | grep -v 'image:' | kubectl apply -f -
-```
+``` -->
 
 ![RabbitMQ Screenshot](../static/rabbit4.png)
 

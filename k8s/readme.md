@@ -585,12 +585,13 @@ Keep exploring, experimenting, and having fun with RabbitMQ and Kubernetes! The 
 
 An AI generated song dedicated to RabbitMQ and Kubernetes. Enjoy the music! 🎶🥁🚀🐰📦
 
-[https://suno.com/s/yfhHe8JGZUdx2EDn](https://suno.com/s/yfhHe8JGZUdx2EDn)
+[One Server to Queue them All](https://suno.com/s/qJBkNInAtdU3gujo)
 
 
 #### Troubleshooting
-- Verfity typo in token or username when logging to helm repo to pull enterprise images
+
 - Check the pods logs
+
 - Kubectl cmd to clean up pods that are not in Running State. Usefull when trying to rerun perftest pods
 ```
 kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[?(@.status.phase!="Running")].metadata.name}')

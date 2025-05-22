@@ -30,6 +30,10 @@ This repo has a collection of hands on  labs for RabbitMQ.
 - [https://github.com/ggreen/event-streaming-showcase](https://github.com/ggreen/event-streaming-showcase)
 - [https://www.rabbitmq.com](https://www.rabbitmq.com)
 
+### One Server To Queue Them ALL !!!!
+- An AI generated song dedicated to RabbitMQ
+  [One Server To Queue Them ALL](https://suno.com/s/yfhHe8JGZUdx2EDn)
+
 
 ### Contirbutions and Questions:
 If you are interested in contributing to the project, Fork this repo and create a pull request with your changes. Please feel free to open an issue if you run into issues with the labs or unable to find the answer or have any questions.

@@ -244,6 +244,11 @@ kubectl -n default  --restart=Always run stream --image=pivotalrabbitmq/perf-tes
 ### 🚀🐰📦 Lab 5: Monitoring RabbitMQ on Kubernetes 🚀🐰📦
 
 ```
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
+```
+
+```
 helm install prometheus  prometheus-community/prometheus
 helm install  grafana grafana/grafana
 ```

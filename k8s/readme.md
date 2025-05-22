@@ -148,8 +148,8 @@ echo $username
 echo $password
 
 instance=downstream-rabbit-new
-username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
-password=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.password}" | base64 --decode)
+username=$(kubectl -n rmq-downstream   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
+password=$(kubectl -n rmq-downstream   get secret ${instance}-default-user -o jsonpath="{.data.password}" | base64 --decode)
 service=${instance}
 echo $username
 echo $password

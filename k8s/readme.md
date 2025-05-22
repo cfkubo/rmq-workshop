@@ -553,6 +553,7 @@ rmqadmin --host=localhost --port=15672  --username=arul --password=password  sho
 
 [RabbitMQ Tutorials](https://www.rabbitmq.com/tutorials)
 
+
 ### RabbitMQ Labs for Developers and DevOps Engineers
 
 Currenty the below appdev labs leverages docker rmq for the hands on labs.
@@ -582,6 +583,12 @@ Use Cases for Using Streams
 - Throughput Performance
 
 - Large backlogs
+
+### RabbitMQ Blogs:
+- https://www.rabbitmq.com/blog/2025/01/17/how-are-the-messages-stored
+- https://www.rabbitmq.com/blog/2023/10/16/stream-filtering
+- https://www.rabbitmq.com/blog/2022/02/21/gatekeeper-validation
+- https://www.rabbitmq.com/blog/2021/07/28/rabbitmq-streams-message-deduplication
 
 
 ### 🎉 Congratulations, Messaging Maestro! 🎉

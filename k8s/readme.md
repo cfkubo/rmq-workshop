@@ -573,9 +573,19 @@ kubectl -n default delete pod $(kubectl -n default get pod -o jsonpath='{.items[
 
 [RabbitMQ Streams - extreme performance with unrivalled flexibility](https://www.youtube.com/watch?v=gbf1_aqVKL0&ab_channel=VMwareTanzu)
 
+Use Cases for Using Streams
+
+- Large fan-outs
+
+- Replay (Time-travelling)
+
+- Throughput Performance
+
+- Large backlogs
 
 
-🎉 Congratulations, Messaging Maestro! 🎉
+### 🎉 Congratulations, Messaging Maestro! 🎉
+
 You’ve now taken a fantastic journey through deploying and interacting with RabbitMQ on Kubernetes! You’ve installed the operator, deployed single and multi-node clusters, enabled plugins, managed users, and even run performance tests.
 
 Keep exploring, experimenting, and having fun with RabbitMQ and Kubernetes! The world of distributed messaging awaits your command! 🚀🐰📦

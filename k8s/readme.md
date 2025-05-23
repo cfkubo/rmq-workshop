@@ -22,11 +22,13 @@
 * [LAB 11: RabbitMQ HTTP API Refrence](#-lab-11-rabbitmq-http-api-reference-)
 
 
+
 ### Clone this repo and move to rmq-workshop/K8s folder to continue
 ```
 git clone https://github.com/cfkubo/rmq-workshop
 cd rmq-workshop/k8s
 ```
+
 
 ### 🚀🐰📦 LAB 1: Intall OSS RabbitMQ Operator on K8s (any K8s) 🚀🐰📦
 Below kubectl command will create all the neccessary objects on the cluster to deploy RabbitMQ using operator. 
@@ -81,6 +83,7 @@ rmqadmin --help
 ```
 
 ### Deploy a single node RMQ Cluster
+The below command will deploy a single node cluster
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/rabbitmq/cluster-operator/main/docs/examples/hello-world/rabbitmq.yaml
@@ -104,6 +107,9 @@ hello-world   True               True               5m26s
 ```
 
 ### Deploy a multinode RMQ Cluster : HA Setup
+
+The below command will deploy a multinode cluster with high availability setup. Please review the yaml files for configuration details.
+
 ```
 kubectl create ns rmq-downstream
 kubectl apply -f rmq-upstream.yaml
@@ -135,6 +141,8 @@ kubectl -n default exec upstream-rabbit-new-server-0  -- rabbitmq-plugins enable
 kubectl -n default exec upstream-rabbit-new-server-0  -- rabbitmq-plugins enable rabbitmq_shovel
 kubectl -n default exec upstream-rabbit-new-server-0  -- rabbitmq-plugins enable rabbitmq_shovel_management
 ```
+
+
 
 ### 🚀🐰📦 LAB 2: Creating User and Permissions 🚀🐰📦
 

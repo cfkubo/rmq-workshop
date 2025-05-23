@@ -198,7 +198,7 @@ Use the above default username password  or the user you have created
 
 **NOTE** Lets adjust the memory high watermark to be able run the below perf test without issues
 
-** Understand Memory High Watermark*** 
+**Understand Memory High Watermark**
 
 RabbitMQ has a concept of memory high watermark which is used to determine when to start dropping messages. The default value is 0.4 (40%). This means that RabbitMQ will start dropping messages when it reaches 40% of its total available memory.
 

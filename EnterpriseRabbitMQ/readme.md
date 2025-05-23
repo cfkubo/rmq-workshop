@@ -19,7 +19,8 @@
 * [LAB 8: Validating Distaster Recovery - Enterprise Feature](#-lab-8-disaster-recovery-)
 * [Lab 9: Upgrading Enterprise RabbitMQ Operators and RabbitMQ Cluster](#-lab-9-upgrading-rmq-on-k8s-)
 * [LAB 10: Working with RabbitMQAdmin V2 CLI](#-lab-10-working-rabbitmqadmin-cli-)
-
+* [LAB 11: Disaster Recovery - Enterprise Feature](#-lab-11-promoting-downstream-rmq)
+* [LAB 12: Scaling RabbitMQ on k8s](#-lab-12-scaling-rmq--)
 
 
 ## 🚀🐰📦 Install instruction for Enterprise RabbitMQ on Kubernetes.🚀🐰📦

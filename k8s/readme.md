@@ -472,6 +472,7 @@ The third command sets a federation policy named queue-federation. It applies to
 For these commands to work, the rabbitmq_federation plugin must be enabled on the RabbitMQ server.
 
 #### Setting up exchange and queue federation on upstream cluster
+
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@downstream-rabbit-new.rmq-downstream.svc.cluster.local:5672"}'
 
@@ -480,7 +481,10 @@ kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_policy 
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_policy queue-federation ".*" '{"federation-upstream-set":"all"}' --priority 10 --apply-to queues
 ```
 
+Setting up federation on Downstream Cluster to be able have Active-Active setup
+
 #### Setting up exchange and queue federation on downstream cluster
+
 ```
 kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672"}'
 

@@ -316,11 +316,13 @@ kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_paramete
 - Direct Routing for Specific Tasks: Utilize a direct exchange to send messages with a precise routing key to a single bound queue, ideal for task queues where specific workers handle particular jobs.
 
 
-
 - Create an exchange named demo
 - Bind the queue event to demo exchange with routing-key event.#
 - Bind the queue new-event to demo exchange with routing-key new-event.#
 - Publish a message via exchange and see how messages are routed to queues event and new-event based on routing keys.
+
+![RabbitMQ Screenshot](../static/exchange2.png)
+
 
 #### Now publish the messages to demo exchange via perf test and see how messages are routed to queues A and B based on routing keys.
 
@@ -390,6 +392,8 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set
 ```
 
 #### Creating queue, exchange, bindinging on both Upstream & Downstream cluster , publish a message to Upstream cluster and observe the message on both clusters
+
+
 
 - Delcare an exchange named federated.exchange on upstream RMQ
 

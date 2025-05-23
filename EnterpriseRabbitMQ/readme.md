@@ -415,6 +415,8 @@ Click on create new dasboard > Import > copy the json code from rmq-overview.jso
 ### 🚀🐰📦 Lab 8: Disaster Recovery 🚀🐰📦
 #### Inspecting Standby Replication on Downstream RMQ
 
+We can use the below command to validate standby replication on the Downstream RabbitMQ instance.
+
 ```
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmq-diagnostics inspect_local_data_available_for_standby_replication_recovery
 ```

@@ -198,6 +198,10 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set
 
 #### Classic Queue Perf Test
 
+This kubectl run command launches a temporary Kubernetes Pod named sa-workshop to execute a RabbitMQ performance test. It uses the pivotalrabbitmq/perf-test image and connects to the RabbitMQ instance specified by the $service URI with provided credentials.
+
+The test simulates 10 message producers sending a total of 100,000 messages (10,000 each) with the routing key "sa-workshop" to a pre-declared queue also named "sa-workshop" at a rate of 100 messages/second per producer. Simultaneously, 5 consumers retrieve messages from the same queue at a rate of 10 messages/second each, sending multiple acknowledgements every 10 messages. The queue is configured not to auto-delete. This setup measures RabbitMQ's performance under a defined publishing and consuming load.
+
 ```
 instance=upstream-rabbit-new
 username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)
@@ -210,6 +214,12 @@ kubectl -n default  --restart=Never run sa-workshop --image=pivotalrabbitmq/perf
 ```
 
 #### Quorum Queue Perf Test
+
+This kubectl run command launches a single-use Pod named sa-workshop-quorum in the default namespace, using the pivotalrabbitmq/perf-test image. It targets a RabbitMQ instance at the specified $service URI. This test specifically uses a quorum queue (--quorum-queue). It simulates 10 producers sending 1,000 messages each (total 10,000) with the routing key "sa-workshop-quorum" to a pre-declared queue named "sa-workshop-quorum" at 100 messages/second per producer. Concurrently, 5 consumers retrieve messages from this queue at 10 messages/second each, acknowledging every 10 messages.
+
+Second Command:
+
+This kubectl run command deploys a Pod named perf-syn-check in the default namespace that will always be restarted (--restart=Always). It uses the pivotalrabbitmq/perf-test image to perform a synthetic health check on the RabbitMQ instance at $service. It runs for 120 iterations (-i 120), publishes to the "q.sys.synthetic-health-check" queue (-u ... -qq), with 5 persistent messages (-P 5), using message sizes (-ms), a batch size of 20 (-b 20), 4 hostnames (-hst 4), disables credit flow control (-dcr), with 1 consumer (-c 1) and a queue depth target of 5 (-q 5).
 
 ```
 instance=upstream-rabbit-new
@@ -228,6 +238,11 @@ kubectl -n default  --restart=Always run perf-syn-check --image=pivotalrabbitmq/
 ```
 
 #### Stream RMQ Perftest
+
+This kubectl run command deploys a persistently running Pod named stream in the default namespace (--restart=Always). It utilizes the pivotalrabbitmq/perf-test image to benchmark a RabbitMQ stream queue (--stream-queue) at the specified $service URI.
+
+The test involves 10 producers sending a total of 100,000 messages (10,000 each) with the routing key "sa-workshop-stream" to a pre-declared stream queue named "sa-workshop-stream", at a rate of 100 messages/second per producer. Concurrently, 5 consumers retrieve messages from this stream queue at a rate of 10 messages/second each, acknowledging every message (--multi-ack-every 1). Additionally, it specifies 10 concurrent connections per consumer (-c 10). This setup measures the performance of RabbitMQ streams under a defined load.
+
 ```
 instance=upstream-rabbit-new
 username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)

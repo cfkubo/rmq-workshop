@@ -278,6 +278,12 @@ kubectl -n default  --restart=Always run perf-syn-check --image=pivotalrabbitmq/
 ```
 
 #### Stream RMQ Perftest
+
+This kubectl run command deploys a persistent Pod named stream in the default namespace. It uses the pivotalrabbitmq/perf-test image to benchmark a RabbitMQ stream queue.
+
+The test involves 10 producers sending a total of 100,000 messages to a pre-declared stream queue named "sa-workshop-stream" with the routing key "sa-workshop-stream" at 100 messages/second per producer. Simultaneously, 5 consumers read from the same stream queue at 10 messages/second each, acknowledging every message. Each consumer uses 10 concurrent connections. This command continuously evaluates the performance of RabbitMQ streams under load.
+
+
 ```
 instance=upstream-rabbit
 username=$(kubectl -n default   get secret ${instance}-default-user -o jsonpath="{.data.username}" | base64 --decode)

@@ -103,7 +103,8 @@ kubectl apply -f downstream-config.yaml
 
 ### Intall RabbitmqAdmin CLI
 Interacting with RabbitMQ Server using rabbitmqadmin v2 CLI . Below steps work on MAC. For other OS please download the executalbe from git releases and move it to /usr/local/bin.
-> https://github.com/rabbitmq/rabbitmqadmin-ng/releases
+
+Access the releases: [https://github.com/rabbitmq/rabbitmqadmin-ng/releases](https://github.com/rabbitmq/rabbitmqadmin-ng/releases)
 
 Download the binary for your OS, update permission and move it bin folder
 
@@ -175,11 +176,9 @@ kubectl port-forward svc/upstream-rabbit 15672:15672
 ```
 kubectl -n default port-forward svc/downstream-rabbit 15673:15672
 ```
-### Access Upstream RMQ
-> http://localhost:15672
+- Access Upstream RMQ at: [http://localhost:15672](http://localhost:15672)
 
-### Access Downstream RMQ
-> http://localhost:15673
+- Access Downstream RMQ [http://localhost:15673](http://localhost:15673)
 
 **Use the above default username password**
 
@@ -189,20 +188,22 @@ kubectl -n default port-forward svc/downstream-rabbit 15673:15672
 
 ### NOTE: Most of configuration is done via yaml. Please review the upstream-config.yaml and downstream-config.yaml for standby replication configuration.
 
-#### Specify local (upstream cluster) nodes and credentials to be used for WSR.
-#### Note that the target port is that of the RabbitMQ Stream protocol, *not* AMQP 1.0.
+- Specify local (upstream cluster) nodes and credentials to be used for WSR.
+- Note that the target port is that of the RabbitMQ Stream protocol, *not* AMQP 1.0.
 
 ```
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_standby_replication_upstream_endpoints '{"endpoints": ["upstream-rabbit:5552","upstream2-rabbit:5552","upstream3-rabbit:5552"], "username": "test-user", "password": "test-password"}'
 ```
 
-#### Create a user and grant it permissions to the virtual host that will be used for schema replication.
-#### This command is similar to 'rabbitmqctl add_user' but also grants full permissions to the virtual host used for definition sync.
+- Create a user and grant it permissions to the virtual host that will be used for schema replication.
+- This command is similar to 'rabbitmqctl add_user' but also grants full permissions to the virtual host used for definition sync.
 
 ```
 kubectl -n default exec downstream-rabbit-server-0 --  rabbitmqctl add_schema_replication_user "test-user" "test-password"
 ```
-#### specify local (upstream cluster) nodes and credentials to be used for schema replication
+
+
+-  specify local (upstream cluster) nodes and credentials to be used for schema replication
 
 ```
 kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_schema_replication_upstream_endpoints '{"endpoints": ["upstream-rabbit:5672","upstream2-rabbit:5672","upstream3-rabbit:5672"], "username": "test-user", "password": "test-password"}'

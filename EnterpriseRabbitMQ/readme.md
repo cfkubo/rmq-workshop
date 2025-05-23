@@ -214,7 +214,26 @@ kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_schema_rep
 
 #### RMQPerf Test on k8s:
 
+More about RMQPerf Test: [https://perftest.rabbitmq.com/](https://perftest.rabbitmq.com/)
+
+"RabbitMQ has a throughput testing tool, PerfTest, that is based on the Java client and can be configured to simulate basic workloads and more advanced workloads as well. PerfTest has extra tools that produce HTML graphs of the output.
+
+A RabbitMQ cluster can be limited by a number of factors, from infrastructure-level constraints (e.g. network bandwidth) to RabbitMQ configuration and topology to applications that publish and consume. PerfTest can demonstrate baseline performance of a node or a cluster of nodes.
+
+PerfTest uses the AMQP 0.9.1 protocol to communicate with a RabbitMQ cluster. Use Stream PerfTest if you want to test RabbitMQ Streams with the stream protocol."
+
+
 #### Classic Queue Perf Test
+
+
+These kubectl run commands launch one-off Kubernetes Pods in the default namespace to run RabbitMQ performance tests using the pivotalrabbitmq/perf-test image.
+
+The first command starts a Pod named sa-workshop with 10 producers sending 10,000 messages each to a pre-declared queue "sa-workshop" with routing key "sa-workshop" at a rate of 100 messages/second. It also starts 5 consumers reading from the same queue at 10 messages/second, acknowledging every 10 messages. The queue will not auto-delete.
+
+The second command starts a Pod named sa-workshop-new with 10 producers sending 10,000 messages each to a pre-declared queue "sa-workshop-new" with routing key "sa-workshop-new" at a rate of 100 messages/second. This test does not include any consumers, and the queue will also not auto-delete.
+
+Both commands target the RabbitMQ instance specified by the $service URI using provided credentials. They are designed to generate load on the RabbitMQ server for performance evaluation.
+
 
 ```
 instance=upstream-rabbit
@@ -232,6 +251,14 @@ kubectl -n default  --restart=Never run sa-workshop-new --image=pivotalrabbitmq/
 ```
 
 #### Quorum Queue Perf Test
+
+These kubectl run commands initiate performance tests against a RabbitMQ instance (specified by $service) within the default namespace as one-off Pods, except for perf-syn-check.
+
+The first command (sa-workshop-quorum) tests a quorum queue. It uses 10 producers sending 1,000 messages each to a pre-declared "sa-workshop-quorum" queue with the same routing key at 100 messages/second. 5 consumers read from it at 10 messages/second, acknowledging every 10 messages.
+
+The second command (sa-workshop-quorum-new) also tests a quorum queue. It uses 10 producers sending 1,000 messages each to a pre-declared "sa-workshop-quorum" queue (note the queue name is the same as the first command, potentially leading to interaction) with the routing key "sa-workshop-quorum-new" at 100 messages/second. It has no consumers.
+
+The third command (perf-syn-check) runs persistently (--restart=Always) to perform a synthetic health check. It sends 5 persistent messages to the "q.sys.synthetic-health-check" queue over 120 iterations with specific message size, batch size, and other parameters, using one consumer.
 
 ```
 instance=upstream-rabbit

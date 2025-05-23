@@ -393,7 +393,7 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set
 
 #### Creating queue, exchange, bindinging on both Upstream & Downstream cluster , publish a message to Upstream cluster and observe the message on both clusters
 
-
+![RabbitMQ Screenshot](../static/exchange.png)
 
 - Delcare an exchange named federated.exchange on upstream RMQ
 

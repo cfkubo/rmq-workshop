@@ -138,7 +138,7 @@ kubectl -n default exec upstream-rabbit-new-server-0  -- rabbitmq-plugins enable
 
 [https://www.rabbitmq.com/docs/access-control](https://www.rabbitmq.com/docs/access-control)
 
-You can control user permissions. For now we will create a admin user that we use to login to the RabbitMQ management UI.
+You can control user permissions. For now we will create a admin user that we use to login to the RabbitMQ management UI. Below some of test are preconfigured with the below user. To be able run all the labs you need to have this user created.
 
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl add_user arul password

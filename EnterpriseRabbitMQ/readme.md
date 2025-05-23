@@ -11,6 +11,9 @@
 
 * [LAB 1: Installing Enterprise RabbitMQ Operators and RabbitMQ Cluster](#-install-instruction-for-enterprise-rabbitmq-on-kubernetes)
 * [LAB 2: Creating Users and Permissions](#-lab-2-creating-user-and-permissions-)
+* [LAB 3: Accessing the ManagementUI](#-lab-3-access-rmq-management-ui-)
+* [LAB 4: Enabling Standby Replication - Enterprise Feature](#-lab-4-standby-replication-enterprise-feature-for-rmq-)
+*
 
 ## 🚀🐰📦 Install instruction for Enterprise RabbitMQ on Kubernetes.🚀🐰📦
 

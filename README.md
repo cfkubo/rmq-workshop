@@ -32,12 +32,13 @@ This repo has a collection of hands on  labs for RabbitMQ.
 
 ### One Server To Queue Them ALL !!!! 🎶🥁🚀🐰📦
 
-- [One Server To Queue Them ALL!!!](https://youtu.be/zoAPWZF9TRI?si=XbmoSunl47eqZ6a-)
+- An AI generated song dedicated to RabbitMQ
+- [One Server To Queue Them ALL!!!](https://youtu.be/zoAPWZF9TRI?si=XbmoSunl47eqZ6a-)🎶🥁🚀🐰📦
 
 <!-- <iframe width="1254" height="706" src="https://www.youtube.com/embed/zoAPWZF9TRI" title="One Server To Queue Them All !!!   #rabbitmq" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
 
-- An AI generated song dedicated to RabbitMQ
-  [One Server To Queue Them ALL](https://suno.com/s/yfhHe8JGZUdx2EDn) 🎶🥁🚀🐰📦
+
+
 
 
 ### Contirbutions and Questions:

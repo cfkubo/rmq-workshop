@@ -18,7 +18,7 @@
 * [LAB 7: Monitoring RabbitMQ with Prometheus](#-lab-7-monitoring-rabbitmq-with-prometheus-and-grafana-)
 * [LAB 8: Validating Distaster Recovery - Enterprise Feature](#-lab-8-disaster-recovery-)
 * [Lab 9: Upgrading Enterprise RabbitMQ Operators and RabbitMQ Cluster](#-lab-9-upgrading-rmq-on-k8s-)
-
+* [LAB 10: Working with RabbitMQAdmin V2 CLI](#-lab-10-working-rabbitmqadmin-cli-)
 
 
 

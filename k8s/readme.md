@@ -461,6 +461,16 @@ kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabb
 
 [https://www.rabbitmq.com/docs/federation](https://www.rabbitmq.com/docs/federation)
 
+These kubectl exec commands configure federation in RabbitMQ running within the upstream-rabbit-new-server-0 Pod in the default namespace.
+
+The first command sets a federation upstream named origin. This defines a connection to another RabbitMQ instance at amqp://arul:password@downstream-rabbit-new.rmq-downstream.svc.cluster.local:5672.
+
+The second command sets a federation policy named exchange-federation. It applies to exchanges whose names match the regex ^federated\.. The policy links these exchanges to all defined federation upstreams ("federation-upstream-set":"all"), with a priority of 10. This means exchanges starting with "federated." on the upstream will federate to the downstream.
+
+The third command sets a federation policy named queue-federation. It applies to all queues (".*"). This policy also links these queues to all federation upstreams, with a priority of 10. This means all queues on the upstream will federate to the downstream.
+
+For these commands to work, the rabbitmq_federation plugin must be enabled on the RabbitMQ server.
+
 #### Setting up exchange and queue federation on upstream cluster
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_parameter federation-upstream origin '{"uri":"amqp://arul:password@downstream-rabbit-new.rmq-downstream.svc.cluster.local:5672"}'

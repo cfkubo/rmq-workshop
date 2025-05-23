@@ -154,7 +154,7 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set
 
 ### Pull the default username and password created as a k8s Secret for RMQ:
 
-Below perftest are configured to user defalut user created by the operator. Run this in your terminal for the instance you want run the below labs. The below script will export the username and password to your terminal session.
+Below perftest are configured to user defalut user created by the operator. Run this in your terminal for the instance you want run the below labs. The below script will export the username and password to your terminal session. Below command are for example. All the below labs provide these command when running the perf test jobs.
 
 ```
 instance=upstream-rabbit-new

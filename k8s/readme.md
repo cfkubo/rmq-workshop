@@ -7,6 +7,11 @@
 - kubectl
 - helm
 
+### Labs
+
+* [LAB 2: Creating User and Permissions](#lab-2-creating-user-and-permissions)
+
+
 ### Clone this repo and move to rmq-workshop/K8s folder to continue
 ```
 git clone https://github.com/cfkubo/rmq-workshop

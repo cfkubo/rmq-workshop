@@ -197,6 +197,14 @@ Use the above default username password  or the user you have created
 ### 🚀🐰📦 LAB 4: Deploy Producers and Consumer Applications - Leveraging RabbitMQ PerfTest 🚀🐰📦
 
 **NOTE** Lets adjust the memory high watermark to be able run the below perf test without issues
+
+** Understand Memory High Watermark*** 
+
+RabbitMQ has a concept of memory high watermark which is used to determine when to start dropping messages. The default value is 0.4 (40%). This means that RabbitMQ will start dropping messages when it reaches 40% of its total available memory.
+
+Below command will adjust the configuration at runtime but we can do the same with rabbitmq configuration to be persistent.
+
+
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqctl set_vm_memory_high_watermark absolute "700MiB"
 
@@ -212,6 +220,14 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set
 ```
 
 #### RMQPerf Test on k8s:
+
+[https://perftest.rabbitmq.com/](https://perftest.rabbitmq.com/)
+
+"RabbitMQ has a throughput testing tool, PerfTest, that is based on the Java client and can be configured to simulate basic workloads and more advanced workloads as well. PerfTest has extra tools that produce HTML graphs of the output.
+
+A RabbitMQ cluster can be limited by a number of factors, from infrastructure-level constraints (e.g. network bandwidth) to RabbitMQ configuration and topology to applications that publish and consume. PerfTest can demonstrate baseline performance of a node or a cluster of nodes.
+
+PerfTest uses the AMQP 0.9.1 protocol to communicate with a RabbitMQ cluster. Use Stream PerfTest if you want to test RabbitMQ Streams with the stream protocol."
 
 #### Classic Queue Perf Test
 

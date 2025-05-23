@@ -64,7 +64,9 @@ rabbitmq-cluster-operator-5f94454fb7-bnqtg   1/1     Running   0          4s
 
 ### Intall RabbitmqAdmin CLI
 Interacting with RabbitMQ Server using rabbitmqadmin v2 CLI . Below steps work on MAC. For other OS please download the executalbe from git releases and move it to /usr/local/bin.
-> https://github.com/rabbitmq/rabbitmqadmin-ng/releases
+
+Access the releases 
+[https://github.com/rabbitmq/rabbitmqadmin-ng/releases](https://github.com/rabbitmq/rabbitmqadmin-ng/releases)
 
 Download the binary for your OS, update permission and move it bin folder
 
@@ -186,10 +188,10 @@ kubectl port-forward svc/upstream-rabbit-new 15672:15672
 kubectl -n rmq-downstream port-forward svc/downstream-rabbit-new 15673:15672
 ```
 Upstream RMQ
-> http://localhost:15672
+[http://localhost:15672](http://localhost:15672)
 
 Downstream RMQ
-> http://localhost:15673
+[http://localhost:15673](http://localhost:15673)
 
 Use the above default username password  or the user you have created
 

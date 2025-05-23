@@ -2,12 +2,12 @@
 
 ![RabbitMQ Screenshot](../static/rabbitmq-new.png)
 
-### Prequisites
+### 📦 Prequisites 📦
 - K8s installed and running (Kind,Docker k8s, MiniKube)
 - kubectl
 - helm
 
-### Labs
+### 🚀🐰📦 Labs 🚀🐰📦
 
 * [LAB 1: Deploy RabbitMQ operator and Rabbitmq Servers](#-lab-1-intall-oss-rabbitmq-operator-on-k8s-any-k8s-)
 * [LAB 2: Creating User and Permissions](#-lab-2-creating-user-and-permissions-)

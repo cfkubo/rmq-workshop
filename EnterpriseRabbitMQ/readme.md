@@ -14,8 +14,11 @@
 * [LAB 3: Accessing the ManagementUI](#-lab-3-access-rmq-management-ui-)
 * [LAB 4: Enabling Standby Replication - Enterprise Feature](#-lab-4-standby-replication-enterprise-feature-for-rmq-)
 * [LAB 5: Creating a Queues and Publishing/Consuming Messages Via RMQPerf Test](#-lab-5-deploy-producers-and-consumer-applications---leveraging-rabbitmq-perftest-)
-* [LAB 6: Monitoring RabbitMQ with Prometheus](#-lab-7-monitoring-rabbitmq-with-prometheus-and-grafana-)
+* [LAB 6: Shovel Plugin: Moving Messages](#--lab-6-everyday-im-shovelling-)
+* [LAB 7: Monitoring RabbitMQ with Prometheus](#-lab-7-monitoring-rabbitmq-with-prometheus-and-grafana-)
 * [LAB 8: Validating Distaster Recovery - Enterprise Feature](#-lab-8-disaster-recovery-)
+* [Lab 9: Upgrading Enterprise RabbitMQ Operators and RabbitMQ Cluster](#-lab-9-upgrading-rmq-on-k8s-)
+
 
 
 

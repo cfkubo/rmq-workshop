@@ -311,6 +311,22 @@ Usecases:
 - Queue names changed
 - Queue is full and need to be drained
 
+> This kubectl exec command directly executes the rabbitmqctl utility within the running Pod named upstream-rabbit-new-server-0 in the default namespace.
+
+> The rabbitmqctl set_parameter shovel my-shovel part instructs RabbitMQ to create or update a shovel named my-shovel. A shovel is a RabbitMQ feature that moves messages between queues, potentially across different brokers.
+
+> The JSON payload defines the shovel's behavior:
+
+> "src-protocol": "amqp091" and "src-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672": Specifies the source connection details using the AMQP 0.9.1 protocol to the RabbitMQ service upstream-rabbit-new on the default Kubernetes service port (5672), with the username "arul" and password "password".
+> "src-queue": "sa-workshop": Indicates that the shovel will consume messages from the queue named sa-workshop on the source broker.
+> "dest-protocol": "amqp091" and "dest-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672": Specifies the destination connection details, which in this case is the same RabbitMQ service as the source.
+> "dest-queue": "sa-workshop-shovelq": Indicates that the shovel will publish the consumed messages to the queue named sa-workshop-shovelq on the destination broker.
+> "dest-queue-args": {"x-queue-type": "quorum"}: Configures the destination queue sa-workshop-shovelq to be a quorum queue.
+
+> In essence, this command configures a shovel within the upstream-rabbit-new-server-0 Pod to take messages from the sa-workshop queue on the upstream-rabbit-new service and move them to a newly created (or existing) quorum queue named sa-workshop-shovelq on the same service. The rabbitmq_shovel plugin must be enabled on the RabbitMQ server for this command to function.
+
+
+
 - In this sample we are moving messages from a classic queue to quorum queue
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672", "src-queue": "sa-workshop", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672", "dest-queue": "sa-workshop-shovelq", "dest-queue-args": {"x-queue-type": "quorum"}}'

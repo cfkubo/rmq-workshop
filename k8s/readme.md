@@ -175,7 +175,7 @@ echo $password
 
 ### 🚀🐰📦 LAB 3: Access RMQ Management UI 🚀🐰📦
 
-When running on container platforms like kubernetes, we need to port forward to access the management UI. You can access the Upstream and Downstream cluster using the below urls.
+When running on container platforms like kubernetes and RabbitMQ server deployed with ClusterIP configurations, we need to port forward to access the management UI. You can access the Upstream and Downstream cluster using the below urls.
 
 - Access the upstream RMQ server via
 ```

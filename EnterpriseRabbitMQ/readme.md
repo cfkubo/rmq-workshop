@@ -10,7 +10,7 @@
 ### Labs
 
 * [LAB 1: Installing Enterprise RabbitMQ Operators and RabbitMQ Cluster](#-install-instruction-for-enterprise-rabbitmq-on-kubernetes)
-* [LAB 2: ](#-lab-2-creating-user-and-permissions-)
+* [LAB 2: Creating Users and Permissions](#-lab-2-creating-user-and-permissions-)
 
 ## 🚀🐰📦 Install instruction for Enterprise RabbitMQ on Kubernetes.🚀🐰📦
 

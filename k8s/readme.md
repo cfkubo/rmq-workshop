@@ -183,25 +183,30 @@ echo $password
 
 ```
 
+
+
 ### 🚀🐰📦 LAB 3: Access RMQ Management UI 🚀🐰📦
 
 When running on container platforms like kubernetes and RabbitMQ server deployed with ClusterIP configurations, we need to port forward to access the management UI. You can access the Upstream and Downstream cluster using the below urls.
 
-- Access the upstream RMQ server via
+- Port forward to upstream RMQ server via
 ```
 kubectl port-forward svc/upstream-rabbit-new 15672:15672
 ```
-- Access the upstream RMQ server via
+
+- Port forward to  upstream RMQ server via
 ```
 kubectl -n rmq-downstream port-forward svc/downstream-rabbit-new 15673:15672
 ```
-Upstream RMQ
-[http://localhost:15672](http://localhost:15672)
 
-Downstream RMQ
-[http://localhost:15673](http://localhost:15673)
+Acess Upstream RMQ at: [http://localhost:15672](http://localhost:15672)
 
-Use the above default username password  or the user you have created
+Access Downstream RMQ at:  [http://localhost:15673](http://localhost:15673)
+
+
+**Use the above default username password  or the user you have created above in lab 2**
+
+
 
 
 ### 🚀🐰📦 LAB 4: Deploy Producers and Consumer Applications - Leveraging RabbitMQ PerfTest 🚀🐰📦
@@ -229,6 +234,7 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set
 kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set_vm_memory_high_watermark absolute "700MiB"
 ```
 
+
 #### RMQPerf Test on k8s:
 
 [https://perftest.rabbitmq.com/](https://perftest.rabbitmq.com/)
@@ -238,6 +244,7 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set
 A RabbitMQ cluster can be limited by a number of factors, from infrastructure-level constraints (e.g. network bandwidth) to RabbitMQ configuration and topology to applications that publish and consume. PerfTest can demonstrate baseline performance of a node or a cluster of nodes.
 
 PerfTest uses the AMQP 0.9.1 protocol to communicate with a RabbitMQ cluster. Use Stream PerfTest if you want to test RabbitMQ Streams with the stream protocol."
+
 
 #### Classic Queue Perf Test
 
@@ -255,6 +262,7 @@ echo $password
 
 kubectl -n default  --restart=Never run sa-workshop --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop" --pmessages 10000 --queue "sa-workshop" --rate 100 --consumer-rate 10 --multi-ack-every 10 --auto-delete false
 ```
+
 
 #### Quorum Queue Perf Test
 
@@ -279,6 +287,7 @@ kubectl -n default  --restart=Never run sa-workshop-quorum --image=pivotalrabbit
 kubectl -n default  --restart=Always run perf-syn-check --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" -i 120 -u "q.sys.synthetic-health-check" -qq -P 5 -ms -b 20 -hst 4 -dcr -c 1 -q 5
 
 ```
+
 
 #### Stream RMQ Perftest
 
@@ -344,9 +353,10 @@ Click on create new dasboard > Import > copy the json code from **rmq-overview.j
 ![RabbitMQ Screenshot](../static/grafana.png)
 
 
-### 🚀🐰📦 LAB 6: Everyday I'm Shovelling 🚀🐰📦
 
-Shovel is an amazing plugin you can leverage to move messages from one to another queue.
+### 🚀🐰📦 LAB 6: Shovel Plugin Everyday I'm Shovelling 🚀🐰📦
+
+We have enabled Shovel pulgin on the cluster via yaml configurations. Shovel is an amazing plugin you can leverage to move messages from one to another queue.
 
 Usecases:
 - Moving messages between queues on same or different cluster
@@ -374,12 +384,15 @@ Usecases:
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672", "src-queue": "sa-workshop", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local:5672", "dest-queue": "sa-workshop-shovelq", "dest-queue-args": {"x-queue-type": "quorum"}}'
 ```
+
 **Checkout the changes in Managment UI** 
 
 - In this sample we are moving messages from a quorum queue to stream queue in same cluster (same could be achieved with different clusters as well)
 ```
 kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqctl set_parameter shovel my-shovel2 '{"src-protocol": "amqp091", "src-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "src-queue": "sa-workshop-shovelq", "dest-protocol": "amqp091", "dest-uri": "amqp://arul:password@upstream-rabbit-new.default.svc.cluster.local", "dest-queue": "sa-workshop-shovelq-Upstream", "dest-queue-args": {"x-queue-type": "stream"}}'
 ```
+
+
 
 ### 🚀🐰📦 LAB 7: Routing Messages via Exchanges 🚀🐰📦
 
@@ -433,6 +446,7 @@ kubectl -n default exec upstream-rabbit-new-server-0 -- rabbitmqadmin publish ex
 kubectl -n default exec upstream-rabbit-new-server-0 --  rabbitmqadmin publish exchange=demo.exchange routing_key=new-event.test payload="Hello from demo exchange to new-event"
 ```
 
+
 #### Now publish the messages to demo exchange via perf test and see how messages are routed to queues events and new-events based on routing keys.
 
 ```
@@ -440,6 +454,7 @@ kubectl -n default  --restart=Never run sa-workshop-demo-route --image=pivotalra
 
 kubectl -n default  --restart=Never run sa-workshop-aq-demo1 --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --exchange demo.exchange --routing-key "new-event.demo2" --pmessages 1000  --rate 100 --consumer-rate 10 --multi-ack-every 10
 ```
+
 
 
 ### 🚀🐰📦 LAB 8: Federation  - Actvie - Active RMQ deployments in Kubernetes 🚀🐰📦
@@ -535,6 +550,8 @@ echo $password
 kubectl -n default  --restart=Never run sa-workshop-fed-exchange --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --quorum-queue --producers 10 --consumers 5 --predeclared  --pmessages 1000 --exchange "federated.exchange" --routing-key "event.test" --rate 100 --consumer-rate 10 --multi-ack-every 10 -c 10
 ```
 
+
+
 ### 🚀🐰📦 LAB 9: Upgrading RMQ on K8s 🚀🐰📦
 
 #### Upgrade the RMQ k8s operator
@@ -587,6 +604,8 @@ cd spring-boot-random-data-generator
 mvn spring-boot:run
 
 ``` -->
+
+
 
 ### 🚀🐰📦 LAB 10: Working RabbitmqAdmin cli 🚀🐰📦
 

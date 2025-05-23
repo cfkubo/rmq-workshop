@@ -29,6 +29,8 @@ cd rmq-workshop/k8s
 ```
 
 ### 🚀🐰📦 LAB 1: Intall OSS RabbitMQ Operator on K8s (any K8s) 🚀🐰📦
+Below kubectl command will create all the neccessary objects on the cluster to deploy RabbitMQ using operator. 
+
 ```
 kubectl apply -f https://github.com/rabbitmq/cluster-operator/releases/download/v2.10.0/cluster-operator.yml
 

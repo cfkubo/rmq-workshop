@@ -9,7 +9,17 @@
 
 ### Labs
 
+* [LAB 1: Deploy RabbitMQ operator and Rabbitmq Servers](#-lab-1-intall-oss-rabbitmq-operator-on-k8s-any-k8s-)
 * [LAB 2: Creating User and Permissions](#-lab-2-creating-user-and-permissions-)
+* [LAB 3: Accessing RabbitMQ Management UI](#lab-3-access-rmq-management-ui-)
+* [LAB 4: Publishing and Consuming Messages](#lab-4-publishing-and-consuming-messages-)
+* [LAB 5: Monitoring RabbitMQ with Prometheus](#-lab-5-monitoring-rabbitmq-on-kubernetes-)
+* [LAB 6: Using Shovel Plugin to Move Messages](#-lab-6-everyday-im-shovelling-)
+* [LAB 7: Routing Messages using Exchanges](#-lab-7-routing-messages-via-exchanges-)
+* [LAB 8: Federation Plugin: RabbitMQ Active - Active Configuration](#-lab-8-federation----actvie---active-rmq-deployments-in-kubernetes-)
+* [LAB 9: Upgrading RabbitMQ Operators and RabbitMQ Servers](#-lab-9-upgrading-rmq-on-k8s-)
+* [LAB 10: Using RabbitMQAdmin V2 CLI](#-lab-10-working-rabbitmqadmin-cli-)
+* [LAB 11: RabbitMQ HTTP API Refrence](#-lab-11-rabbitmq-http-api-reference-)
 
 
 ### Clone this repo and move to rmq-workshop/K8s folder to continue

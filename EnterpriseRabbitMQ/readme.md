@@ -212,6 +212,8 @@ kubectl -n default exec downstream-rabbit-server-0 -- rabbitmqctl set_schema_rep
 
 ### 🚀🐰📦 LAB 5: Deploy Producers and Consumer Applications - Leveraging RabbitMQ PerfTest 🚀🐰📦
 
+[Understanding RabbitMQ Queues Types](https://www.rabbitmq.com/docs/queues)
+
 #### RMQPerf Test on k8s:
 
 More about RMQPerf Test: [https://perftest.rabbitmq.com/](https://perftest.rabbitmq.com/)

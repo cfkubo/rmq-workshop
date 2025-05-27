@@ -5,7 +5,7 @@ This repo has a collection of hands on  labs for RabbitMQ.
 ![RabbitMQ Screenshot](static/rmq.png)
 
 ### RabbitMQ on Docker:
-- [RabbitMQ Docker Hands On Labs](https://github.com/cfkubo/rmq-workshop/tree/ed882554b7fc17952e482947ade64c67dbd580f0/docker)
+- [RabbitMQ Docker Hands On Labs](https://github.com/cfkubo/rmq-workshop/tree/main/docker)
 - [RabbitMQ Docker Hands On Labs GitHub Pages](https://site.arullab.com/rmq-workshop/docker/)
 
 ### RabbitMQ on Kubernetes: 
@@ -13,10 +13,10 @@ This repo has a collection of hands on  labs for RabbitMQ.
 - [RabbitMQ K8s Hands On Labs GitHub Pages](https://site.arullab.com/rmq-workshop/k8s/)
 
 ### RabbitMQ on Windows
-- [RabbitMQ Windows Hands On Labs](https://github.com/cfkubo/rmq-workshop/tree/d599490f80b8c8eaffe41fb7a2e389bd3708a6ee/Windows)
+- [RabbitMQ Windows Hands On Labs](https://github.com/cfkubo/rmq-workshop/tree/main/Windows)
 
 ### Enterprise RabbitMQ on K8s:
-- [Enterprise RabbitMQ K8s Hands On Labs](https://github.com/cfkubo/rmq-workshop/tree/a879dc3dbfba24c1d1dd3cbc82b71c2eca1d28b6/EnterpriseRabbitMQ)
+- [Enterprise RabbitMQ K8s Hands On Labs](https://github.com/cfkubo/rmq-workshop/tree/main/EnterpriseRabbitMQ)
 - [Enterprise RabbitMQ K8s Hands On Labs GitHub Pages](https://site.arullab.com/rmq-workshop/EnterpriseRabbitMQ/)
 
 

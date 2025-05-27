@@ -235,9 +235,11 @@ kubectl -n rmq-downstream exec downstream-rabbit-new-server-0 -- rabbitmqctl set
 ```
 
 
+[Understanding RabbitMQ Queues Types](https://www.rabbitmq.com/docs/queues)
+
 #### RMQPerf Test on k8s:
 
-[https://perftest.rabbitmq.com/](https://perftest.rabbitmq.com/)
+More about RMQPerf Test: [https://perftest.rabbitmq.com/](https://perftest.rabbitmq.com/)
 
 "RabbitMQ has a throughput testing tool, PerfTest, that is based on the Java client and can be configured to simulate basic workloads and more advanced workloads as well. PerfTest has extra tools that produce HTML graphs of the output.
 

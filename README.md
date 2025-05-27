@@ -22,8 +22,9 @@ This repo has a collection of hands on  labs for RabbitMQ.
 
 
 ### Blog: (WIP)
--  [https://site.arullab.com/posts/RMQDOCKERHANDSON/](https://site.arullab.com/posts/RMQDOCKERHANDSON/)
--  [https://site.arullab.com/posts/RMQK8SHANDON/](https://site.arullab.com/posts/RMQK8SHANDON/)
+-  [Enterprise RabbitMQ on K8s](https://site.arullab.com/posts/ENTERPRISERMQ/)
+-  [OSS RabbitMQ on Docker](https://site.arullab.com/posts/RMQDOCKERHANDSON/)
+-  [OSS RabbitMQ on Kubernetes](https://site.arullab.com/posts/RMQK8SHANDON/)
 
 
 ### References: 

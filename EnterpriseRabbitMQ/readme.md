@@ -45,7 +45,7 @@ export token="<YOUR-BROADCOM-SUPPORT-TOKEN-FOR-RMQ-K8S>"
 ### Login to Broadcom registry.
 
 ```
-helm registry login rabbitmq-helmoci.packages.broadcom.com -u username -p $token
+helm registry login rabbitmq-helmoci.packages.broadcom.com -u $username -p $token
 ```
 
 ### Create teh rabbitmq-system namespace to install the RMQ Enterprise Operators.
@@ -57,7 +57,7 @@ kubectl create ns rabbitmq-system
 ### Create a docker-registry secret to be able to pull the images
 
 ```
-kubectl create secret docker-registry tanzu-rabbitmq-registry-creds --docker-server "rabbitmq.packages.broadcom.com" --docker-username "support-registered-email" --docker-password $token -n rabbitmq-system
+kubectl create secret docker-registry tanzu-rabbitmq-registry-creds --docker-server "rabbitmq.packages.broadcom.com" --docker-username  $username --docker-password $token -n rabbitmq-system
 ```
 
 ### Install the RMQ Enterprise Operators.
@@ -246,9 +246,20 @@ echo $username
 echo $password
 
 
-kubectl -n default  --restart=Never run sa-workshop --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop" --pmessages 10000 --queue "sa-workshop" --rate 100 --consumer-rate 10 --multi-ack-every 10 --auto-delete false
+kubectl -n default  --restart=Never run sa-workshop --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --routing-key "sa-workshop" --pmessages 1000 --queue "sa-workshop" --rate 100 --consumer-rate 10 --multi-ack-every 10 --auto-delete false
 
-kubectl -n default  --restart=Never run sa-workshop-new --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10  --predeclared --routing-key "sa-workshop-new" --pmessages 10000 --queue "sa-workshop-new" --rate 100 --auto-delete false
+kubectl -n default  --restart=Never run sa-workshop-new --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10  --predeclared --routing-key "sa-workshop-new" --pmessages 1000 --queue "sa-workshop-new" --rate 100 --auto-delete false
+
+
+
+kubectl -n default  --restart=Never run productionline --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --routing-key "productionline" --pmessages 1000 --queue "productionline" --rate 100 --consumer-rate 10 --multi-ack-every 10 --auto-delete false
+
+kubectl -n default  --restart=Never run airbags  --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10  --predeclared --routing-key "airbags" --pmessages 1000 --queue "airbags" --rate 100 --auto-delete false
+
+
+kubectl -n default  --restart=Never run seatbelts --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10 --consumers 5 --predeclared --routing-key "seatbelts" --pmessages 1000 --queue "seatbelts" --rate 100 --consumer-rate 10 --multi-ack-every 10 --auto-delete false
+
+kubectl -n default  --restart=Never run motorbikes --image=pivotalrabbitmq/perf-test -- --uri "amqp://${username}:${password}@${service}" --producers 10  --predeclared --routing-key "motorbikes" --pmessages 1000 --queue "motorobikes" --rate 100 --auto-delete false
 
 ```
 

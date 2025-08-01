@@ -115,7 +115,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(rabbitmq_queue_messages_ready * on(instance, job) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\", rabbitmq_endpoint=\"$endpoint\"})",
+          "expr": "sum(rate(rabbitmq_queue_messages_ready[5m]) * on(instance, job) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\", rabbitmq_endpoint=\"$endpoint\"})",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -566,7 +566,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(rabbitmq_queue_messages_unacked * on(instance, job) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\",rabbitmq_endpoint=\"$endpoint\"})",
+          "expr": "sum(rate(rabbitmq_queue_messages_unacked[5m])* on(instance, job) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\",rabbitmq_endpoint=\"$endpoint\"})",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -8305,8 +8305,8 @@
       {
         "allValue": ".*",
         "current": {
-          "text": "",
-          "value": ""
+          "text": "default",
+          "value": "default"
         },
         "datasource": {
           "type": "prometheus",
@@ -8382,7 +8382,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
@@ -8397,6 +8397,6 @@
   "timezone": "",
   "title": "RabbitMQ-Overview",
   "uid": "Kn5xm-gZk",
-  "version": 11,
+  "version": 13,
   "weekStart": ""
 }

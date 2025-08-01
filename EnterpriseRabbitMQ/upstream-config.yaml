@@ -13,6 +13,8 @@ metadata:
 spec:
   service:
     type: ClusterIP
+  persistence:
+    storage: 2Gi
   # resources:
   #   requests:
   #     cpu: "250m"
@@ -24,145 +26,145 @@ spec:
     additionalPlugins:
       - rabbitmq_stream
       - rabbitmq_stream_management
-      - rabbitmq_schema_definition_sync
-      - rabbitmq_schema_definition_sync_prometheus  # optional
-      - rabbitmq_standby_replication
-      - rabbitmq_warm_standby
+      # - rabbitmq_schema_definition_sync
+      # - rabbitmq_schema_definition_sync_prometheus  # optional
+      # - rabbitmq_standby_replication
+      # - rabbitmq_warm_standby
       - rabbitmq_shovel
       - rabbitmq_shovel_management
     additionalConfig: |
       log.console.level = debug
-      schema_definition_sync.operating_mode = upstream
-      schema_definition_sync.connection.endpoints.one = localhost:5672
-      schema_definition_sync.connection.username = test-user
-      schema_definition_sync.connection.password = test-password
-      standby.replication.operating_mode = upstream
-      standby.replication.connection.endpoints.one = localhost:5552
-      standby.replication.connection.username = test-user
-      standby.replication.connection.password = test-password
-      # message stream retention limit (can either be size or time based)
-      standby.replication.retention.size_limit.messages = 5000000000
-      # standby.replication.retention.time_limit.messages = 12h
+      # schema_definition_sync.operating_mode = upstream
+      # schema_definition_sync.connection.endpoints.one = localhost:5672
+      # schema_definition_sync.connection.username = test-user
+      # schema_definition_sync.connection.password = test-password
+      # standby.replication.operating_mode = upstream
+      # standby.replication.connection.endpoints.one = localhost:5552
+      # standby.replication.connection.username = test-user
+      # standby.replication.connection.password = test-password
+      # # message stream retention limit (can either be size or time based)
+      # standby.replication.retention.size_limit.messages = 5000000000
+      # # standby.replication.retention.time_limit.messages = 12h
 
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: upstream-secret
-type: Opaque
-stringData:
-  username: test-user
-  password: test-password
+# ---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: upstream-secret
+# type: Opaque
+# stringData:
+#   username: test-user
+#   password: test-password
 
----
-apiVersion: rabbitmq.com/v1beta1
-kind: User
-metadata:
-  name: rabbitmq-replicator
-spec:
-  rabbitmqClusterReference:
-    name:  upstream-rabbit # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
-  importCredentialsSecret:
-    name: upstream-secret
+# ---
+# apiVersion: rabbitmq.com/v1beta1
+# kind: User
+# metadata:
+#   name: rabbitmq-replicator
+# spec:
+#   rabbitmqClusterReference:
+#     name:  upstream-rabbit # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
+#   importCredentialsSecret:
+#     name: upstream-secret
 
----
-apiVersion: rabbitmq.com/v1beta1
-kind: Permission
-metadata:
-  name: rabbitmq-replicator.rabbitmq-schema-definition-sync.all
-spec:
-  vhost: "rabbitmq_schema_definition_sync" # name of a virtual host
-  userReference:
-    name: rabbitmq-replicator
-  permissions:
-    write: ".*"
-    configure: ".*"
-    read: ".*"
-  rabbitmqClusterReference:
-    name: upstream-rabbit  # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
+# ---
+# apiVersion: rabbitmq.com/v1beta1
+# kind: Permission
+# metadata:
+#   name: rabbitmq-replicator.rabbitmq-schema-definition-sync.all
+# spec:
+#   vhost: "rabbitmq_schema_definition_sync" # name of a virtual host
+#   userReference:
+#     name: rabbitmq-replicator
+#   permissions:
+#     write: ".*"
+#     configure: ".*"
+#     read: ".*"
+#   rabbitmqClusterReference:
+#     name: upstream-rabbit  # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
 
----
-apiVersion: rabbitmq.com/v1beta1
-kind: Vhost
-metadata:
-  name: default
-spec:
-  name: "test" # vhost name
-  tags: ["standby_replication"]
-  rabbitmqClusterReference:
-    name: upstream-rabbit
+# ---
+# apiVersion: rabbitmq.com/v1beta1
+# kind: Vhost
+# metadata:
+#   name: default
+# spec:
+#   name: "test" # vhost name
+#   tags: ["standby_replication"]
+#   rabbitmqClusterReference:
+#     name: upstream-rabbit
 
----
-apiVersion: rabbitmq.com/v1beta1
-kind: Permission
-metadata:
-  name: rabbitmq-replicator.rabbitmq-schema-definition-sync.test
-spec:
-  vhost: "test" # name of the vhost
-  userReference:
-    name: rabbitmq-replicator
-  permissions:
-    write: ".*"
-    configure: ".*"
-    read: ".*"
-  rabbitmqClusterReference:
-    name: upstream-rabbit  # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
+# ---
+# apiVersion: rabbitmq.com/v1beta1
+# kind: Permission
+# metadata:
+#   name: rabbitmq-replicator.rabbitmq-schema-definition-sync.test
+# spec:
+#   vhost: "test" # name of the vhost
+#   userReference:
+#     name: rabbitmq-replicator
+#   permissions:
+#     write: ".*"
+#     configure: ".*"
+#     read: ".*"
+#   rabbitmqClusterReference:
+#     name: upstream-rabbit  # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
 
----
-apiVersion: rabbitmq.com/v1beta1
-kind: Policy
-metadata:
-  name: upstream-policy
-spec:
-  name: osr # name of the policy
-  vhost: "test" # default to '/' if not provided
-  pattern: "^.*" # regex used to match queues and exchanges
-  applyTo: "queues" # set to 'queues', 'exchanges', or 'all'
-  definition: # policy definition
-    remote-dc-replicate: true
-  rabbitmqClusterReference:
-    name: upstream-rabbit # rabbitmqCluster must exist in the same namespace as this resource
+# ---
+# apiVersion: rabbitmq.com/v1beta1
+# kind: Policy
+# metadata:
+#   name: upstream-policy
+# spec:
+#   name: osr # name of the policy
+#   vhost: "test" # default to '/' if not provided
+#   pattern: "^.*" # regex used to match queues and exchanges
+#   applyTo: "queues" # set to 'queues', 'exchanges', or 'all'
+#   definition: # policy definition
+#     remote-dc-replicate: true
+#   rabbitmqClusterReference:
+#     name: upstream-rabbit # rabbitmqCluster must exist in the same namespace as this resource
 
 
 
----
-apiVersion: rabbitmq.com/v1beta1
-kind: Vhost
-metadata:
-  name: default-vhost-new
-spec:
-  name: "/" # vhost name
-  tags: ["standby_replication"]
-  rabbitmqClusterReference:
-    name: upstream-rabbit
+# ---
+# apiVersion: rabbitmq.com/v1beta1
+# kind: Vhost
+# metadata:
+#   name: default-vhost-new
+# spec:
+#   name: "/" # vhost name
+#   tags: ["standby_replication"]
+#   rabbitmqClusterReference:
+#     name: upstream-rabbit
 
----
-apiVersion: rabbitmq.com/v1beta1
-kind: Permission
-metadata:
-  name: rabbitmq-replicator.rabbitmq-schema-definition-sync.test-default-new
-spec:
-  vhost: "/" # name of the vhost
-  userReference:
-    name: rabbitmq-replicator
-  permissions:
-    write: ".*"
-    configure: ".*"
-    read: ".*"
-  rabbitmqClusterReference:
-    name: upstream-rabbit  # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
+# ---
+# apiVersion: rabbitmq.com/v1beta1
+# kind: Permission
+# metadata:
+#   name: rabbitmq-replicator.rabbitmq-schema-definition-sync.test-default-new
+# spec:
+#   vhost: "/" # name of the vhost
+#   userReference:
+#     name: rabbitmq-replicator
+#   permissions:
+#     write: ".*"
+#     configure: ".*"
+#     read: ".*"
+#   rabbitmqClusterReference:
+#     name: upstream-rabbit  # the upstream RabbitMQ cluster name. It must be in the same namespace and it is a mandatory value.
 
----
-apiVersion: rabbitmq.com/v1beta1
-kind: Policy
-metadata:
-  name: upstream-policy-default-new
-spec:
-  name: osr # name of the policy
-  vhost: "/" # default to '/' if not provided
-  pattern: "^.*" # regex used to match queues and exchanges
-  applyTo: "queues" # set to 'queues', 'exchanges', or 'all'
-  definition: # policy definition
-    remote-dc-replicate: true
-  rabbitmqClusterReference:
-    name: upstream-rabbit # rabbitmqCluster must exist in the same namespace as this resource
+# ---
+# apiVersion: rabbitmq.com/v1beta1
+# kind: Policy
+# metadata:
+#   name: upstream-policy-default-new
+# spec:
+#   name: osr # name of the policy
+#   vhost: "/" # default to '/' if not provided
+#   pattern: "^.*" # regex used to match queues and exchanges
+#   applyTo: "queues" # set to 'queues', 'exchanges', or 'all'
+#   definition: # policy definition
+#     remote-dc-replicate: true
+#   rabbitmqClusterReference:
+#     name: upstream-rabbit # rabbitmqCluster must exist in the same namespace as this resource
